@@ -46,8 +46,13 @@ const values = getValuesFromColumn(tables[positionObj.tabIndex].table, positionO
 console.log(values);
 
 // ([...values], table) => updatedTable
-const appendValuesToTwoDArr = (values, table) => {
-    //for (let )
+const appendColumnToTwoDArr = (values, table) => {
+    const newColumnPos = table[0].length;
+    for (let y = 0; y < values.length; y++) {
+        if (!table[y]) {table.push([]);} 
+        table[y][newColumnPos] = values[y];
+    }
+
 }
 
 const selectFunc = (ColumnsHeadersSelected, tablesSelected) => {
@@ -55,8 +60,12 @@ const selectFunc = (ColumnsHeadersSelected, tablesSelected) => {
     for (const head of ColumnsHeadersSelected) {
         const posObj = getColumnHeadPositionInTables(head, tablesSelected);
         const values = getValuesFromColumn(tables[posObj.tabIndex].table, posObj.colIndex);
-        appendValuesToTwoDArr(values, newTable);
+        appendColumnToTwoDArr(values, newTable);
     }
-
-
+    return newTable;
 }
+
+console.log(
+selectFunc(['firstName'], tables));
+const selectFirstName = selectFunc(['lastName'], tables)
+body.appendChild(TableDisplayer.twoDArrToHTMLTable(selectFirstName))
