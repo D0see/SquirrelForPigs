@@ -1,5 +1,15 @@
-export const twoDArrToHTMLTable = (twoDArr) => {
+export const twoDArrToHTMLTable = (tableObj) => {
+
+    const twoDArr = tableObj.table;
+    const tableName = tableObj.tableName;
+
+
     const table = document.createElement('table');
+    const caption = document.createElement('caption');
+    caption.innerText = tableName;
+    caption.style.captionSide = 'bottom';
+    table.appendChild(caption);
+
     const tableHead = document.createElement('thead');
     table.appendChild(tableHead);
     const tableBody = document.createElement('tbody');
@@ -23,4 +33,8 @@ export const twoDArrToHTMLTable = (twoDArr) => {
         });
     }
     return table;
+}
+
+export default {
+    twoDArrToHTMLTable,
 }

@@ -3,7 +3,7 @@ export const appendColumnToTwoDArr = (values, table) => {
     const newColumnPos = table[0].length;
     for (let y = 0; y < values.length; y++) {
         if (!table[y]) {table.push([]);} 
-        table[y][newColumnPos] = values[y];
+        table[y][newColumnPos] = values[y] ?? '';
     }
 }
 
@@ -26,15 +26,10 @@ export const getColumnValuesByIndexFromTable = (table, columnIndex) => {
 }
 
 
-// ("columnHead", [...tables]) => {tabIndex : tableIndex, colIndex : columnIndex}
+// ("columnHead", [...tables]) => colIndex
 export const getColumnHeadIndex = (columnHead, table) => {
     const result = [];
-
-    table[0].forEach((header, colIndex) => {
-        if (header === columnHead) result.push(
-            colIndex
-        )
-    });
-
-    return result[0];
+    for (const [colIndex, header] of table[0].entries()) {
+        if (header === columnHead) return colIndex;
+    }
 }
