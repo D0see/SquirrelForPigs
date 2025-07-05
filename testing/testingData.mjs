@@ -7,16 +7,16 @@ export default {
         ['3', 'Bob', 'Dylan'],
         ['4', 'Cillian', 'Murphy'],
     ], 
-        tableName : 'testTable1'
+        tableName : 'people'
     },
     testTable2 : {
         table : [
-        ['id', 'occupation', 'age'],
-        ['1', 'Mason', '21'],
-        ['2', 'Plumber', '22'],
-        ['3', 'Bouncer', '23'],
+        ['idUser', 'occupation', 'age'],
+        ['2', 'Mason', '21'],
+        ['3', 'Plumber', '22'],
+        ['1', 'Bouncer', '23'],
         ['4', 'Barman', '24'],
     ],
-        tableName : "testTable2"
+        tableName : "job"
     },
 }

@@ -24,7 +24,3 @@ export const twoDArrToHTMLTable = (twoDArr) => {
     }
     return table;
 }
-
-export default {
-    twoDArrToHTMLTable,
-}

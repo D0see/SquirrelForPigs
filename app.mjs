@@ -1,71 +1,18 @@
-import TableDisplayer from './services/tableDisplayer.mjs'
+import { twoDArrToHTMLTable } from './services/tableDisplayer.mjs'
+import { sqlSelect,sqlJoin } from './services/sqlFunctions.mjs'
 import testingData from './testing/testingData.mjs';
 
 const body = document.querySelector('main');
-body.appendChild(TableDisplayer.twoDArrToHTMLTable(testingData.testTable1.table))
+body.appendChild(twoDArrToHTMLTable(testingData.testTable1.table))
 
-// ("columnHead", [...tables]) => [{tabIndex : tableIndex, colIndex : columnIndex}}
-const getColumnHeadPositionInTables = (columnHead, tables) => {
-    const result = [];
-    tables.forEach((tableObj, tabIndex) => {
-        tableObj.table[0].forEach((header, colIndex) => {
-            if (header === columnHead) result.push({
-                tabIndex,
-                colIndex
-            })
-        });
-    });
+const tables = [testingData.testTable1, testingData.testTable2];
 
-    //placeholder
-    if (result.length > 1) {
-        return error("ambiguous query")
-        // console.error('ambiguous query')
-    } 
+console.log(sqlSelect(['firstName'], tables[0]));
 
-    return result[0];
-}
 
-//TESTING getColumnHeadMatchInTables
-const tables = [testingData.testTable1];
-console.log("TESTING getColumnHeadMatchInTables");
-const positionObj = getColumnHeadPositionInTables('firstName', tables);
-console.log(positionObj);
+const selectFirstName = sqlSelect(['firstName'], tables[0])
+body.appendChild(twoDArrToHTMLTable(selectFirstName));
 
-// (TwoDArr, columnIndex) => [head, val1, val2, val3...]
-const getValuesFromColumn = (table, columnIndex) => {
-    const result = [];
-    for (let y = 0; y < table.length; y++) {
-        result.push(table[y][columnIndex]);
-    }
-    return result;
-}
+const joinOnId = sqlJoin(tables[0], tables[1], 'id', 'idUser', '=');
 
-//TESTING getValuesFromColumn
-console.log("TESTING getValuesFromColumn");
-const values = getValuesFromColumn(tables[positionObj.tabIndex].table, positionObj.colIndex);
-console.log(values);
-
-// ([...values], table) => updatedTable
-const appendColumnToTwoDArr = (values, table) => {
-    const newColumnPos = table[0].length;
-    for (let y = 0; y < values.length; y++) {
-        if (!table[y]) {table.push([]);} 
-        table[y][newColumnPos] = values[y];
-    }
-
-}
-
-const selectFunc = (ColumnsHeadersSelected, tablesSelected) => {
-    const newTable = [[]];
-    for (const head of ColumnsHeadersSelected) {
-        const posObj = getColumnHeadPositionInTables(head, tablesSelected);
-        const values = getValuesFromColumn(tables[posObj.tabIndex].table, posObj.colIndex);
-        appendColumnToTwoDArr(values, newTable);
-    }
-    return newTable;
-}
-
-console.log(
-selectFunc(['firstName'], tables));
-const selectFirstName = selectFunc(['lastName'], tables)
-body.appendChild(TableDisplayer.twoDArrToHTMLTable(selectFirstName))
+body.appendChild(twoDArrToHTMLTable(joinOnId));
