@@ -5,11 +5,14 @@ export const twoDArrToHTMLTable = (tableObj) => {
 
 
     const table = document.createElement('table');
+
+    // builds caption
     const caption = document.createElement('caption');
     caption.innerText = tableName;
     caption.style.captionSide = 'bottom';
     table.appendChild(caption);
 
+    // builds thead
     const tableHead = document.createElement('thead');
     table.appendChild(tableHead);
     const tableBody = document.createElement('tbody');

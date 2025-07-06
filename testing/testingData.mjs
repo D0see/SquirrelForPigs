@@ -1,5 +1,5 @@
 export default {
-    testTable1 : {
+    people : {
         table : [
         ['id', 'firstName', 'lastName', 'jobId'],
         ['1', 'John', 'Doe', '1'],
@@ -10,7 +10,7 @@ export default {
     ], 
         tableName : 'people'
     },
-    testTable2 : {
+    job : {
         table : [
         ['id', 'occupation'],
         ['1', 'Mason'],
