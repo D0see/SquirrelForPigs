@@ -1,5 +1,4 @@
 import { twoDArrToHTMLTable } from './services/tableDisplayer.mjs'
-import { sqlSelect, sqlLeftJoin } from './services/sqlFunctions.mjs'
 import { SqlParser } from './services/sqlParser.mjs';
 import testingData from './testing/testingData.mjs';
 
@@ -15,6 +14,6 @@ sqlQuerySubsmissionButton.addEventListener("click", (e) => {
     body.appendChild(twoDArrToHTMLTable(newTable));
 })
 
-// const parserTest = SqlParser('SELECT firstName occupation jobId FROM people LEFTJOIN job on jobId = id', tables);
+//SELECT firstName occupation FROM people LEFTJOIN job on jobId = id
 
-
+//SELECT firstName occupation salary FROM people LEFTJOIN job on jobId = id LEFTJOIN salary on idSalary = thisId

@@ -23,13 +23,12 @@ body {
     padding: 1%;
     height: 50%;
     width: 60%;
-    gap: 15px;
     border: 1px solid orange;
 }
 
 #sqlQueryEntry {
     position: relative;
-    margin: 0 auto;
+    margin: 12px auto;
     border: 1px solid red;
     width: 75%;
 }

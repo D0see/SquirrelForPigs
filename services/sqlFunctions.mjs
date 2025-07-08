@@ -14,9 +14,9 @@ export const sqlSelect = (ColumnsHeadersSelected, tableSelected) => {
 }
 
 // For a join we first join the whole tables then select the correct headers
+// For a join to work header 1 must reference a table1 header and header2 must reference a table2 header
 export const sqlLeftJoin = (table1, table2, header1, header2, condOperator) => {
 
-    //initalizes newTable
     const newTable = JSON.parse(JSON.stringify(table1.table));
     table2.table[0].forEach(header => newTable[0].push(header));
 
@@ -28,14 +28,13 @@ export const sqlLeftJoin = (table1, table2, header1, header2, condOperator) => {
         const values = getColumnValuesByIndexFromTable(table2.table, joiningHeaderIndexT2);
         for (const [index, value] of values.entries()) {
             if (row[joiningHeaderIndexT1] === value) {
-                newTable[rowIndex].push(...table2.table[index + 1] ?? 'hey')
+                newTable[rowIndex].push(...table2.table[index + 1])
             }
         }
     })
 
     return {
         table : newTable,
-        tableName : `${table1.tableName}-${table2.tableName}-joined`
-    };;
-
+        tableName : `${table1.tableName}-${table2.tableName}`
+    };
 }
