@@ -1,7 +1,7 @@
 export default {
     people : {
         table : [
-        ['idUser', 'firstName', 'lastName', 'jobId'],
+        ['id', 'firstName', 'lastName', 'jobId'],
         ['1', 'John', 'Doe', '1'],
         ['2', 'Jane', 'Doe', '2'],
         ['3', 'Bob', 'Dylan', '4'],
@@ -22,7 +22,7 @@ export default {
     },
     salary : {
         table : [
-        ['thisId', 'salary'],
+        ['id', 'salary'],
         ['1', '10000'],
         ['2', '15000'],
         ['3', '20000'],

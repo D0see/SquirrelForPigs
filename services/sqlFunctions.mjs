@@ -3,7 +3,7 @@ import { appendColumnToTwoDArr, getColumnByIndexFromTable, getColumnHeadIndex, g
 export const sqlSelect = (ColumnsHeadersSelected, tableSelected) => {
     const newTable = [[]];
     for (const head of ColumnsHeadersSelected) {
-        const colunmIndex = getColumnHeadIndex(head, tableSelected.table);
+        const colunmIndex = getColumnHeadIndex(head, tableSelected);
         const values = getColumnByIndexFromTable(tableSelected.table, colunmIndex);
         appendColumnToTwoDArr(values, newTable);
     }
@@ -15,13 +15,13 @@ export const sqlSelect = (ColumnsHeadersSelected, tableSelected) => {
 
 // For a join we first join the whole tables then select the correct headers
 // For a join to work header 1 must reference a table1 header and header2 must reference a table2 header
-export const sqlLeftJoin = (table1, table2, header1, header2, condOperator) => {
+export const sqlLeftJoin = (table1, table2, table1JoiningHeader, table2JoiningHeader, condOperator) => {
 
     const newTable = JSON.parse(JSON.stringify(table1.table));
-    table2.table[0].forEach(header => newTable[0].push(header));
+    table2.table[0].forEach(header => {newTable[0].push(header)});
 
-    const joiningHeaderIndexT1 = getColumnHeadIndex(header1, table1.table);
-    const joiningHeaderIndexT2 = getColumnHeadIndex(header2, table2.table);
+    const joiningHeaderIndexT1 = getColumnHeadIndex(table1JoiningHeader, table1);
+    const joiningHeaderIndexT2 = getColumnHeadIndex(table2JoiningHeader, table2);
 
     table1.table.forEach((row, rowIndex) => {
         if (!rowIndex) return;

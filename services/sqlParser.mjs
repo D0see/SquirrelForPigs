@@ -1,13 +1,16 @@
 import { sqlLeftJoin, sqlSelect } from "./sqlFunctions.mjs";
 import { keywords } from "../utils/keywords.mjs";
-import { updateAliases, findEndIndexOfKeywordQuery } from "./sqlParser.helper.mjs";
+import { queryAliasesHandler, buildDescriptiveHeaders, findEndIndexOfKeywordQuery, normalizeHeaders } from "./sqlParser.helper.mjs";
 
 export const SqlParser = (input, tables) => {
 
     const words = input.split(' ');
 
-    //updates aliases and remove them for the query
-    aliasesHandler(words, tables);
+    //updates tables aliases and remove them for the query
+    queryAliasesHandler(words, tables);
+
+    //updates tables headers based on their aliases and names (table.Name : a, table.alias : b => a.b.header)
+    buildDescriptiveHeaders(tables);
 
     let currIntermediaryTable;
     while(words.includes('LEFTJOIN')) {
@@ -32,6 +35,9 @@ export const SqlParser = (input, tables) => {
     const selectedColumns = words.slice(selectIndex + 1, lastElemIndex);
     const selectedFromTable = tables[words[lastElemIndex]];
     currIntermediaryTable = sqlSelect(selectedColumns, selectedFromTable);
+
+    //removes aliases and tablename from column headers
+    normalizeHeaders(currIntermediaryTable);
 
     return currIntermediaryTable
 } 

@@ -25,11 +25,21 @@ export const getColumnValuesByIndexFromTable = (table, columnIndex) => {
     return result;
 }
 
+//Checks that the selectedcolumn could be => tableName + '.' + header || table.alias + '.' + header || header
+const isPossibleColumnHeadWriting = (selectedColumnHead, header) => {
+    const splittedHeader = header.split('.');
+    if (splittedHeader[0] === selectedColumnHead) return true;
+    for (let i = 1; i < splittedHeader.length; i++) {
+        if (splittedHeader[i] + '.' + splittedHeader[0] === selectedColumnHead) return true;
+    }
+}
 
 // ("columnHead", [...tables]) => colIndex
-export const getColumnHeadIndex = (columnHead, table) => {
+export const getColumnHeadIndex = (selectedColumnHead, table) => {
     const result = [];
-    for (const [colIndex, header] of table[0].entries()) {
-        if (header === columnHead) return colIndex;
+    for (const [colIndex, header] of table.table[0].entries()) {
+        if (isPossibleColumnHeadWriting(selectedColumnHead, header)) result.push(colIndex);
     }
+    if (result.length > 1) throw new Error('Ambiguous column head : ' + `${result[0]}`);
+    return result[0]; 
 }
