@@ -9,7 +9,7 @@ export const SqlParser = (input, tables) => {
     //updates tables aliases and remove them for the query
     queryAliasesHandler(words, tables);
 
-    //updates tables headers based on their aliases and names (table.Name : a, table.alias : b => a.b.header)
+    //updates tables headers based on their aliases and names (table.Name : a, table.alias : b => header.a.b)
     buildDescriptiveHeaders(tables);
 
     let currIntermediaryTable;
@@ -43,7 +43,7 @@ export const SqlParser = (input, tables) => {
 } 
 
 //after a left join what stays in the query is the new table Name
-export const parseLeftJoin = (query, tables) => {
+const parseLeftJoin = (query, tables) => {
 
     const table1 = tables[query[0]];
     const table2 = tables[query[2]];

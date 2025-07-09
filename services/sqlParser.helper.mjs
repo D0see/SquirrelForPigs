@@ -19,6 +19,8 @@ export const queryAliasesHandler = (words, tables) => {
             //TODO: CHECK FOR ALIAS CONFLICT WITH OTHER TABLES NAME & ALIASES
 
             //Alias updating
+
+            //TODO: IF TABLE ALREADY HAS AN ALIAS, MAKE A COPY OF THAT TABLE WITH THE NEW ALIAS
             tables[words[i - 1]].alias = words[i + 1]; 
             words.splice(i, 2);
             i -= 2;
