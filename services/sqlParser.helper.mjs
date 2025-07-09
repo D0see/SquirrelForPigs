@@ -1,5 +1,10 @@
 import { keywords } from "../utils/keywords.mjs";
 
+export const findTableInTableArray = (tableName, tableArr) => {
+    const tableIndex = tableArr.findIndex(table => table.tableName === tableName);
+    return tableArr[tableIndex];
+}
+
 export const findEndIndexOfKeywordQuery = (keywords, words, index) => {
     for (let i = index + 2; i < words.length; i++) {
         if (keywords[words[i]]) {
@@ -12,16 +17,26 @@ export const findEndIndexOfKeywordQuery = (keywords, words, index) => {
 export const queryAliasesHandler = (words, tables) => {
     for (let i = 0; i < words.length; i++) {
         if (words[i] === "AS") {
+            let table = findTableInTableArray(words[i - 1], tables);
+            const alias = words[i + 1];
             //Error handling
-            if (!tables[words[i - 1]]) throw new Error(`no table with name : ${words[i - 1]}`);
-            if (!words[i + 1] || keywords[words[i + 1]]) throw new Error(`invalid or absent alias for table : ${words[i - 1]}`);
+            if (!table) throw new Error(`no table with name : ${words[i - 1]}`);
+            if (!alias || keywords[alias]) throw new Error(`invalid or absent alias for table : ${table.tableName}`);
 
             //TODO: CHECK FOR ALIAS CONFLICT WITH OTHER TABLES NAME & ALIASES
 
+            //CREATE NEW TABLE IF TABLE ALREADY HAS ALIAS
+            if (table.alias) {
+                table = structuredClone(table);
+                table.alias = alias;
+                tables.push(table);
+                words.splice(i, 2);
+                i -= 2;
+                continue;
+            }
+            
             //Alias updating
-
-            //TODO: IF TABLE ALREADY HAS AN ALIAS, MAKE A COPY OF THAT TABLE WITH THE NEW ALIAS
-            tables[words[i - 1]].alias = words[i + 1]; 
+            table.alias = words[i + 1]; 
             words.splice(i, 2);
             i -= 2;
         }
@@ -34,7 +49,6 @@ export const buildDescriptiveHeaders = (tables) => {
         for (let i = 0; i < table.table[0].length; i++) {
             table.table[0][i] += '.' + table.tableName;
             if (table.alias) table.table[0][i] += '.' + table.alias;
-
         }
     });
 }

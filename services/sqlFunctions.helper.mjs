@@ -30,16 +30,22 @@ const isPossibleColumnHeadWriting = (selectedColumnHead, header) => {
     const splittedHeader = header.split('.');
     if (splittedHeader[0] === selectedColumnHead) return true;
     for (let i = 1; i < splittedHeader.length; i++) {
-        if (splittedHeader[i] + '.' + splittedHeader[0] === selectedColumnHead) return true;
+        const currHeader = (splittedHeader[i] + '.' + splittedHeader[0]).trim();
+        if (currHeader === selectedColumnHead) return true;
     }
+    return false;
 }
 
 // ("columnHead", [...tables]) => colIndex
 export const getColumnHeadIndex = (selectedColumnHead, table) => {
     const result = [];
+    console.log(selectedColumnHead);
     for (const [colIndex, header] of table.table[0].entries()) {
-        if (isPossibleColumnHeadWriting(selectedColumnHead, header)) result.push(colIndex);
+        if (isPossibleColumnHeadWriting(selectedColumnHead, header)) {
+            result.push(colIndex);
+        };
     }
-    if (result.length > 1) throw new Error('Ambiguous column head : ' + `${result[0]}`);
+    if (result.length > 1) throw new Error('Ambiguous column head : ' + `${selectedColumnHead}`);
+    if (result.length === 0) throw new Error('couldntFind column head : ' + `${selectedColumnHead}`);
     return result[0]; 
 }

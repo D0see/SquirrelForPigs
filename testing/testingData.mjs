@@ -1,12 +1,12 @@
 export default {
     people : {
         table : [
-        ['id', 'firstName', 'lastName', 'jobId'],
-        ['1', 'John', 'Doe', '1'],
-        ['2', 'Jane', 'Doe', '2'],
-        ['3', 'Bob', 'Dylan', '4'],
-        ['4', 'Cillian', 'Murphy', '4'],
-        ['4', 'Jobless', 'Murphy', '1']
+        ['id', 'firstName', 'lastName', 'jobId', 'idManager'],
+        ['1', 'John', 'Doe', '1','2'],
+        ['2', 'Jane', 'Doe', '2', undefined],
+        ['3', 'Bob', 'Dylan', '3', undefined],
+        ['4', 'Cillian', 'Murphy', '4', undefined],
+        ['5', 'Jobless', 'Murphy', '1', undefined]
     ], 
         tableName : 'people'
     },
@@ -15,7 +15,7 @@ export default {
         ['id', 'occupation', 'idSalary'],
         ['1', 'Mason', '1'],
         ['2', 'Plumber','2'],
-        ['3', 'Bouncer','2'],
+        ['3', 'Bouncer','3'],
         ['4', 'Barman', '1'],
     ],
         tableName : "job"

@@ -16,4 +16,6 @@ sqlQuerySubsmissionButton.addEventListener("click", (e) => {
 
 //SELECT firstName occupation FROM people LEFTJOIN job on jobId = id
 
-//SELECT firstName occupation salary FROM people LEFTJOIN job on jobId = id LEFTJOIN salary on idSalary = thisId
+//SELECT firstName occupation salary FROM people AS p LEFTJOIN job on p.id = job.id LEFTJOIN salary on job.idSalary = id
+
+//SELECT p.firstName m.firstName m.lastName FROM people AS p LEFTJOIN people AS m on p.idManager = m.id
