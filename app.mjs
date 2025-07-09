@@ -10,7 +10,7 @@ const sqlQuerySubsmissionButton = document.getElementById("sqlQuerySubmitButton"
 const tables = testingData;
 
 sqlQuerySubsmissionButton.addEventListener("click", (e) => {
-    const newTable = SqlParser(sqlTextArea.value, tables);
+    const newTable = SqlParser(sqlTextArea.value, structuredClone(tables));
     body.appendChild(twoDArrToHTMLTable(newTable));
 })
 

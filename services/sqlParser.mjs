@@ -1,10 +1,13 @@
 import { sqlLeftJoin, sqlSelect } from "./sqlFunctions.mjs";
 import { keywords } from "../utils/keywords.mjs";
-import { findEndIndexOfKeywordQuery } from "./sqlParser.helper.mjs";
+import { updateAliases, findEndIndexOfKeywordQuery } from "./sqlParser.helper.mjs";
 
 export const SqlParser = (input, tables) => {
 
     const words = input.split(' ');
+
+    //updates aliases and remove them for the query
+    aliasesHandler(words, tables);
 
     let currIntermediaryTable;
     while(words.includes('LEFTJOIN')) {
@@ -23,11 +26,11 @@ export const SqlParser = (input, tables) => {
     let lastElemIndex;
     for (const [index, word] of words.entries()) {
         if (word === 'FROM') {
-            lastElemIndex = index;
+            lastElemIndex = index + 1;
         }
     }
     const selectedColumns = words.slice(selectIndex + 1, lastElemIndex);
-    const selectedFromTable = tables[words[lastElemIndex + 1]];
+    const selectedFromTable = tables[words[lastElemIndex]];
     currIntermediaryTable = sqlSelect(selectedColumns, selectedFromTable);
 
     return currIntermediaryTable

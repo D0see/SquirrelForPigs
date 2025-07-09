@@ -3,7 +3,6 @@ export const twoDArrToHTMLTable = (tableObj) => {
     const twoDArr = tableObj.table;
     const tableName = tableObj.tableName;
 
-
     const table = document.createElement('table');
 
     // builds caption
