@@ -4,7 +4,7 @@ import { queryAliasesHandler, buildDescriptiveHeaders, findEndIndexOfKeywordQuer
 
 export const SqlParser = (input, tablesObj) => {
 
-    const words = input.split(' ').map(word => word.trim());
+    const words = input.split(' ').map(word => word.trim()).filter(word => word);
     const tables = [];
     for (const key of Object.keys(tablesObj)) {
         tables.push(tablesObj[key]);

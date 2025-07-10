@@ -29,14 +29,7 @@ sqlQuerySubsmissionButton.addEventListener("click", (e) => {
 
 /* WORKING
 
-SELECT firstName occupation FROM people LEFTJOIN job on jobId = id
-
-SELECT firstName occupation salary FROM people AS p LEFTJOIN job on p.id = job.id LEFTJOIN salary on job.idSalary = id
-
-SELECT p.firstName m.firstName m.lastName FROM people AS p LEFTJOIN people AS m on p.idManager = m.id
-
-SELECT p.firstName j1.occupation m.firstName m.lastName j2.occupation FROM people AS p LEFTJOIN people AS m on p.idManager = m.id LEFTJOIN job AS j1 on p.jobId = j1.id LEFTJOIN job AS j2 on m.jobId = j2.id
-
+SELECT p.id p.firstName j1.occupation s1.salary m.id m.firstName m.lastName j2.occupation s2.salary FROM people AS p LEFTJOIN people AS m on p.idManager = m.id LEFTJOIN job AS j1 on p.jobId = j1.id LEFTJOIN job AS j2 on m.jobId = j2.id LEFTJOIN salary AS s1 on j1.idSalary = s1.id LEFTJOIN salary AS s2 on j2.idSalary = s2.id
 
 /* DOESNT WORK
 
