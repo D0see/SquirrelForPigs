@@ -61,7 +61,6 @@ export const normalizeHeaders = (table) => {
 }
 
 export const turnRightJoinIntoLeftJoin = (words) => {
-    console.log(words.join(''))
     for (let i = 0; i < words.length; i++) {
         if (words[i] === "RIGHTJOIN") {
             words[i] = "LEFTJOIN";
@@ -69,12 +68,10 @@ export const turnRightJoinIntoLeftJoin = (words) => {
             words[i - 1] = words[i + 1]
             words[i + 1] = temp;
             const leftJoinOnIndex = words.findIndex((word, index) => index > i && word === '=');
-            console.log(leftJoinOnIndex)
             let temp2 = words[leftJoinOnIndex - 1]
             words[leftJoinOnIndex - 1] = words[leftJoinOnIndex + 1]
             words[leftJoinOnIndex + 1] = temp2;
         }
     }
-    console.log(words.join(''))
 
 }

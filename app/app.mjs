@@ -17,7 +17,6 @@ sqlQuerySubsmissionButton.addEventListener("click", (e) => {
     errorMessage.innerHTML = null;
     try {
         newTable = SqlParser(sqlTextArea.value, structuredClone(tables));
-        console.log(JSON.stringify(newTable));
     } catch(e) {
         errorMessage.innerText = e.message + '\n' + e.stack;
         return;
