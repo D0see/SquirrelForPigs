@@ -4,6 +4,10 @@
     padding: 0;
 }
 
+/* ///////////////////////////
+   ///////////////////////////              INPUT AREA 
+   ///////////////////////////*/
+
 body {
     position: relative;
     display: flex;
@@ -33,7 +37,91 @@ body {
     width: 75%;
 }
 
+#errorMessage {
+    color: red;
+}
+
 #sqlQuerySubmitButton {
     width:25%;
     margin: 0 auto;
+}
+
+#queryResultVisualizer {
+    display: flex;
+    justify-content: center;
+    width: 60%;
+    margin: 0 auto;
+    border: 1px solid green;
+}
+
+/* ///////////////////////////
+   ///////////////////////////              TABLE STYLES 
+   ///////////////////////////*/
+
+/* queryResult */
+
+.queryResult-table {
+    max-width: 75%;
+    min-width: 50%;
+}
+
+.queryResult-caption {
+    padding: 5px;
+    text-transform: uppercase;
+}
+
+.queryResult-thead {
+    background-color: darkgray;
+}
+
+.queryResult-tbody {
+
+}
+
+.queryResult-th {
+    padding: 10px;
+}
+
+.queryResult-tr {
+    
+}
+
+.queryResult-td {
+    background-color: lightgrey;
+    text-align: center;
+    padding: 5px;
+}
+
+/* tableDisplay */
+
+.tableDisplay-table {
+    max-width: 75%;
+    min-width: 50%;
+}
+
+.tableDisplay-caption {
+    padding: 5px;
+    text-transform: uppercase;
+}
+
+.tableDisplay-thead {
+    background-color: darkgray;
+}
+
+.tableDisplay-tbody {
+
+}
+
+.tableDisplay-th {
+    padding: 10px;
+}
+
+.tableDisplay-tr {
+    
+}
+
+.tableDisplay-td {
+    background-color: lightgrey;
+    text-align: center;
+    padding: 5px;
 }

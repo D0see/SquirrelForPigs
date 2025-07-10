@@ -48,7 +48,7 @@ describe(findEndIndexOfKeywordQuery.name, () => {
     const result =  findEndIndexOfKeywordQuery(keywords, testingQuery, startingKeywordIndex);
 
     //ASSERT
-     expect(result).toBe(13);
+    expect(result).toBe(13);
   }) 
 })
 

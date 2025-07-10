@@ -5,22 +5,25 @@ import testingData from './testing/testingData.mjs';
 const body = document.querySelector('body');
 
 const sqlTextArea = document.getElementById("sqlQueryEntry");
+const errorMessage = document.getElementById("errorMessage");
 const sqlQuerySubsmissionButton = document.getElementById("sqlQuerySubmitButton");
+const queryResultVisualizer = document.getElementById("queryResultVisualizer")
 
 const tables = testingData;
 
 sqlQuerySubsmissionButton.addEventListener("click", (e) => {
     let newTable;
+    queryResultVisualizer.innerHTML = null;
+    errorMessage.innerHTML = null;
     try {
         newTable = SqlParser(sqlTextArea.value, structuredClone(tables));
     } catch(e) {
-        const errorElem = document.createElement('p');
-        errorElem.style.color = 'red';
-        errorElem.innerText = e.message;
-        body.appendChild(errorElem);
+        errorMessage.innerText = e.message;
+        return;
     }
-    if (newTable) body.appendChild(twoDArrToHTMLTable(newTable));
-    
+    if (newTable) {
+        queryResultVisualizer.appendChild(twoDArrToHTMLTable(newTable, "queryResult"))
+    };
 })
 
 //SELECT firstName occupation FROM people LEFTJOIN job on jobId = id

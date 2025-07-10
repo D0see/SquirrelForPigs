@@ -45,6 +45,6 @@ export const getColumnHeadIndex = (selectedColumnHead, table) => {
         };
     }
     if (result.length > 1) throw new Error('Ambiguous column head : ' + `${selectedColumnHead}`);
-    if (result.length === 0) throw new Error('couldntFind column head : ' + `${selectedColumnHead}`);
+    if (result.length === 0) throw new Error('Couldnt find column head : ' + `${selectedColumnHead}`);
     return result[0]; 
 }

@@ -22,11 +22,11 @@ export const queryAliasesHandler = (words, tables) => {
             const alias = words[i + 1];
 
             //Error handling
-            if (!table) throw new Error(`no table with name : ${words[i - 1]}`);
-            if (!alias || keywords[alias]) throw new Error(`invalid or absent alias for table : ${table.tableName}`);
+            if (!table) throw new Error(`No table with name : ${words[i - 1]}`);
+            if (!alias || keywords[alias]) throw new Error(`Invalid or absent alias for table : ${table.tableName}`);
             //Check for name conflict between specified alias and tables names and aliases
             const aliasOrNameCollidingTables = tables.filter(table => table.tableName === alias || table.alias === alias);
-            if (aliasOrNameCollidingTables.length) throw new Error(`name collision for alias : ${alias}`);
+            if (aliasOrNameCollidingTables.length) throw new Error(`Name collision for alias : ${alias}`);
 
             //Create new table if specified table already has an alias
             if (table.alias) {
