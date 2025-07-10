@@ -10,8 +10,17 @@ const sqlQuerySubsmissionButton = document.getElementById("sqlQuerySubmitButton"
 const tables = testingData;
 
 sqlQuerySubsmissionButton.addEventListener("click", (e) => {
-    const newTable = SqlParser(sqlTextArea.value, structuredClone(tables));
-    body.appendChild(twoDArrToHTMLTable(newTable));
+    let newTable;
+    try {
+        newTable = SqlParser(sqlTextArea.value, structuredClone(tables));
+    } catch(e) {
+        const errorElem = document.createElement('p');
+        errorElem.style.color = 'red';
+        errorElem.innerText = e.message;
+        body.appendChild(errorElem);
+    }
+    if (newTable) body.appendChild(twoDArrToHTMLTable(newTable));
+    
 })
 
 //SELECT firstName occupation FROM people LEFTJOIN job on jobId = id
