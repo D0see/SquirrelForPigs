@@ -95,17 +95,15 @@ body {
 /* tableDisplay */
 
 .tableDisplay-table {
-    max-width: 75%;
-    min-width: 50%;
+
 }
 
 .tableDisplay-caption {
-    padding: 5px;
-    text-transform: uppercase;
+
 }
 
 .tableDisplay-thead {
-    background-color: darkgray;
+
 }
 
 .tableDisplay-tbody {
@@ -113,7 +111,7 @@ body {
 }
 
 .tableDisplay-th {
-    padding: 10px;
+
 }
 
 .tableDisplay-tr {
@@ -121,7 +119,5 @@ body {
 }
 
 .tableDisplay-td {
-    background-color: lightgrey;
-    text-align: center;
-    padding: 5px;
+
 }

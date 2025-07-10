@@ -1,9 +1,10 @@
 import { keywords } from "../utils/keywords.mjs";
 
 export const findTableInTableArray = (tableName, tableArr) => {
-    const tableIndex = tableArr.findIndex(table => table.tableName === tableName);
-    if (!tableArr[tableIndex]) throw new Error(`no table with name : ${tableName}`);
-    return tableArr[tableIndex];
+    const result = tableArr.filter(table => table.tableName === tableName || (table.alias ? table.alias === tableName : false));
+    if (result.length === 0) throw new Error(`no table with name : ${tableName}`);
+    if (result.length > 1) throw new Error(`ambiguous result for tableName : ${tableName}`);
+    return result[0];
 }
 
 export const findEndIndexOfKeywordQuery = (keywords, words, index) => {
@@ -19,6 +20,7 @@ export const queryAliasesHandler = (words, tables) => {
     for (let i = 0; i < words.length; i++) {
         if (words[i] === "AS") {
             let table = findTableInTableArray(words[i - 1], tables);
+            console.log('table', table);
             const alias = words[i + 1];
 
             //Error handling
@@ -37,7 +39,7 @@ export const queryAliasesHandler = (words, tables) => {
             //Alias updating
             table.alias = alias; 
             //Query updating
-            words.splice(i, 2);
+            words.splice(i - 1, 2);
             i -= 2;
         }
     }
