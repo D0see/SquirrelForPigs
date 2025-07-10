@@ -99,7 +99,7 @@ const testingData = {
 }
 
  describe(SqlParser.name, () => {
-  it("should pass functionnal test 1", () => {
+  it("LEFTJOIN should pass functionnal test 1", () => {
     //ARRANGE
     const query = "SELECT firstName occupation FROM people LEFTJOIN job on jobId = id";
     const tablesObj = structuredClone(testingData);
@@ -113,7 +113,7 @@ const testingData = {
 })
 
 describe(SqlParser.name, () => {
-  it("should pass functionnal test 2", () => {
+  it("LEFTJOIN should pass functionnal test 2", () => {
     //ARRANGE
     const query = "SELECT firstName occupation salary FROM people AS p LEFTJOIN job on p.id = job.id LEFTJOIN salary on job.idSalary = id";
     const tablesObj = structuredClone(testingData);
@@ -127,7 +127,7 @@ describe(SqlParser.name, () => {
 })
 
 describe(SqlParser.name, () => {
-  it("should pass functionnal test 3", () => {
+  it("LEFTJOIN should pass functionnal test 3", () => {
     //ARRANGE
     const tablesObj = structuredClone(testingData);
     const query = "SELECT p.firstName m.firstName m.lastName FROM people AS p LEFTJOIN people AS m on p.idManager = m.id";
@@ -141,7 +141,7 @@ describe(SqlParser.name, () => {
 })
 
 describe(SqlParser.name, () => {
-  it("should pass functionnal test 4", () => {
+  it("LEFTJOIN should pass functionnal test 4", () => {
     //ARRANGE
     const tablesObj = structuredClone(testingData);
     const query = "SELECT p.firstName j1.occupation m.firstName m.lastName j2.occupation FROM people AS p LEFTJOIN people AS m on p.idManager = m.id LEFTJOIN job AS j1 on p.jobId = j1.id LEFTJOIN job AS j2 on m.jobId = j2.id";
@@ -155,7 +155,7 @@ describe(SqlParser.name, () => {
 })
 
 describe(SqlParser.name, () => {
-  it("should pass functionnal test 5", () => {
+  it("LEFTJOIN should pass functionnal test 5", () => {
     //ARRANGE
     const tablesObj = structuredClone(testingData);
     const query = "SELECT o.product o.amount p.firstName j1.occupation s1.salary m.firstName m.lastName j2.occupation FROM order AS o LEFTJOIN people AS p on o.userId = p.id LEFTJOIN people AS m on p.idManager = m.id LEFTJOIN job AS j1 on p.jobId = j1.id LEFTJOIN job AS j2 on m.jobId = j2.id LEFTJOIN salary AS s1 on j1.idSalary = s1.id LEFTJOIN salary AS s2 on j2.idSalary = s2.id";
@@ -165,5 +165,19 @@ describe(SqlParser.name, () => {
 
     //ASSERT
     expect(result).toBe('{"table":[["product","amount","firstName","occupation","salary","firstName","lastName","occupation"],["Laptop","1200.00","John","Mason","10000","Jane","Doe","Plumber"],["Phone","800.00","Jane","Plumber","15000","","",""],["Mouse","25.50","John","Mason","10000","Jane","Doe","Plumber"],["Keyboard","45.00","Bob","Bouncer","20000","","",""],["Monitor","220.00","Cillian","Barman","10000","","",""],["Tablet","600.00","Jane","Plumber","15000","","",""],["Webcam","70.00","Bob","Bouncer","20000","","",""],["Desk Lamp","35.00","John","Mason","10000","Jane","Doe","Plumber"],["Chair","150.00","Cillian","Barman","10000","","",""],["USB Hub","20.00","John","Mason","10000","Jane","Doe","Plumber"],["External HDD","90.00","Jane","Plumber","15000","","",""],["Microphone","130.00","Bob","Bouncer","20000","","",""],["Graphics Tablet","340.00","Cillian","Barman","10000","","",""],["SSD","110.00","John","Mason","10000","Jane","Doe","Plumber"],["Router","75.00","Jane","Plumber","15000","","",""],["Power Supply","95.00","Jobless","Mason","10000","","",""],["RAM","60.00","Alice","Plumber","15000","Jane","Doe","Plumber"],["Desk","300.00","Charlie","Bouncer","20000","Bob","Dylan","Bouncer"],["Office Chair","250.00","Emily","Barman","10000","Jane","Doe","Plumber"],["Notebook","3.00","George","Mason","10000","John","Doe","Mason"],["Pen Pack","5.00","Hannah","Plumber","15000","Jane","Doe","Plumber"],["Drawing Tablet","400.00","Ivan","Bouncer","20000","Bob","Dylan","Bouncer"],["Headphones","150.00","Julia","Barman","10000","Cillian","Murphy","Barman"],["Webcam","80.00","Kevin","Mason","10000","John","Doe","Mason"],["Laptop Stand","50.00","Laura","Plumber","15000","Jane","Doe","Plumber"],["Micro SD Card","20.00","Michael","Bouncer","20000","Bob","Dylan","Bouncer"],["Portable Monitor","180.00","Nina","Barman","10000","Cillian","Murphy","Barman"],["Gaming Mouse","65.00","Oscar","Mason","10000","John","Doe","Mason"],["Mechanical Keyboard","130.00","Paul","Plumber","15000","Jane","Doe","Plumber"],["Smartwatch","210.00","Queen","Bouncer","20000","Bob","Dylan","Bouncer"],["Router","85.00","Rachel","Barman","10000","Cillian","Murphy","Barman"],["Cable Organizer","15.00","John","Mason","10000","Jane","Doe","Plumber"],["Flash Drive","12.00","Jane","Plumber","15000","","",""],["Bluetooth Speaker","90.00","Bob","Bouncer","20000","","",""],["Laptop Bag","70.00","Cillian","Barman","10000","","",""]],"tableName":"order-people-people-job-job-salary-salary-filtered"}')
+  }) 
+})
+
+ describe(SqlParser.name, () => {
+  it("RIGHTJOIN should pass functionnal test 6", () => {
+    //ARRANGE
+    const query = "SELECT firstName occupation FROM job RIGHTJOIN people on id = jobId";
+    const tablesObj = structuredClone(testingData);
+
+    //ACT
+    const result = JSON.stringify(SqlParser(query, tablesObj));
+
+    //ASSERT
+    expect(result).toBe('{"table":[["firstName","occupation"],["John","Mason"],["Jane","Plumber"],["Bob","Bouncer"],["Cillian","Barman"],["Jobless","Mason"],["Alice","Plumber"],["Charlie","Bouncer"],["Emily","Barman"],["George","Mason"],["Hannah","Plumber"],["Ivan","Bouncer"],["Julia","Barman"],["Kevin","Mason"],["Laura","Plumber"],["Michael","Bouncer"],["Nina","Barman"],["Oscar","Mason"],["Paul","Plumber"],["Queen","Bouncer"],["Rachel","Barman"]],"tableName":"people-job-filtered"}')
   }) 
 })

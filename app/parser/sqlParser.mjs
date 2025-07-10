@@ -1,6 +1,6 @@
 import { sqlLeftJoin, sqlSelect } from "../services/sqlFunctions.mjs";
 import { keywords } from "../utils/keywords.mjs";
-import { queryAliasesHandler, buildDescriptiveHeaders, findEndIndexOfKeywordQuery, normalizeHeaders, findTableInTableArray } from "./sqlParser.helper.mjs";
+import { queryAliasesHandler, buildDescriptiveHeaders, turnRightJoinIntoLeftJoin, findEndIndexOfKeywordQuery, normalizeHeaders, findTableInTableArray } from "./sqlParser.helper.mjs";
 
 export const SqlParser = (input, tablesObj) => {
 
@@ -10,11 +10,14 @@ export const SqlParser = (input, tablesObj) => {
         tables.push(tablesObj[key]);
     }
 
-    //updates tables aliases and remove them for the query  
+    //updates tables aliases in place and remove them for the query  
     queryAliasesHandler(words, tables);
 
-    //updates tables headers based on their aliases and names (table.Name : a, table.alias : b => header.a.b)
+    //updates tables headers in place based on their aliases and names (table.Name : a, table.alias : b => header.a.b)
     buildDescriptiveHeaders(tables);
+
+    //updates the query in place "table1 RIGHTJOIN table2" => "table2 LEFTJOIN table1"
+    turnRightJoinIntoLeftJoin(words);
 
     let currIntermediaryTable;
     while(words.includes('LEFTJOIN')) {

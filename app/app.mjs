@@ -26,11 +26,3 @@ sqlQuerySubsmissionButton.addEventListener("click", (e) => {
         queryResultVisualizer.appendChild(twoDArrToHTMLTable(newTable, "queryResult"))
     };
 })
-
-/* WORKING
-
-SELECT p.id p.firstName j1.occupation s1.salary m.id m.firstName m.lastName j2.occupation s2.salary FROM people AS p LEFTJOIN people AS m on p.idManager = m.id LEFTJOIN job AS j1 on p.jobId = j1.id LEFTJOIN job AS j2 on m.jobId = j2.id LEFTJOIN salary AS s1 on j1.idSalary = s1.id LEFTJOIN salary AS s2 on j2.idSalary = s2.id
-
-/* DOESNT WORK
-
-*/
