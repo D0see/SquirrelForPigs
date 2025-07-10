@@ -22,8 +22,6 @@ export const sqlLeftJoin = (table1, table2, table1JoiningHeader, table2JoiningHe
 
     const joiningHeaderIndexT1 = getColumnHeadIndex(table1JoiningHeader, table1);
     const joiningHeaderIndexT2 = getColumnHeadIndex(table2JoiningHeader, table2);
-    console.log(joiningHeaderIndexT1, joiningHeaderIndexT2, 'JOINING HEADERS INDEXES');
-    console.log(newTable);
     table1.table.forEach((row, rowIndex) => {
         if (!rowIndex) return;
         const values = getColumnValuesByIndexFromTable(table2.table, joiningHeaderIndexT2);

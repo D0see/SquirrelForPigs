@@ -6,8 +6,10 @@ export const findTableInTableArray = (tableName, tableArr) => {
 }
 
 export const findEndIndexOfKeywordQuery = (keywords, words, index) => {
-    for (let i = index + 2; i < words.length; i++) {
+    console.log(words.join(' '))
+    for (let i = index + 1; i < words.length; i++) {
         if (keywords[words[i]]) {
+            console.log(words[i - 1], i - 1)
             return i - 1;
         }
     }

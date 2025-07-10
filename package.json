@@ -1,0 +1,16 @@
+{
+  "name": "squirrelforpigs",
+  "version": "1.0.0",
+  "description": "basic sql parser",
+  "main": "index.html",
+  "scripts": {
+    "test": "vitest"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "vite": "^7.0.3",
+    "vitest": "^3.2.4"
+  }
+}

@@ -39,7 +39,6 @@ const isPossibleColumnHeadWriting = (selectedColumnHead, header) => {
 // ("columnHead", [...tables]) => colIndex
 export const getColumnHeadIndex = (selectedColumnHead, table) => {
     const result = [];
-    console.log(selectedColumnHead);
     for (const [colIndex, header] of table.table[0].entries()) {
         if (isPossibleColumnHeadWriting(selectedColumnHead, header)) {
             result.push(colIndex);

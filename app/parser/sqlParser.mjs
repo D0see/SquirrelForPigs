@@ -1,11 +1,10 @@
-import { sqlLeftJoin, sqlSelect } from "./sqlFunctions.mjs";
+import { sqlLeftJoin, sqlSelect } from "../services/sqlFunctions.mjs";
 import { keywords } from "../utils/keywords.mjs";
 import { queryAliasesHandler, buildDescriptiveHeaders, findEndIndexOfKeywordQuery, normalizeHeaders, findTableInTableArray } from "./sqlParser.helper.mjs";
 
 export const SqlParser = (input, tablesObj) => {
 
     const words = input.split(' ').map(word => word.trim());
-    console.log(words);
     const tables = [];
     for (const key of Object.keys(tablesObj)) {
         tables.push(tablesObj[key]);
@@ -22,7 +21,6 @@ export const SqlParser = (input, tablesObj) => {
         const leftJoinIndex = words.findIndex(word => word === 'LEFTJOIN');
         const endIndex = findEndIndexOfKeywordQuery(keywords, words, leftJoinIndex);
         const query = words.slice(leftJoinIndex - 1, endIndex + 1);
-        console.log(query);
         currIntermediaryTable = parseLeftJoin(query, tables);
 
         //builds intermediary table and updates query

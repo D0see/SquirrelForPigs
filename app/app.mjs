@@ -1,5 +1,5 @@
-import { twoDArrToHTMLTable } from './services/tableDisplayer.mjs'
-import { SqlParser } from './services/sqlParser.mjs';
+import { twoDArrToHTMLTable } from './utils/tableDisplayer.mjs'
+import { SqlParser } from './parser/sqlParser.mjs';
 import testingData from './testing/testingData.mjs';
 
 const body = document.querySelector('body');
