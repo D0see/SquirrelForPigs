@@ -20,7 +20,6 @@ export const queryAliasesHandler = (words, tables) => {
     for (let i = 0; i < words.length; i++) {
         if (words[i] === "AS") {
             let table = findTableInTableArray(words[i - 1], tables);
-            console.log('table', table);
             const alias = words[i + 1];
 
             //Error handling

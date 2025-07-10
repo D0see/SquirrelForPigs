@@ -48,8 +48,6 @@ export const SqlParser = (input, tablesObj) => {
 
 //after a left join what stays in the query is the new table Name
 const parseLeftJoin = (query, tables) => {
-    console.log('------- ', query)
-    console.log('tables2', tables)
     const table1 = findTableInTableArray(query[0], tables);
     let tablesWithoutTable1 = tables;
     if (table1.alias) {
