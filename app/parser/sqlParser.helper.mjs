@@ -21,7 +21,7 @@ export const cleanseInput = (allKeywords, input) => {
 
     buildCompositeKeywords(result);
 
-    //replace equivalentkeyWords
+    //TODO : replace equivalentkeyWords
     
     return result;
 }
