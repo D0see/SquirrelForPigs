@@ -1,4 +1,4 @@
-export const twoDArrToHTMLTable = (tableObj, tableType) => {
+export const tableObjToHTMLTable = (tableObj, tableType) => {
 
     const twoDArr = tableObj.table;
     const tableName = tableObj.tableName;

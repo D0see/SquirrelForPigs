@@ -1,4 +1,4 @@
-import { twoDArrToHTMLTable } from './utils/tableDisplayer.mjs'
+import { tableObjToHTMLTable } from './utils/tableDisplayer.mjs'
 import { SqlParser } from './parser/sqlParser.mjs';
 import testingData from './testing/testingData.mjs';
 
@@ -17,11 +17,12 @@ sqlQuerySubsmissionButton.addEventListener("click", (e) => {
     errorMessage.innerHTML = null;
     try {
         newTable = SqlParser(sqlTextArea.value, structuredClone(tables));
+        console.log(JSON.stringify(newTable));
     } catch(e) {
         errorMessage.innerText = e.message + '\n' + e.stack;
         return;
     }
     if (newTable) {
-        queryResultVisualizer.appendChild(twoDArrToHTMLTable(newTable, "queryResult"))
+        queryResultVisualizer.appendChild(tableObjToHTMLTable(newTable, "queryResult"))
     };
 })

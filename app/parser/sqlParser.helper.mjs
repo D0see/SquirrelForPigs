@@ -16,7 +16,32 @@ export const findEndIndexOfKeywordQuery = (keywords, words, index) => {
     return words.length - 1
 }
 
-export const queryAliasesHandler = (words, tables) => {
+// words => columnAliases = ['','',"aliasforcolumn3",'']
+// updates words to remove columns aliases affectations
+export const columnsHeadersAliasesHandler = (words) => {
+    const columnsAliases = []
+    const selectIndex = words.findIndex(word => word === "SELECT");
+    let fromIndex = words.findIndex(word => word === "FROM");
+    for(let i = selectIndex + 1; i < fromIndex - 1; i++) {
+        if (words[i + 1] != "AS") {
+            columnsAliases.push('');
+            continue;
+        };
+        columnsAliases.push(words[i + 2]);
+        words.splice(i + 1, 2);
+        fromIndex -= 2;
+    }
+    return columnsAliases;
+}
+
+export const applyHeadersAliases = (table, columnHeaderAliases) => {
+    for (let i = 0; i < table.table[0].length; i++) {
+        if (!columnHeaderAliases[i]) continue;
+        table.table[0][i] = columnHeaderAliases[i];
+    }
+}
+
+export const tablesAliasesHandler = (words, tables) => {
     for (let i = 0; i < words.length; i++) {
         if (words[i] === "AS") {
             let table = findTableInTableArray(words[i - 1], tables);
@@ -26,7 +51,7 @@ export const queryAliasesHandler = (words, tables) => {
             if (!table) throw new Error(`No table with name : ${words[i - 1]}`);
             if (!alias || keywords[alias]) throw new Error(`Invalid or absent alias for table : ${table.tableName}`);
             //Check for name conflict between specified alias and tables names and aliases
-            const aliasOrNameCollidingTables = tables.filter(table => table.tableName === alias || table.alias === alias);
+            const aliasOrNameCollidingTables = tables.filter(table => [table.tableName, table.alias].includes(alias));
             if (aliasOrNameCollidingTables.length) throw new Error(`Name collision for alias : ${alias}`);
 
             //Create new table if specified table already has an alias
@@ -56,7 +81,8 @@ export const buildDescriptiveHeaders = (tables) => {
 // tableHeaders : header.a.b => header
 export const normalizeHeaders = (table) => {
     for (let i = 0; i < table.table[0].length; i++) {
-        table.table[0][i] = table.table[0][i].split('.')[0];
+        const header = table.table[0][i].split('.');
+        table.table[0][i] = header.length === 3 ? header[2] + '.' + header[0] : header[0];
     }
 }
 

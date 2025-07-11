@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { findTableInTableArray, findEndIndexOfKeywordQuery, queryAliasesHandler } from './sqlParser.helper.mjs'
+import { findTableInTableArray, findEndIndexOfKeywordQuery, tablesAliasesHandler} from './sqlParser.helper.mjs'
 
 describe(findTableInTableArray.name, () => {
   it("should return a table with the name specified in the parameters", () => {
@@ -52,7 +52,7 @@ describe(findEndIndexOfKeywordQuery.name, () => {
   }) 
 })
 
-describe(queryAliasesHandler.name, () => {
+describe(tablesAliasesHandler.name, () => {
   it("", () => {
     //ARRANGE
 

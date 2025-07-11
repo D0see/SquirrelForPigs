@@ -1,6 +1,6 @@
 import { sqlLeftJoin, sqlSelect } from "../services/sqlFunctions.mjs";
 import { keywords } from "../utils/keywords.mjs";
-import { queryAliasesHandler, buildDescriptiveHeaders, turnRightJoinIntoLeftJoin, findEndIndexOfKeywordQuery, normalizeHeaders, findTableInTableArray } from "./sqlParser.helper.mjs";
+import { tablesAliasesHandler, buildDescriptiveHeaders, turnRightJoinIntoLeftJoin, findEndIndexOfKeywordQuery, normalizeHeaders, findTableInTableArray, columnsHeadersAliasesHandler, applyHeadersAliases } from "./sqlParser.helper.mjs";
 
 export const SqlParser = (input, tablesObj) => {
 
@@ -10,8 +10,10 @@ export const SqlParser = (input, tablesObj) => {
         tables.push(tablesObj[key]);
     }
 
+    const savedSelectedHeaderAliases = columnsHeadersAliasesHandler(words);
+
     //updates tables aliases in place and remove them for the query  
-    queryAliasesHandler(words, tables);
+    tablesAliasesHandler(words, tables);
 
     //updates tables headers in place based on their aliases and names (table.Name : a, table.alias : b => header.a.b)
     buildDescriptiveHeaders(tables);
@@ -45,6 +47,8 @@ export const SqlParser = (input, tablesObj) => {
 
     //removes aliases and tablename from column headers
     normalizeHeaders(currIntermediaryTable);
+
+    applyHeadersAliases(currIntermediaryTable, savedSelectedHeaderAliases)
 
     return currIntermediaryTable
 } 
