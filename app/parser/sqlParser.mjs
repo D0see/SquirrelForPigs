@@ -6,6 +6,8 @@ export const SqlParser = (input, tablesObj) => {
 
     const words = cleanseInput(allKeywords, input);
 
+    console.log(words)
+
     const tables = [];
     for (const key of Object.keys(tablesObj)) {
         tables.push(tablesObj[key]);
@@ -26,7 +28,7 @@ export const SqlParser = (input, tablesObj) => {
     let currIntermediaryTable;
     for (let index = 0; index < words.length; index++) {
         const word = words[index];
-        if (word === 'LEFTJOIN') {
+        if (word === 'LEFT JOIN') {
             const endIndex = findEndIndexOfKeywordQuery(transformationKeywords, words, index);
             const query = words.slice(index - 1, endIndex + 1);
             currIntermediaryTable = parseLeftJoin(query, tables);
@@ -36,7 +38,7 @@ export const SqlParser = (input, tablesObj) => {
             words.splice(index - 1, endIndex + 2 - index, currIntermediaryTable.tableName);
             index--;
 
-        } else if (word === 'INNERJOIN') {
+        } else if (word === 'INNER JOIN') {
             const endIndex = findEndIndexOfKeywordQuery(transformationKeywords, words, index);
             const query = words.slice(index - 1, endIndex + 1);
             currIntermediaryTable = parseInnerJoin(query, tables);

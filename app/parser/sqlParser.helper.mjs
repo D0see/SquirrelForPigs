@@ -1,10 +1,27 @@
+import { nextCompositeKeyWordsWord } from "../utils/keywords.mjs"
+//TODO : should import allkeywords here directly instead of passing it to every other functions
+
+const buildCompositeKeywords = (words) => {
+    for (let i = 0; i < words.length; i++) {
+        if (nextCompositeKeyWordsWord[words[i]] && nextCompositeKeyWordsWord[words[i]] === words[i + 1]) {
+            words[i] += ` ${words[i + 1]}`;
+            words.splice(i + 1, 1);
+        }
+    }
+}
+
 //TODO : optimize this
 export const cleanseInput = (allKeywords, input) => {
+
     //removes empty spaces
     let result = input.split(' ').map(word => word.trim()).filter(word => word);
 
     //make sure keyword are uppercase
     result = result.map(word => allKeywords[word.toUpperCase()] ? word.toUpperCase() : word);
+
+    buildCompositeKeywords(result);
+
+    //replace equivalentkeyWords
     
     return result;
 }
@@ -97,8 +114,8 @@ export const normalizeHeaders = (table) => {
 
 export const turnRightJoinIntoLeftJoin = (words) => {
     for (let i = 0; i < words.length; i++) {
-        if (words[i] === "RIGHTJOIN") {
-            words[i] = "LEFTJOIN";
+        if (words[i] === "RIGHT JOIN") {
+            words[i] = "LEFT JOIN";
             let temp = words[i - 1]
             words[i - 1] = words[i + 1]
             words[i + 1] = temp;

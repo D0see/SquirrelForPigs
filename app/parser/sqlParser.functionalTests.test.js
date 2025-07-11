@@ -100,9 +100,9 @@ const testingData = {
 }
 
  describe(SqlParser.name, () => {
-  it("LEFTJOIN should pass functionnal test 1", () => {
+  it("LEFT JOIN should pass functionnal test 1", () => {
     //ARRANGE
-    const query = "SELECT firstName occupation FROM people LEFTJOIN job on jobId = id";
+    const query = "SELECT firstName occupation FROM people LEFT JOIN job on jobId = id";
     const tablesObj = structuredClone(testingData);
 
     //ACT
@@ -114,9 +114,9 @@ const testingData = {
 })
 
 describe(SqlParser.name, () => {
-  it("LEFTJOIN should pass functionnal test 2", () => {
+  it("LEFT JOIN should pass functionnal test 2", () => {
     //ARRANGE
-    const query = "SELECT firstName occupation salary FROM people AS p LEFTJOIN job on p.id = job.id LEFTJOIN salary on job.idSalary = id";
+    const query = "SELECT firstName occupation salary FROM people AS p LEFT JOIN job on p.id = job.id LEFT JOIN salary on job.idSalary = id";
     const tablesObj = structuredClone(testingData);
 
     //ACT
@@ -128,10 +128,10 @@ describe(SqlParser.name, () => {
 })
 
 describe(SqlParser.name, () => {
-  it("LEFTJOIN should pass functionnal test 3", () => {
+  it("LEFT JOIN should pass functionnal test 3", () => {
     //ARRANGE
     const tablesObj = structuredClone(testingData);
-    const query = "SELECT p.firstName m.firstName m.lastName FROM people AS p LEFTJOIN people AS m on p.idManager = m.id";
+    const query = "SELECT p.firstName m.firstName m.lastName FROM people AS p LEFT JOIN people AS m on p.idManager = m.id";
 
     //ACT
     const result = JSON.stringify(SqlParser(query, tablesObj));
@@ -142,10 +142,10 @@ describe(SqlParser.name, () => {
 })
 
 describe(SqlParser.name, () => {
-  it("LEFTJOIN should pass functionnal test 4", () => {
+  it("LEFT JOIN should pass functionnal test 4", () => {
     //ARRANGE
     const tablesObj = structuredClone(testingData);
-    const query = "SELECT p.firstName j1.occupation m.firstName m.lastName j2.occupation FROM people AS p LEFTJOIN people AS m on p.idManager = m.id LEFTJOIN job AS j1 on p.jobId = j1.id LEFTJOIN job AS j2 on m.jobId = j2.id";
+    const query = "SELECT p.firstName j1.occupation m.firstName m.lastName j2.occupation FROM people AS p LEFT JOIN people AS m on p.idManager = m.id LEFT JOIN job AS j1 on p.jobId = j1.id LEFT JOIN job AS j2 on m.jobId = j2.id";
 
     //ACT
     const result = JSON.stringify(SqlParser(query, tablesObj));
@@ -156,10 +156,10 @@ describe(SqlParser.name, () => {
 })
 
 describe(SqlParser.name, () => {
-  it("LEFTJOIN should pass functionnal test 5", () => {
+  it("LEFT JOIN should pass functionnal test 5", () => {
     //ARRANGE
     const tablesObj = structuredClone(testingData);
-    const query = "SELECT o.product o.amount p.firstName j1.occupation s1.salary m.firstName m.lastName j2.occupation FROM order AS o LEFTJOIN people AS p on o.userId = p.id LEFTJOIN people AS m on p.idManager = m.id LEFTJOIN job AS j1 on p.jobId = j1.id LEFTJOIN job AS j2 on m.jobId = j2.id LEFTJOIN salary AS s1 on j1.idSalary = s1.id LEFTJOIN salary AS s2 on j2.idSalary = s2.id";
+    const query = "SELECT o.product o.amount p.firstName j1.occupation s1.salary m.firstName m.lastName j2.occupation FROM order AS o LEFT JOIN people AS p on o.userId = p.id LEFT JOIN people AS m on p.idManager = m.id LEFT JOIN job AS j1 on p.jobId = j1.id LEFT JOIN job AS j2 on m.jobId = j2.id LEFT JOIN salary AS s1 on j1.idSalary = s1.id LEFT JOIN salary AS s2 on j2.idSalary = s2.id";
 
     //ACT
     const result = JSON.stringify(SqlParser(query, tablesObj));
@@ -170,9 +170,9 @@ describe(SqlParser.name, () => {
 })
 
  describe(SqlParser.name, () => {
-  it("RIGHTJOIN should pass functionnal test 6", () => {
+  it("RIGHT JOIN should pass functionnal test 6", () => {
     //ARRANGE
-    const query = "SELECT firstName occupation FROM job RIGHTJOIN people on id = jobId";
+    const query = "SELECT firstName occupation FROM job RIGHT JOIN people on id = jobId";
     const tablesObj = structuredClone(testingData);
 
     //ACT
@@ -186,7 +186,7 @@ describe(SqlParser.name, () => {
  describe(SqlParser.name, () => {
   it("COLUMNSHEADERSALIASES should pass functionnal test 7", () => {
     //ARRANGE
-    const query = "SELECT o.product AS product_bought o.amount AS price p.firstName AS client_firstname j1.occupation AS client_job s1.salary AS client_salary m.firstName AS manager_firstname m.lastName AS manager_lastname j2.occupation AS manager_job FROM order AS o LEFTJOIN people AS p on o.userId = p.id LEFTJOIN people AS m on p.idManager = m.id LEFTJOIN job AS j1 on p.jobId = j1.id LEFTJOIN job AS j2 on m.jobId = j2.id LEFTJOIN salary AS s1 on j1.idSalary = s1.id LEFTJOIN salary AS s2 on j2.idSalary = s2.id";
+    const query = "SELECT o.product AS product_bought o.amount AS price p.firstName AS client_firstname j1.occupation AS client_job s1.salary AS client_salary m.firstName AS manager_firstname m.lastName AS manager_lastname j2.occupation AS manager_job FROM order AS o LEFT JOIN people AS p on o.userId = p.id LEFT JOIN people AS m on p.idManager = m.id LEFT JOIN job AS j1 on p.jobId = j1.id LEFT JOIN job AS j2 on m.jobId = j2.id LEFT JOIN salary AS s1 on j1.idSalary = s1.id LEFT JOIN salary AS s2 on j2.idSalary = s2.id";
     const tablesObj = structuredClone(testingData);
 
     //ACT
@@ -198,9 +198,9 @@ describe(SqlParser.name, () => {
 })
 
  describe(SqlParser.name, () => {
-  it("INNERJOIN should pass functionnal test 8", () => {
+  it("INNER JOIN should pass functionnal test 8", () => {
     //ARRANGE
-    const query = "SELECT o.product AS product_bought o.amount AS price p.firstName AS client_firstname j1.occupation AS client_job s1.salary AS client_salary m.firstName AS manager_firstname m.lastName AS manager_lastname j2.occupation AS manager_job FROM order AS o INNERJOIN people AS p on o.userId = p.id LEFTJOIN people AS m on p.idManager = m.id LEFTJOIN job AS j1 on p.jobId = j1.id LEFTJOIN job AS j2 on m.jobId = j2.id LEFTJOIN salary AS s1 on j1.idSalary = s1.id LEFTJOIN salary AS s2 on j2.idSalary = s2.id";
+    const query = "SELECT o.product AS product_bought o.amount AS price p.firstName AS client_firstname j1.occupation AS client_job s1.salary AS client_salary m.firstName AS manager_firstname m.lastName AS manager_lastname j2.occupation AS manager_job FROM order AS o INNER JOIN people AS p on o.userId = p.id LEFT JOIN people AS m on p.idManager = m.id LEFT JOIN job AS j1 on p.jobId = j1.id LEFT JOIN job AS j2 on m.jobId = j2.id LEFT JOIN salary AS s1 on j1.idSalary = s1.id LEFT JOIN salary AS s2 on j2.idSalary = s2.id";
     const tablesObj = structuredClone(testingData);
 
     //ACT
@@ -214,7 +214,7 @@ describe(SqlParser.name, () => {
  describe(SqlParser.name, () => {
   it("POORLY WRITTEN INPUT : BADCASING should pass functionnal test 9", () => {
     //ARRANGE
-    const query = "select o.product as product_bought o.amount AS price p.firstName AS client_firstname j1.occupation as client_job s1.salary AS client_salary m.firstName AS manager_firstname m.lastName AS manager_lastname j2.occupation AS manager_job FROM order AS o innerJoiN people AS p on o.userId = p.id LEFTJOIN people AS m on p.idManager = m.id LEFTJOIN job AS j1 on p.jobId = j1.id leftJoin job AS j2 on m.jobId = j2.id leftjoin salary AS s1 on j1.idSalary = s1.id LEFTJOIN salary AS s2 on j2.idSalary = s2.id";
+    const query = "select o.product as product_bought o.amount AS price p.firstName AS client_firstname j1.occupation as client_job s1.salary AS client_salary m.firstName AS manager_firstname m.lastName AS manager_lastname j2.occupation AS manager_job FROM order AS o inner JoiN people AS p on o.userId = p.id LEFT JOIN people AS m on p.idManager = m.id LEFT JOIN job AS j1 on p.jobId = j1.id left Join job AS j2 on m.jobId = j2.id left join salary AS s1 on j1.idSalary = s1.id LEFT JOIN salary AS s2 on j2.idSalary = s2.id";
     const tablesObj = structuredClone(testingData);
 
     //ACT

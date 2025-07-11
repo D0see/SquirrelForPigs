@@ -1,14 +1,28 @@
+export const nextCompositeKeyWordsWord = {
+    'LEFT' : 'JOIN',
+    'RIGHT' : 'JOIN',
+    'INNER' : 'JOIN',
+}
+
 export const transformationKeywords = {
-    'LEFTJOIN' : true,
-    'INNERJOIN' : true,
+    'LEFT JOIN' : true,
+    'INNER JOIN' : true,
     'SELECT' : true,
 }
 
+export const equivalentKeywords = {
+    'JOIN' : 'INNER JOIN',
+}
+
 export const allKeywords = {
-    'LEFTJOIN' : true,
-    'RIGHTJOIN' : true,
-    'INNERJOIN' : true,
+    'LEFT JOIN' : true,
+    'RIGHT JOIN' : true,
+    'INNER JOIN' : true,
     'SELECT' : true,
+    'LEFT' : true,
+    'RIGHT' : true,
+    'INNER' : true,
+    'JOIN' : true,
     'AS' : true,
     'ON' : true
 }
