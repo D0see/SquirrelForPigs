@@ -17,10 +17,10 @@ export const getColumnByIndexFromTable = (table, columnIndex) => {
 }
 
 // (TwoDArr, columnIndex) => [val1, val2, val3...]
-export const getColumnValuesByIndexFromTable = (table, columnIndex) => {
+export const getColumnValuesByIndexFromTable = (twoDArr, columnIndex) => {
     const result = [];
-    for (let y = 1; y < table.length; y++) {
-        result.push(table[y][columnIndex]);
+    for (let y = 1; y < twoDArr.length; y++) {
+        result.push(twoDArr[y][columnIndex]);
     }
     return result;
 }

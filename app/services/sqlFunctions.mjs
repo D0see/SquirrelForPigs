@@ -45,3 +45,32 @@ export const sqlLeftJoin = (table1, table2, table1JoiningHeader, table2JoiningHe
         tableName : `${table1.tableName}-${table2.tableName}`
     };
 }
+
+export const sqlInnerJoin = (table1, table2, table1JoiningHeader, table2JoiningHeader, condOperator) => {
+    //build headers
+    const newTable = [JSON.parse(JSON.stringify(table1.table[0])).concat(JSON.parse(JSON.stringify(table2.table[0])))];
+
+    const joiningHeaderIndexT1 = getColumnHeadIndex(table1JoiningHeader, table1);
+    const joiningHeaderIndexT2 = getColumnHeadIndex(table2JoiningHeader, table2);
+
+    const table2JoiningColumnValues = getColumnValuesByIndexFromTable(table2.table, joiningHeaderIndexT2);
+    for (let i = 1; i < table1.table.length; i++) {
+        const matchingRowIndex = table2JoiningColumnValues.findIndex(value => value === table1.table[i][joiningHeaderIndexT1]) + 1;
+        if (!matchingRowIndex) continue;
+        newTable.push([
+            ...table1.table[i].concat(table2.table[matchingRowIndex])
+        ])
+    }
+    //fill empty cells with empty values
+    newTable.forEach((row, index) => {
+        if (index === 0) return;
+        while (row.length < newTable[0].length) {
+            row.push('')
+        }
+    });
+
+    return {
+        table : newTable,
+        tableName : `${table1.tableName}-${table2.tableName}`
+    };
+}
