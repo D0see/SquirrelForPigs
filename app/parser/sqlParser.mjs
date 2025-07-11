@@ -1,10 +1,11 @@
 import { sqlLeftJoin, sqlInnerJoin, sqlSelect } from "../services/sqlFunctions.mjs";
-import { keywords } from "../utils/keywords.mjs";
-import { tablesAliasesHandler, buildDescriptiveHeaders, turnRightJoinIntoLeftJoin, findEndIndexOfKeywordQuery, normalizeHeaders, findTableInTableArray, columnsHeadersAliasesHandler, applyHeadersAliases } from "./sqlParser.helper.mjs";
+import { allKeywords, transformationKeywords } from "../utils/keywords.mjs";
+import { cleanseInput, tablesAliasesHandler, buildDescriptiveHeaders, turnRightJoinIntoLeftJoin, findEndIndexOfKeywordQuery, normalizeHeaders, findTableInTableArray, columnsHeadersAliasesHandler, applyHeadersAliases } from "./sqlParser.helper.mjs";
 
 export const SqlParser = (input, tablesObj) => {
 
-    const words = input.split(' ').map(word => word.trim()).filter(word => word);
+    const words = cleanseInput(allKeywords, input);
+
     const tables = [];
     for (const key of Object.keys(tablesObj)) {
         tables.push(tablesObj[key]);
@@ -13,7 +14,7 @@ export const SqlParser = (input, tablesObj) => {
     const selectedColumnsHeaderAliases = columnsHeadersAliasesHandler(words);
 
     //updates tables aliases in place and remove them for the query  
-    tablesAliasesHandler(words, tables);
+    tablesAliasesHandler(transformationKeywords, words, tables);
 
     //updates tables headers in place based on their aliases and names (table.Name : a, table.alias : b => header.a.b)
     buildDescriptiveHeaders(tables);
@@ -26,7 +27,7 @@ export const SqlParser = (input, tablesObj) => {
     for (let index = 0; index < words.length; index++) {
         const word = words[index];
         if (word === 'LEFTJOIN') {
-            const endIndex = findEndIndexOfKeywordQuery(keywords, words, index);
+            const endIndex = findEndIndexOfKeywordQuery(transformationKeywords, words, index);
             const query = words.slice(index - 1, endIndex + 1);
             currIntermediaryTable = parseLeftJoin(query, tables);
 
@@ -36,7 +37,7 @@ export const SqlParser = (input, tablesObj) => {
             index--;
 
         } else if (word === 'INNERJOIN') {
-            const endIndex = findEndIndexOfKeywordQuery(keywords, words, index);
+            const endIndex = findEndIndexOfKeywordQuery(transformationKeywords, words, index);
             const query = words.slice(index - 1, endIndex + 1);
             currIntermediaryTable = parseInnerJoin(query, tables);
 

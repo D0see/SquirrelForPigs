@@ -1,4 +1,13 @@
-import { keywords } from "../utils/keywords.mjs";
+//TODO : optimize this
+export const cleanseInput = (allKeywords, input) => {
+    //removes empty spaces
+    let result = input.split(' ').map(word => word.trim()).filter(word => word);
+
+    //make sure keyword are uppercase
+    result = result.map(word => allKeywords[word.toUpperCase()] ? word.toUpperCase() : word);
+    
+    return result;
+}
 
 export const findTableInTableArray = (tableName, tableArr) => {
     const result = tableArr.filter(table => table.tableName === tableName || (table.alias ? table.alias === tableName : false));
@@ -41,7 +50,7 @@ export const applyHeadersAliases = (table, columnHeaderAliases) => {
     }
 }
 
-export const tablesAliasesHandler = (words, tables) => {
+export const tablesAliasesHandler = (keywords, words, tables) => {
     for (let i = 0; i < words.length; i++) {
         if (words[i] === "AS") {
             let table = findTableInTableArray(words[i - 1], tables);
