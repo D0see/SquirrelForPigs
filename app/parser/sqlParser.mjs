@@ -1,15 +1,10 @@
 import { sqlLeftJoin, sqlInnerJoin, sqlSelect } from "../services/sqlFunctions.mjs";
-import { allKeywords, joinKeywords, nextCompositeKeyWordsWord } from "../utils/keywords.mjs";
+import { allKeywords, joinKeywords, nextCompositeKeyWordsWord, equivalentKeywords } from "../utils/keywords.mjs";
 import { cleanQueryInput, tablesAliasesHandler, buildDescriptiveHeaders, turnRightJoinIntoLeftJoin, findEndIndexOfKeywordQuery, normalizeHeaders, findTableInTableArray, columnsHeadersAliasesHandler, applyHeadersAliases, applySqlJoinQuery } from "./sqlParser.helper.mjs";
 
-export const SqlParser = (input, tablesObj) => {
+export const SqlParser = (input, tables) => {
 
-    const words = cleanQueryInput(allKeywords, nextCompositeKeyWordsWord, input);
-
-    const tables = [];
-    for (const key of Object.keys(tablesObj)) {
-        tables.push(tablesObj[key]);
-    }
+    const words = cleanQueryInput(allKeywords, nextCompositeKeyWordsWord, equivalentKeywords, input);
 
     const selectedColumnsHeaderAliases = columnsHeadersAliasesHandler(words);
 

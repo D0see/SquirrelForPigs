@@ -1,8 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { SqlParser } from './sqlParser.mjs';
 
-const testingData = {
-    people: {
+const testingData = [{
         table: [
             ['id', 'firstName', 'lastName', 'jobId', 'idManager'],
             ['1', 'John', 'Doe', '1', '2'],
@@ -28,7 +27,7 @@ const testingData = {
         ],
         tableName: 'people'
     },
-    job: {
+    {
         table: [
             ['id', 'occupation', 'idSalary'],
             ['1', 'Mason', '1'],
@@ -44,7 +43,7 @@ const testingData = {
         ],
         tableName: 'job'
     },
-    salary: {
+    {
         table: [
             ['id', 'salary'],
             ['1', '10000'],
@@ -55,7 +54,7 @@ const testingData = {
         ],
         tableName: 'salary'
     },
-    order: {
+    {
         table: [
             ['id', 'userId', 'product', 'amount', 'createdAt'],
             ['1', '1', 'Laptop', '1200.00', '2023-06-01'],
@@ -97,7 +96,7 @@ const testingData = {
         ],
         tableName: 'order'
     }
-}
+]
 
  describe(SqlParser.name, () => {
   it("LEFT JOIN should pass functionnal test 1", () => {
@@ -222,5 +221,33 @@ describe(SqlParser.name, () => {
 
     //ASSERT
     expect(result).toBe('{"table":[["product_bought","price","client_firstname","client_job","client_salary","manager_firstname","manager_lastname","manager_job"],["Laptop","1200.00","John","Mason","10000","Jane","Doe","Plumber"],["Phone","800.00","Jane","Plumber","15000","","",""],["Mouse","25.50","John","Mason","10000","Jane","Doe","Plumber"],["Keyboard","45.00","Bob","Bouncer","20000","","",""],["Monitor","220.00","Cillian","Barman","10000","","",""],["Tablet","600.00","Jane","Plumber","15000","","",""],["Webcam","70.00","Bob","Bouncer","20000","","",""],["Desk Lamp","35.00","John","Mason","10000","Jane","Doe","Plumber"],["Chair","150.00","Cillian","Barman","10000","","",""],["USB Hub","20.00","John","Mason","10000","Jane","Doe","Plumber"],["External HDD","90.00","Jane","Plumber","15000","","",""],["Microphone","130.00","Bob","Bouncer","20000","","",""],["Graphics Tablet","340.00","Cillian","Barman","10000","","",""],["SSD","110.00","John","Mason","10000","Jane","Doe","Plumber"],["Router","75.00","Jane","Plumber","15000","","",""],["Power Supply","95.00","Jobless","Mason","10000","","",""],["RAM","60.00","Alice","Plumber","15000","Jane","Doe","Plumber"],["Desk","300.00","Charlie","Bouncer","20000","Bob","Dylan","Bouncer"],["Office Chair","250.00","Emily","Barman","10000","Jane","Doe","Plumber"],["Notebook","3.00","George","Mason","10000","John","Doe","Mason"],["Pen Pack","5.00","Hannah","Plumber","15000","Jane","Doe","Plumber"],["Drawing Tablet","400.00","Ivan","Bouncer","20000","Bob","Dylan","Bouncer"],["Headphones","150.00","Julia","Barman","10000","Cillian","Murphy","Barman"],["Webcam","80.00","Kevin","Mason","10000","John","Doe","Mason"],["Laptop Stand","50.00","Laura","Plumber","15000","Jane","Doe","Plumber"],["Micro SD Card","20.00","Michael","Bouncer","20000","Bob","Dylan","Bouncer"],["Portable Monitor","180.00","Nina","Barman","10000","Cillian","Murphy","Barman"],["Gaming Mouse","65.00","Oscar","Mason","10000","John","Doe","Mason"],["Mechanical Keyboard","130.00","Paul","Plumber","15000","Jane","Doe","Plumber"],["Smartwatch","210.00","Queen","Bouncer","20000","Bob","Dylan","Bouncer"],["Router","85.00","Rachel","Barman","10000","Cillian","Murphy","Barman"],["Cable Organizer","15.00","John","Mason","10000","Jane","Doe","Plumber"],["Flash Drive","12.00","Jane","Plumber","15000","","",""],["Bluetooth Speaker","90.00","Bob","Bouncer","20000","","",""],["Laptop Bag","70.00","Cillian","Barman","10000","","",""]],"tableName":"order-people-people-job-job-salary-salary-filtered"}')
+  }) 
+})
+
+ describe(SqlParser.name, () => {
+  it("LEFT OUTER JOIN should pass functionnal test 10", () => {
+    //ARRANGE
+    const query = "select firstName lastName job.occupation from people LEFT OUTER JOIN job on people.jobId = job.id";
+    const tablesObj = structuredClone(testingData);
+
+    //ACT
+    const result = JSON.stringify(SqlParser(query, tablesObj));
+
+    //ASSERT
+    expect(result).toBe('{"table":[["firstName","lastName","occupation"],["John","Doe","Mason"],["Jane","Doe","Plumber"],["Bob","Dylan","Bouncer"],["Cillian","Murphy","Barman"],["Jobless","Murphy","Mason"],["Alice","Smith","Plumber"],["Charlie","Brown","Bouncer"],["Emily","Jones","Barman"],["George","Clark","Mason"],["Hannah","Adams","Plumber"],["Ivan","Petrov","Bouncer"],["Julia","Williams","Barman"],["Kevin","Johnson","Mason"],["Laura","Martinez","Plumber"],["Michael","Lee","Bouncer"],["Nina","White","Barman"],["Oscar","Hall","Mason"],["Paul","Allen","Plumber"],["Queen","Moore","Bouncer"],["Rachel","Taylor","Barman"]],"tableName":"people-job-filtered"}')
+  }) 
+})
+
+ describe(SqlParser.name, () => {
+  it("RIGHT OUTER JOIN should pass functionnal test 11", () => {
+    //ARRANGE
+    const query = "select firstName lastName job.occupation from people RIGHT OUTER JOIN job on people.jobId = job.id";
+    const tablesObj = structuredClone(testingData);
+
+    //ACT
+    const result = JSON.stringify(SqlParser(query, tablesObj));
+
+    //ASSERT
+    expect(result).toBe('{"table":[["firstName","lastName","occupation"],["John","Doe","Mason"],["Jane","Doe","Plumber"],["Bob","Dylan","Bouncer"],["Cillian","Murphy","Barman"],["","","Electrician"],["","","Carpenter"],["","","Technician"],["","","Engineer"],["","","Mechanic"],["","","Painter"]],"tableName":"job-people-filtered"}')
   }) 
 })

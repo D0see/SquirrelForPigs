@@ -1,7 +1,15 @@
 export const nextCompositeKeyWordsWord = {
-    'LEFT' : 'JOIN',
-    'RIGHT' : 'JOIN',
-    'INNER' : 'JOIN',
+    'LEFT' : {
+        'JOIN' : true,
+        'OUTER' : true,
+    },
+    'RIGHT' : {
+        'JOIN' : true,
+        'OUTER' : true,
+    },
+    'LEFT OUTER' : {'JOIN' : true},
+    'RIGHT OUTER' : {'JOIN' : true},
+    'INNER' : {'JOIN' : true},
 }
 
 export const joinKeywords = {
@@ -19,11 +27,14 @@ export const allKeywords = {
     'LEFT JOIN' : true,
     'RIGHT JOIN' : true,
     'INNER JOIN' : true,
+    'LEFT OUTER JOIN' : true,
+    'RIGHT OUTER JOIN' : true,
     'SELECT' : true,
     'LEFT' : true,
     'RIGHT' : true,
     'INNER' : true,
     'JOIN' : true,
     'AS' : true,
-    'ON' : true
+    'ON' : true,
+    'FROM' : true,
 }

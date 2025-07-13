@@ -1,5 +1,4 @@
-export default {
-    people: {
+export default [{
         table: [
             ['id', 'firstName', 'lastName', 'jobId', 'idManager'],
             ['1', 'John', 'Doe', '1', '2'],
@@ -25,7 +24,7 @@ export default {
         ],
         tableName: 'people'
     },
-    job: {
+    {
         table: [
             ['id', 'occupation', 'idSalary'],
             ['1', 'Mason', '1'],
@@ -41,7 +40,7 @@ export default {
         ],
         tableName: 'job'
     },
-    salary: {
+    {
         table: [
             ['id', 'salary'],
             ['1', '10000'],
@@ -52,7 +51,7 @@ export default {
         ],
         tableName: 'salary'
     },
-    order: {
+    {
         table: [
             ['id', 'userId', 'product', 'amount', 'createdAt'],
             ['1', '1', 'Laptop', '1200.00', '2023-06-01'],
@@ -94,4 +93,4 @@ export default {
         ],
         tableName: 'order'
     }
-}
+]

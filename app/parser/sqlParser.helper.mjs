@@ -1,21 +1,24 @@
 const buildCompositeKeywords = (nextCompositeKeyWordsWord, words) => {
     for (let i = 0; i < words.length; i++) {
-        if (nextCompositeKeyWordsWord[words[i]] && nextCompositeKeyWordsWord[words[i]] === words[i + 1]) {
+        if (nextCompositeKeyWordsWord[words[i]] && nextCompositeKeyWordsWord[words[i]][words[i + 1]]) {
+            console.log(words[i])
             words[i] += ` ${words[i + 1]}`;
             words.splice(i + 1, 1);
+            i-=2;
         }
     }
 }
 
 //TODO : optimize this
-export const cleanQueryInput = (allKeywords, nextCompositeKeyWordsWord,  input) => {
-
+export const cleanQueryInput = (allKeywords, nextCompositeKeyWordsWord, equivalentKeywords, input) => {
     //removes empty spaces
     let query = input.split(' ').map(word => word.trim()).filter(word => word);
     //make sure keyword are uppercase
     query = query.map(word => allKeywords[word.toUpperCase()] ? word.toUpperCase() : word);
     buildCompositeKeywords(nextCompositeKeyWordsWord, query);
     //TODO : replace equivalentkeyWords
+    query = query.map(word => equivalentKeywords[word] ? equivalentKeywords[word] : word);
+    console.log(query)
     return query;
 }
 
