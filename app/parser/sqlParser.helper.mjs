@@ -1,7 +1,4 @@
-import { nextCompositeKeyWordsWord } from "../utils/keywords.mjs"
-//TODO : should import allkeywords here directly instead of passing it to every other functions
-
-const buildCompositeKeywords = (words) => {
+const buildCompositeKeywords = (nextCompositeKeyWordsWord, words) => {
     for (let i = 0; i < words.length; i++) {
         if (nextCompositeKeyWordsWord[words[i]] && nextCompositeKeyWordsWord[words[i]] === words[i + 1]) {
             words[i] += ` ${words[i + 1]}`;
@@ -11,19 +8,15 @@ const buildCompositeKeywords = (words) => {
 }
 
 //TODO : optimize this
-export const cleanseInput = (allKeywords, input) => {
+export const cleanQueryInput = (allKeywords, nextCompositeKeyWordsWord,  input) => {
 
     //removes empty spaces
-    let result = input.split(' ').map(word => word.trim()).filter(word => word);
-
+    let query = input.split(' ').map(word => word.trim()).filter(word => word);
     //make sure keyword are uppercase
-    result = result.map(word => allKeywords[word.toUpperCase()] ? word.toUpperCase() : word);
-
-    buildCompositeKeywords(result);
-
+    query = query.map(word => allKeywords[word.toUpperCase()] ? word.toUpperCase() : word);
+    buildCompositeKeywords(nextCompositeKeyWordsWord, query);
     //TODO : replace equivalentkeyWords
-    
-    return result;
+    return query;
 }
 
 export const findTableInTableArray = (tableName, tableArr) => {
@@ -125,5 +118,16 @@ export const turnRightJoinIntoLeftJoin = (words) => {
             words[leftJoinOnIndex + 1] = temp2;
         }
     }
-
 }
+
+export const applySqlJoinQuery = (sqlJoinQueryCallback, query, tables) => {
+    const table1 = findTableInTableArray(query[0], tables);
+    let tablesWithoutTable1 = tables;
+    if (table1.alias) {
+        tablesWithoutTable1 = tables.filter(table => table.alias != table1.alias);
+    }
+    const table2 = findTableInTableArray(query[2], tablesWithoutTable1);
+    const resultTable = sqlJoinQueryCallback(table1, table2, query[4], query[6], query[5]);
+    return resultTable;
+}
+
