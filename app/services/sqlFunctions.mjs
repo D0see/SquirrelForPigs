@@ -42,7 +42,7 @@ export const sqlLeftJoin = (table1, table2, table1JoiningHeader, table2JoiningHe
 
     return {
         table : newTable,
-        tableName : `${table1.tableName}-${table2.tableName}`
+        tableName : `${table1.alias ? table1.alias : table1.tableName}-${table2.alias ? table2.alias : table2.tableName}`
     };
 }
 
@@ -71,6 +71,6 @@ export const sqlInnerJoin = (table1, table2, table1JoiningHeader, table2JoiningH
 
     return {
         table : newTable,
-        tableName : `${table1.tableName}-${table2.tableName}`
+        tableName : `${table1.alias ? table1.alias : table1.tableName}-${table2.alias ? table2.alias : table2.tableName}`
     };
 }
