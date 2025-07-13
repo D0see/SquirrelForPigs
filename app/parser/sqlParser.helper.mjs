@@ -1,7 +1,6 @@
 const buildCompositeKeywords = (nextCompositeKeyWordsWord, words) => {
     for (let i = 0; i < words.length; i++) {
         if (nextCompositeKeyWordsWord[words[i]] && nextCompositeKeyWordsWord[words[i]][words[i + 1]]) {
-            console.log(words[i])
             words[i] += ` ${words[i + 1]}`;
             words.splice(i + 1, 1);
             i-=2;
@@ -16,9 +15,8 @@ export const cleanQueryInput = (allKeywords, nextCompositeKeyWordsWord, equivale
     //make sure keyword are uppercase
     query = query.map(word => allKeywords[word.toUpperCase()] ? word.toUpperCase() : word);
     buildCompositeKeywords(nextCompositeKeyWordsWord, query);
-    //TODO : replace equivalentkeyWords
+    //replaces obsolete keywords for equivalent ones
     query = query.map(word => equivalentKeywords[word] ? equivalentKeywords[word] : word);
-    console.log(query)
     return query;
 }
 
@@ -94,8 +92,9 @@ export const tablesAliasesHandler = (keywords, words, tables) => {
 export const buildDescriptiveHeaders = (tables) => {
     for (const table of tables) {
         for (let i = 0; i < table.table[0].length; i++) {
-            table.table[0][i] += '.' + table.tableName;
+            if (table.table[0][i].split('.').length < 2) table.table[0][i] += '.' + table.tableName;
             if (table.alias) table.table[0][i] += '.' + table.alias;
+            //its shit
         }
     }
 }
@@ -104,7 +103,8 @@ export const buildDescriptiveHeaders = (tables) => {
 export const normalizeHeaders = (table) => {
     for (let i = 0; i < table.table[0].length; i++) {
         const header = table.table[0][i].split('.');
-        table.table[0][i] = header.length === 3 ? header[2] + '.' + header[0] : header[0];
+        console.log(header);
+        table.table[0][i] = header.length >= 3 ? header[2] + '.' + header[0] : header[0];
     }
 }
 
@@ -116,9 +116,9 @@ export const turnRightJoinIntoLeftJoin = (words) => {
             words[i - 1] = words[i + 1]
             words[i + 1] = temp;
             const leftJoinOnIndex = words.findIndex((word, index) => index > i && word === '=');
-            let temp2 = words[leftJoinOnIndex - 1]
+            temp = words[leftJoinOnIndex - 1]
             words[leftJoinOnIndex - 1] = words[leftJoinOnIndex + 1]
-            words[leftJoinOnIndex + 1] = temp2;
+            words[leftJoinOnIndex + 1] = temp;
         }
     }
 }

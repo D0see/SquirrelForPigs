@@ -251,3 +251,45 @@ describe(SqlParser.name, () => {
     expect(result).toBe('{"table":[["firstName","lastName","occupation"],["John","Doe","Mason"],["Jane","Doe","Plumber"],["Bob","Dylan","Bouncer"],["Cillian","Murphy","Barman"],["","","Electrician"],["","","Carpenter"],["","","Technician"],["","","Engineer"],["","","Mechanic"],["","","Painter"]],"tableName":"job-people-filtered"}')
   }) 
 })
+
+ describe(SqlParser.name, () => {
+  it("SIMPLE QUERY WITH SUBQUERY should pass functionnal test 12", () => {
+    //ARRANGE
+    const query = "SELECT firstName occupation FROM (select firstName id jobId from people) LEFT JOIN job on jobId = id";
+    const tablesObj = structuredClone(testingData);
+
+    //ACT
+    const result = JSON.stringify(SqlParser(query, tablesObj));
+
+    //ASSERT
+    expect(result).toBe('{"table":[["firstName","occupation"],["John","Mason"],["Jane","Plumber"],["Bob","Bouncer"],["Cillian","Barman"],["Jobless","Mason"],["Alice","Plumber"],["Charlie","Bouncer"],["Emily","Barman"],["George","Mason"],["Hannah","Plumber"],["Ivan","Bouncer"],["Julia","Barman"],["Kevin","Mason"],["Laura","Plumber"],["Michael","Bouncer"],["Nina","Barman"],["Oscar","Mason"],["Paul","Plumber"],["Queen","Bouncer"],["Rachel","Barman"]],"tableName":"people-filtered-job-filtered"}')
+  }) 
+})
+
+ describe(SqlParser.name, () => {
+  it("SUQUERY WITHIN A SUBQUERY should pass functionnal test 13", () => {
+    //ARRANGE
+    const query = "SELECT firstName occupation FROM (select firstName id jobId from (select firstName id jobId from people)) LEFT JOIN job on jobId = id";
+    const tablesObj = structuredClone(testingData);
+
+    //ACT
+    const result = JSON.stringify(SqlParser(query, tablesObj));
+
+    //ASSERT
+    expect(result).toBe('{"table":[["firstName","occupation"],["John","Mason"],["Jane","Plumber"],["Bob","Bouncer"],["Cillian","Barman"],["Jobless","Mason"],["Alice","Plumber"],["Charlie","Bouncer"],["Emily","Barman"],["George","Mason"],["Hannah","Plumber"],["Ivan","Bouncer"],["Julia","Barman"],["Kevin","Mason"],["Laura","Plumber"],["Michael","Bouncer"],["Nina","Barman"],["Oscar","Mason"],["Paul","Plumber"],["Queen","Bouncer"],["Rachel","Barman"]],"tableName":"people-filtered-filtered-job-filtered"}')
+  }) 
+})
+
+ describe(SqlParser.name, () => {
+  it("MULTIPLE SUBQUERIES should pass functionnal test 14", () => {
+    //ARRANGE
+    const query = "SELECT firstName occupation FROM (select firstName id jobId from people) LEFT JOIN (select occupation id from job) on jobId = id";
+    const tablesObj = structuredClone(testingData);
+
+    //ACT
+    const result = JSON.stringify(SqlParser(query, tablesObj));
+
+    //ASSERT
+    expect(result).toBe('{"table":[["firstName","occupation"],["John","Mason"],["Jane","Plumber"],["Bob","Bouncer"],["Cillian","Barman"],["Jobless","Mason"],["Alice","Plumber"],["Charlie","Bouncer"],["Emily","Barman"],["George","Mason"],["Hannah","Plumber"],["Ivan","Bouncer"],["Julia","Barman"],["Kevin","Mason"],["Laura","Plumber"],["Michael","Bouncer"],["Nina","Barman"],["Oscar","Mason"],["Paul","Plumber"],["Queen","Bouncer"],["Rachel","Barman"]],"tableName":"people-filtered-job-filtered-filtered"}')
+  }) 
+})
