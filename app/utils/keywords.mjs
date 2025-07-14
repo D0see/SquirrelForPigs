@@ -1,34 +1,10 @@
-export const nextCompositeKeyWordsWord = {
-    'LEFT' : {
-        'JOIN' : true,
-        'OUTER' : true,
-    },
-    'RIGHT' : {
-        'JOIN' : true,
-        'OUTER' : true,
-    },
-    'LEFT OUTER' : {'JOIN' : true},
-    'RIGHT OUTER' : {'JOIN' : true},
-    'INNER' : {'JOIN' : true},
-}
-
-export const joinKeywords = {
-    'LEFT JOIN' : true,
-    'INNER JOIN' : true,
-}
-
-export const equivalentKeywords = {
-    'JOIN' : 'INNER JOIN',
-    'LEFT OUTER JOIN' : 'LEFT JOIN',
-    'RIGHT OUTER JOIN' : 'RIGHT JOIN',
-}
-
 export const sqlKeywords = {
     'LEFT_JOIN' : 'LEFT JOIN',
     'RIGHT_JOIN' : 'RIGHT JOIN',
     'INNER_JOIN' : 'INNER JOIN',
     'LEFT_OUTER_JOIN' : 'LEFT OUTER JOIN',
     'RIGHT_OUTER_JOIN' : 'RIGHT OUTER JOIN',
+    'OUTER' : 'OUTER', 
     'SELECT' : 'SELECT',
     'LEFT' : 'LEFT',
     'RIGHT' : 'RIGHT',
@@ -40,4 +16,32 @@ export const sqlKeywords = {
     'SELECT_ALL_COLUMNS' : '*',
     'SUBQUERY_START' : '(',
     'SUBQUERY_END' : ')',
+}
+
+//TODO : make this programatic
+export const nextCompositeKeyWordsWord = {
+    [sqlKeywords.LEFT] : {
+        [sqlKeywords.JOIN] : true,
+        [sqlKeywords.OUTER] : true,
+    },
+    [sqlKeywords.RIGHT] : {
+        [sqlKeywords.JOIN] : true,
+        [sqlKeywords.OUTER] : true,
+    },
+    [sqlKeywords.LEFT + ' ' + sqlKeywords.OUTER] : {[sqlKeywords.JOIN] : true,},
+    [sqlKeywords.RIGHT + ' ' + sqlKeywords.OUTER] : {[sqlKeywords.JOIN] : true,},
+    [sqlKeywords.INNER] : {[sqlKeywords.JOIN] : true,},
+}
+
+//TODO : this needs to depends on sqlKeywords
+export const joinKeywords = {
+    [sqlKeywords.LEFT_JOIN] : true,
+    [sqlKeywords.INNER_JOIN] : true,
+}
+
+//TODO : same
+export const equivalentKeywords = {
+    [sqlKeywords.JOIN] : sqlKeywords.INNER_JOIN,
+    [sqlKeywords.LEFT_OUTER_JOIN] : sqlKeywords.LEFT_JOIN,
+    [sqlKeywords.RIGHT_OUTER_JOIN] : sqlKeywords.RIGHT_JOIN,
 }
