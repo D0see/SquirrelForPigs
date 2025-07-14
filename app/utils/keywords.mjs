@@ -1,3 +1,4 @@
+// Is it a linked list ? Why always true as values ?
 export const nextCompositeKeyWordsWord = {
     'LEFT' : {
         'JOIN' : true,
@@ -12,6 +13,7 @@ export const nextCompositeKeyWordsWord = {
     'INNER' : {'JOIN' : true},
 }
 
+// If values are always true, why not just use a table ?
 export const joinKeywords = {
     'LEFT JOIN' : true,
     'INNER JOIN' : true,
@@ -23,6 +25,8 @@ export const equivalentKeywords = {
     'RIGHT OUTER JOIN' : 'RIGHT JOIN',
 }
 
+
+// If values are always equals to the key, why not just use a table ?
 export const allKeywords = {
     'LEFT JOIN' : 'LEFT JOIN',
     'RIGHT JOIN' : 'RIGHT JOIN',

@@ -1,4 +1,5 @@
 export default [{
+        // table could be renamed dataset
         table: [
             ['id', 'firstName', 'lastName', 'jobId', 'idManager'],
             ['1', 'John', 'Doe', '1', '2'],

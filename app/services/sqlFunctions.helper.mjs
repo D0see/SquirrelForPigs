@@ -1,3 +1,6 @@
+// It could be interesting to have a 2D array abstraction, for example a class with the functions below as methods
+// Also might be interesting to consider using a matrix computation third party library, or take inspiration from one
+
 // ([...values], table) => updatedTable
 export const appendColumnToTwoDArr = (values, table) => {
     const newColumnPos = table[0].length;

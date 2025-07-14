@@ -13,6 +13,7 @@ const tables = testingData;
 
 sqlQuerySubsmissionButton.addEventListener("click", (e) => {
     let newTable;
+    // Use node.remove() to clear the previous results instead of innerHTML
     queryResultVisualizer.innerHTML = null;
     errorMessage.innerHTML = null;
     try {
@@ -23,6 +24,7 @@ sqlQuerySubsmissionButton.addEventListener("click", (e) => {
         return;
     }
     if (newTable) {
+        // Intermediate variable welcomed for clarity
         queryResultVisualizer.appendChild(tableObjToHTMLTable(newTable, "queryResult"))
     };
 })

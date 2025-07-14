@@ -12,6 +12,7 @@ export const SqlParser = (input, tables) => {
     const handleSubQueries = (inputArr, tables) => {
         const openPar = inputArr[0].indexOf('(');
 
+        // To be extracted to a dedicated function
         const findCorrectClosingPar = (openPar, inputArr) => {
             let subQueryCounter = 0;
             for (let i = openPar + 1; i < inputArr[0].length; i++) {
@@ -92,6 +93,7 @@ const parseAllJoins = (words, tables) => {
 
 const parseSelect = (words, tables) => {
     const selectIndex = words.findIndex(word => word === 'SELECT');
+    // Make throw more visible, avoid 1 liner if
     if (selectIndex === undefined) throw new Error("missing SELECT keyword");
 
     let lastElemIndex;
