@@ -9,11 +9,18 @@ const buildCompositeKeywords = (nextCompositeKeyWordsWord, words) => {
 }
 
 //TODO : optimize this
-export const cleanQueryInput = (allKeywords, nextCompositeKeyWordsWord, equivalentKeywords, input) => {
+export const cleanQueryInput = (sqlKeywords, nextCompositeKeyWordsWord, equivalentKeywords, input) => {
+
+    //builds a map of for every sqlKeywords value
+    const keywordsObj = Object.values(sqlKeywords).reduce((acc, val) => {
+        acc[val] = true;
+        return acc;
+    }, {});
+
     //removes empty spaces
     let query = input.split(' ').map(word => word.trim()).filter(word => word);
     //make sure keyword are uppercase
-    query = query.map(word => allKeywords[word.toUpperCase()] ? word.toUpperCase() : word);
+    query = query.map(word => keywordsObj[word.toUpperCase()] ? word.toUpperCase() : word);
     buildCompositeKeywords(nextCompositeKeyWordsWord, query);
     //replaces obsolete keywords for equivalent ones
     query = query.map(word => equivalentKeywords[word] ? equivalentKeywords[word] : word);
@@ -36,12 +43,12 @@ export const findEndIndexOfKeywordQuery = (keywords, words, index) => {
 
 // words => columnAliases = ['','',"aliasforcolumn3",'']
 // updates words to remove columns aliases affectations
-export const columnsHeadersAliasesHandler = (words) => {
+export const columnsHeadersAliasesHandler = (sqlKeywords, words) => {
     const columnsAliases = []
-    const selectIndex = words.findIndex(word => word === "SELECT");
-    let fromIndex = words.findIndex(word => word === "FROM");
+    const selectIndex = words.findIndex(word => word === sqlKeywords.SELECT);
+    let fromIndex = words.findIndex(word => word === sqlKeywords.FROM);
     for(let i = selectIndex + 1; i < fromIndex - 1; i++) {
-        if (words[i + 1] === "AS") {
+        if (words[i + 1] === sqlKeywords.ALIAS_ASSIGNEMENT) {
             columnsAliases.push(words[i + 2]);
             words.splice(i + 1, 2);
             fromIndex -= 2;
@@ -60,15 +67,15 @@ export const applyHeadersAliases = (table, columnHeaderAliases) => {
     }
 }
 
-export const tablesAliasesHandler = (keywords, words, tables) => {
+export const tablesAliasesHandler = (sqlKeywords, words, tables) => {
     for (let i = 0; i < words.length; i++) {
-        if (words[i] === "AS") {
+        if (words[i] === sqlKeywords.ALIAS_ASSIGNEMENT) {
             let table = findTableInTableArray(words[i - 1], tables);
             const alias = words[i + 1];
 
             //Error handling
             if (!table) throw new Error(`No table with name : ${words[i - 1]}`);
-            if (!alias || keywords[alias]) throw new Error(`Invalid or absent alias for table : ${table.tableName}`);
+            if (!alias || sqlKeywords[alias]) throw new Error(`Invalid or absent alias for table : ${table.tableName}`);
             //Check for name conflict between specified alias and tables names and aliases
             const aliasOrNameCollidingTables = tables.filter(table => [table.tableName, table.alias].includes(alias));
             if (aliasOrNameCollidingTables.length) throw new Error(`Name collision for alias : ${alias}`);
@@ -106,10 +113,10 @@ export const normalizeHeaders = (table) => {
     }
 }
 
-export const turnRightJoinIntoLeftJoin = (words) => {
+export const turnRightJoinIntoLeftJoin = (sqlKeywords, words) => {
     for (let i = 0; i < words.length; i++) {
-        if (words[i] === "RIGHT JOIN") {
-            words[i] = "LEFT JOIN";
+        if (words[i] === sqlKeywords.RIGHT_JOIN) {
+            words[i] = sqlKeywords.LEFT_JOIN;
             let temp = words[i - 1]
             words[i - 1] = words[i + 1]
             words[i + 1] = temp;

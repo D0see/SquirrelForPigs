@@ -1,30 +1,30 @@
 import { sqlLeftJoin, sqlInnerJoin, sqlSelect } from "../services/sqlFunctions.mjs";
-import { allKeywords, joinKeywords, nextCompositeKeyWordsWord, equivalentKeywords } from "../utils/keywords.mjs";
+import { sqlKeywords, joinKeywords, nextCompositeKeyWordsWord, equivalentKeywords } from "../utils/keywords.mjs";
 import { cleanQueryInput, tablesAliasesHandler, buildDescriptiveHeaders, turnRightJoinIntoLeftJoin, findEndIndexOfKeywordQuery, normalizeHeaders, findTableInTableArray, columnsHeadersAliasesHandler, applyHeadersAliases, applySqlJoinQuery } from "./sqlParser.helper.mjs";
 
 export const SqlParser = (input, tables) => {
     
     // parse subQueries "(query)" push the result table into tables and updates the input with the result table name
-    input = handleSubQueries(input, tables);
+    input = handleSubQueries(sqlKeywords, input, tables);
 
-    const words = cleanQueryInput(allKeywords, nextCompositeKeyWordsWord, equivalentKeywords, input);
+    const words = cleanQueryInput(sqlKeywords, nextCompositeKeyWordsWord, equivalentKeywords, input);
 
     //saves aliases for selected columns, remove them form the query
-    const selectedColumnsHeaderAliases = columnsHeadersAliasesHandler(words);
+    const selectedColumnsHeaderAliases = columnsHeadersAliasesHandler(sqlKeywords, words);
 
     //updates tables aliases in place and remove them for the query  
-    tablesAliasesHandler(joinKeywords, words, tables);
+    tablesAliasesHandler(sqlKeywords, words, tables);
 
     //updates tables headers in place based on their aliases and names (table.Name : a, table.alias : b => header.a.b)
     buildDescriptiveHeaders(tables);
 
     //updates the query in place "table1 RIGHTJOIN table2 on table1.header = table2.header" => "table2 LEFTJOIN table1 on table2.header = table1.header"
-    turnRightJoinIntoLeftJoin(words);
+    turnRightJoinIntoLeftJoin(sqlKeywords, words);
 
     //executes all joins in the query, updates the query with the new joined tables names and push them into tables
-    parseAllJoins(words, tables)
+    parseAllJoins(sqlKeywords, words, tables)
 
-    const finalTable = parseSelect(words, tables);
+    const finalTable = parseSelect(sqlKeywords, words, tables);
 
     //removes aliases and tablename from column headers
     normalizeHeaders(finalTable);
@@ -34,7 +34,7 @@ export const SqlParser = (input, tables) => {
     return finalTable;
 } 
 
-const parseAllJoins = (words, tables) => {
+const parseAllJoins = (sqlKeywords, words, tables) => {
     let currIntermediaryTable;
     for (let currIndex = 0; currIndex < words.length; currIndex++) {
         const word = words[currIndex];
@@ -44,10 +44,10 @@ const parseAllJoins = (words, tables) => {
         const query = words.slice(currIndex - 1, endIndex + 1);
 
         switch (word) {
-            case "LEFT JOIN":
+            case sqlKeywords.LEFT_JOIN :
                 currIntermediaryTable = applySqlJoinQuery(sqlLeftJoin, query, tables);      
                 break;
-            case "INNER JOIN":
+            case sqlKeywords.INNER_JOIN :
                 currIntermediaryTable = applySqlJoinQuery(sqlInnerJoin, query, tables);
                 break;
         }
@@ -59,32 +59,32 @@ const parseAllJoins = (words, tables) => {
     }
 }
 
-const parseSelect = (words, tables) => {
-    const selectIndex = words.findIndex(word => word === 'SELECT');
-    if (selectIndex === undefined) throw new Error("missing SELECT keyword");
+const parseSelect = (sqlKeywords, words, tables) => {
+    const selectIndex = words.findIndex(word => word === sqlKeywords.SELECT);
+    if (selectIndex === -1) throw new Error(`missing ${sqlKeywords.SELECT} keyword"`);
 
     let lastElemIndex;
     for (const [index, word] of words.entries()) {
-        if (word === 'FROM') {
+        if (word === sqlKeywords.FROM) {
             lastElemIndex = index;
         }
     }
     const selectedColumns = words.slice(selectIndex + 1, lastElemIndex);
     const selectedFromTable = findTableInTableArray(words[lastElemIndex + 1], tables);
-    return sqlSelect(allKeywords, selectedColumns, selectedFromTable);
+    return sqlSelect(sqlKeywords, selectedColumns, selectedFromTable);
 }
 
 //For subqueries ("Select ... From (subquery)") we parse the input and call sql Parser on every query present between 2 parentheses
-const handleSubQueries = (input, tables) => {
-    const openPar = input.indexOf('(');
+const handleSubQueries = (sqlKeywords, input, tables) => {
+    const openPar = input.indexOf(sqlKeywords.SUBQUERY_START);
 
-    const findCorrectClosingPar = (openPar, input) => {
+    const findCorrectClosingPar = (sqlKeywords, openPar, input) => {
         let subQueryCounter = 0;
         for (let i = openPar + 1; i < input.length; i++) {
-            if (input[i] === '(') {
+            if (input[i] === sqlKeywords.SUBQUERY_START) {
                 subQueryCounter++;
                 continue;
-            } else if (input[i] === ')') {
+            } else if (input[i] === sqlKeywords.SUBQUERY_END) {
                 if (!subQueryCounter) return i;
                 subQueryCounter--;
             }
@@ -92,7 +92,7 @@ const handleSubQueries = (input, tables) => {
         return -1
     }
 
-    const closedPar = findCorrectClosingPar(openPar, input);
+    const closedPar = findCorrectClosingPar(sqlKeywords, openPar, input);
     if (openPar === -1 || closedPar === -1) return input;
 
     const subQuery = input.slice(openPar + 1, closedPar);
@@ -100,6 +100,6 @@ const handleSubQueries = (input, tables) => {
     tables.push(subQueryResult);
 
     input = input.slice(0, openPar).concat(subQueryResult.tableName).concat(input.slice(closedPar + 1));
-    input = handleSubQueries(input, tables);
+    input = handleSubQueries(sqlKeywords, input, tables);
     return input;
 }

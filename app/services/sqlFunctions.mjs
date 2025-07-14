@@ -1,9 +1,9 @@
 import { appendColumnToTwoDArr, getColumnByIndexFromTable, getColumnHeadIndex, getColumnValuesByIndexFromTable } from './sqlFunctions.helper.mjs';
 
-export const sqlSelect = (allKeywords, ColumnsHeadersSelected, tableSelected) => {
+export const sqlSelect = (sqlKeywords, ColumnsHeadersSelected, tableSelected) => {
     const newTable = [[]];
     for (const head of ColumnsHeadersSelected) {
-        if (head === allKeywords['*']) {
+        if (head === sqlKeywords.SELECT_ALL_COLUMNS) {
             for (const header of tableSelected.table[0]) {
                 const colunmIndex = getColumnHeadIndex(header, tableSelected);
                 const values = getColumnByIndexFromTable(tableSelected.table, colunmIndex);
