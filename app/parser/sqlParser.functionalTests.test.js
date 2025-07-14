@@ -321,3 +321,59 @@ describe(SqlParser.name, () => {
     expect(result).toBe('{"table":[["id","firstName","lastName","jobId","idManager","firstName","lastName"],["1","John","Doe","1","2","John","Doe"],["2","Jane","Doe","2","","Jane","Doe"],["3","Bob","Dylan","3","","Bob","Dylan"],["4","Cillian","Murphy","4","","Cillian","Murphy"],["5","Jobless","Murphy","1","","Jobless","Murphy"],["6","Alice","Smith","2","2","Alice","Smith"],["7","Charlie","Brown","3","3","Charlie","Brown"],["8","Emily","Jones","4","2","Emily","Jones"],["9","George","Clark","1","1","George","Clark"],["10","Hannah","Adams","2","2","Hannah","Adams"],["11","Ivan","Petrov","3","3","Ivan","Petrov"],["12","Julia","Williams","4","4","Julia","Williams"],["13","Kevin","Johnson","1","1","Kevin","Johnson"],["14","Laura","Martinez","2","2","Laura","Martinez"],["15","Michael","Lee","3","3","Michael","Lee"],["16","Nina","White","4","4","Nina","White"],["17","Oscar","Hall","1","1","Oscar","Hall"],["18","Paul","Allen","2","2","Paul","Allen"],["19","Queen","Moore","3","3","Queen","Moore"],["20","Rachel","Taylor","4","4","Rachel","Taylor"]],"tableName":"people-filtered"}')
   }) 
 })
+
+ describe(SqlParser.name, () => {
+  it("SIMPLE WHERE CLAUSE COLUMN = 'STRING' should pass functionnal test 17", () => {
+    //ARRANGE
+    const query = "select * from people where lastName = 'Doe'";
+    const tablesObj = structuredClone(testingData);
+
+    //ACT
+    const result = JSON.stringify(SqlParser(query, tablesObj));
+
+    //ASSERT
+    expect(result).toBe('{"table":[["id","firstName","lastName","jobId","idManager"],["1","John","Doe","1","2"],["2","Jane","Doe","2",""]],"tableName":"people-filtered"}')
+  }) 
+})
+
+ describe(SqlParser.name, () => {
+  it("SIMPLE WHERE CLAUSE 'STRING' = COLUMN should pass functionnal test 18", () => {
+    //ARRANGE
+    const query = "select * from people where 'Doe' = lastName";
+    const tablesObj = structuredClone(testingData);
+
+    //ACT
+    const result = JSON.stringify(SqlParser(query, tablesObj));
+
+    //ASSERT
+    expect(result).toBe('{"table":[["id","firstName","lastName","jobId","idManager"],["1","John","Doe","1","2"],["2","Jane","Doe","2",""]],"tableName":"people-filtered"}')
+  }) 
+})
+
+ describe(SqlParser.name, () => {
+  it("SIMPLE WHERE CLAUSE COLUMN1 = COLUMN2 should pass functionnal test 19", () => {
+    //ARRANGE
+    const query = "select * from people where jobId = idManager";
+    const tablesObj = structuredClone(testingData);
+
+    //ACT
+    const result = JSON.stringify(SqlParser(query, tablesObj));
+
+    //ASSERT
+    expect(result).toBe('{"table":[["id","firstName","lastName","jobId","idManager"],["6","Alice","Smith","2","2"],["7","Charlie","Brown","3","3"],["9","George","Clark","1","1"],["10","Hannah","Adams","2","2"],["11","Ivan","Petrov","3","3"],["12","Julia","Williams","4","4"],["13","Kevin","Johnson","1","1"],["14","Laura","Martinez","2","2"],["15","Michael","Lee","3","3"],["16","Nina","White","4","4"],["17","Oscar","Hall","1","1"],["18","Paul","Allen","2","2"],["19","Queen","Moore","3","3"],["20","Rachel","Taylor","4","4"]],"tableName":"people-filtered"}')
+  }) 
+})
+
+ describe(SqlParser.name, () => {
+  it("SIMPLE WHERE CLAUSE 'string' = 'string' should pass functionnal test 20", () => {
+    //ARRANGE
+    const query = "select * from people where '1' = '1'";
+    const tablesObj = structuredClone(testingData);
+
+    //ACT
+    const result = JSON.stringify(SqlParser(query, tablesObj));
+
+    //ASSERT
+    expect(result).toBe('{"table":[["id","firstName","lastName","jobId","idManager"],["1","John","Doe","1","2"],["2","Jane","Doe","2",""],["3","Bob","Dylan","3",""],["4","Cillian","Murphy","4",""],["5","Jobless","Murphy","1",""],["6","Alice","Smith","2","2"],["7","Charlie","Brown","3","3"],["8","Emily","Jones","4","2"],["9","George","Clark","1","1"],["10","Hannah","Adams","2","2"],["11","Ivan","Petrov","3","3"],["12","Julia","Williams","4","4"],["13","Kevin","Johnson","1","1"],["14","Laura","Martinez","2","2"],["15","Michael","Lee","3","3"],["16","Nina","White","4","4"],["17","Oscar","Hall","1","1"],["18","Paul","Allen","2","2"],["19","Queen","Moore","3","3"],["20","Rachel","Taylor","4","4"]],"tableName":"people-filtered"}')
+  }) 
+})

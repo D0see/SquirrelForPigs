@@ -16,6 +16,12 @@ export const sqlKeywords = {
     'SELECT_ALL_COLUMNS' : '*',
     'SUBQUERY_START' : '(',
     'SUBQUERY_END' : ')',
+    'WHERE' : 'WHERE',
+}
+
+export const sqlOperators = { 
+    '=' : 'EQUAL',
+    '!=' : 'DIFFERENT_FROM',
 }
 
 //TODO : make this programatic

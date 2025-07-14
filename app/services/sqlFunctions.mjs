@@ -82,3 +82,57 @@ export const sqlInnerJoin = (table1, table2, table1JoiningHeader, table2JoiningH
         tableName : `${table1.alias ? table1.alias : table1.tableName}-${table2.alias ? table2.alias : table2.tableName}`
     };
 }
+
+//TODO : NEEDS URGENT REFACTOR  !!!!!
+export const whereClause = (sqlKeywords, sqlOperators, words, finalTable) => {
+    const whereClauseStartIndex = words.findIndex(word => word === sqlKeywords.WHERE);
+    if (whereClauseStartIndex === -1) return finalTable;
+
+    const clause = words.slice(whereClauseStartIndex);
+
+    let leftVal = clause[1];
+    let rightVal = clause[3];
+    if (sqlKeywords[leftVal] || sqlKeywords[rightVal]) throw new Error(`invalid names for values in ${sqlKeywords.WHERE} clause`);
+    const operator = clause[2];
+    if (!sqlOperators[operator]) throw new Error(`no operator found in ${sqlKeywords.WHERE} clause`);
+
+    const valTypes = {
+        left : 'header',
+        right : 'header'
+    }
+    
+    if ((leftVal.startsWith('"') && leftVal.endsWith('"')) || (leftVal.startsWith("'") && leftVal.endsWith("'"))) {
+        valTypes.left = 'string';
+        leftVal = leftVal.slice(1, leftVal.length -1);
+    }
+    if ((rightVal.startsWith('"') && rightVal.endsWith('"')) || (rightVal.startsWith("'") && rightVal.endsWith("'"))) {
+        valTypes.right = 'string';
+        rightVal = rightVal.slice(1, rightVal.length -1);
+    }
+
+    const wheredtwoDArr = [structuredClone(finalTable.table[0])];
+
+    if (valTypes.left === 'header' && valTypes.right === 'header') {
+        const headerColIndex1 = getColumnHeadIndex(leftVal, finalTable);
+        const headerColIndex2 = getColumnHeadIndex(rightVal, finalTable);
+        for (let i = 0; i < finalTable.table.length; i++) {
+            if (finalTable.table[i][headerColIndex1] === finalTable.table[i][headerColIndex2]) {
+                    wheredtwoDArr.push(finalTable.table[i]);
+            }
+        }
+    } else if (valTypes.left === 'string' && valTypes.right === 'string') {
+        if (leftVal === rightVal) {
+            wheredtwoDArr.push(...finalTable.table.slice(1));
+        }
+    } else {
+        const headerColIndex = getColumnHeadIndex((valTypes.left === 'header' ? leftVal : rightVal), finalTable);
+        for (let i = 0; i < finalTable.table.length; i++) {
+            if (finalTable.table[i][headerColIndex] === (valTypes.left === 'string' ? leftVal : rightVal)) {
+                wheredtwoDArr.push(finalTable.table[i]);
+            }
+        } 
+    }
+
+    finalTable.table = wheredtwoDArr;
+    return finalTable;
+}

@@ -1,5 +1,5 @@
-import { sqlLeftJoin, sqlInnerJoin, sqlSelect } from "../services/sqlFunctions.mjs";
-import { sqlKeywords, joinKeywords, nextCompositeKeyWordsWord, equivalentKeywords } from "../utils/keywords.mjs";
+import { sqlLeftJoin, sqlInnerJoin, sqlSelect, whereClause } from "../services/sqlFunctions.mjs";
+import { sqlKeywords, sqlOperators, joinKeywords, nextCompositeKeyWordsWord, equivalentKeywords } from "../utils/keywords.mjs";
 import { cleanQueryInput, tablesAliasesHandler, buildDescriptiveHeaders, turnRightJoinIntoLeftJoin, findEndIndexOfKeywordQuery, normalizeHeaders, findTableInTableArray, columnsHeadersAliasesHandler, applyHeadersAliases, applySqlJoinQuery } from "./sqlParser.helper.mjs";
 
 export const SqlParser = (input, tables) => {
@@ -24,7 +24,9 @@ export const SqlParser = (input, tables) => {
     //executes all joins in the query, updates the query with the new joined tables names and push them into tables
     parseAllJoins(sqlKeywords, words, tables)
 
-    const finalTable = parseSelect(sqlKeywords, words, tables);
+    let finalTable = parseSelect(sqlKeywords, words, tables);
+
+    finalTable = whereClause(sqlKeywords, sqlOperators, words, finalTable);
 
     //removes aliases and tablename from column headers
     normalizeHeaders(finalTable);
