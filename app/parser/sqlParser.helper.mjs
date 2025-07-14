@@ -8,7 +8,7 @@ const buildCompositeKeywords = (nextCompositeKeyWordsWord, words) => {
     }
 }
 
-//TODO : optimize this
+//TODO : optimize this + urgent refactor
 export const cleanQueryInput = (sqlKeywords, nextCompositeKeyWordsWord, equivalentKeywords, input) => {
 
     //builds a map of for every sqlKeywords value
@@ -24,7 +24,13 @@ export const cleanQueryInput = (sqlKeywords, nextCompositeKeyWordsWord, equivale
     buildCompositeKeywords(nextCompositeKeyWordsWord, query);
     //replaces obsolete keywords for equivalent ones
     query = query.map(word => equivalentKeywords[word] ? equivalentKeywords[word] : word);
-    return query;
+
+    const whereIndex = query.findIndex(word => word === sqlKeywords.WHERE);
+    if (whereIndex === -1) return [query, []]
+
+    const whereClauseWords = query.slice(whereIndex);
+    query = query.slice(0, whereIndex);
+    return [query, whereClauseWords];
 }
 
 export const findTableInTableArray = (tableName, tableArr) => {

@@ -377,3 +377,18 @@ describe(SqlParser.name, () => {
     expect(result).toBe('{"table":[["id","firstName","lastName","jobId","idManager"],["1","John","Doe","1","2"],["2","Jane","Doe","2",""],["3","Bob","Dylan","3",""],["4","Cillian","Murphy","4",""],["5","Jobless","Murphy","1",""],["6","Alice","Smith","2","2"],["7","Charlie","Brown","3","3"],["8","Emily","Jones","4","2"],["9","George","Clark","1","1"],["10","Hannah","Adams","2","2"],["11","Ivan","Petrov","3","3"],["12","Julia","Williams","4","4"],["13","Kevin","Johnson","1","1"],["14","Laura","Martinez","2","2"],["15","Michael","Lee","3","3"],["16","Nina","White","4","4"],["17","Oscar","Hall","1","1"],["18","Paul","Allen","2","2"],["19","Queen","Moore","3","3"],["20","Rachel","Taylor","4","4"]],"tableName":"people-filtered"}')
   }) 
 })
+
+ describe(SqlParser.name, () => {
+  it("MULTIPLE JOIN QUERY WITH WHERE CLAUSE should pass functionnal test 21", () => {
+    //ARRANGE
+    const query = "select o.product as product_bought o.amount AS price p.firstName AS client_firstname j1.occupation as client_job s1.salary AS client_salary m.firstName AS manager_firstname m.lastName AS manager_lastname j2.occupation AS manager_job FROM order AS o inner JoiN people AS p on o.userId = p.id LEFT JOIN people AS m on p.idManager = m.id LEFT JOIN job AS j1 on p.jobId = j1.id left Join job AS j2 on m.jobId = j2.id left join salary AS s1 on j1.idSalary = s1.id LEFT JOIN salary AS s2 on j2.idSalary = s2.id where 'Mason' = j1.occupation";
+    const tablesObj = structuredClone(testingData);
+
+    //ACT
+    const result = JSON.stringify(SqlParser(query, tablesObj));
+
+    //ASSERT
+    expect(result).toBe('{"table":[["product_bought","price","client_firstname","client_job","client_salary","manager_firstname","manager_lastname","manager_job"],["Laptop","1200.00","John","Mason","10000","Jane","Doe","Plumber"],["Mouse","25.50","John","Mason","10000","Jane","Doe","Plumber"],["Desk Lamp","35.00","John","Mason","10000","Jane","Doe","Plumber"],["USB Hub","20.00","John","Mason","10000","Jane","Doe","Plumber"],["SSD","110.00","John","Mason","10000","Jane","Doe","Plumber"],["Power Supply","95.00","Jobless","Mason","10000","","",""],["Notebook","3.00","George","Mason","10000","John","Doe","Mason"],["Webcam","80.00","Kevin","Mason","10000","John","Doe","Mason"],["Gaming Mouse","65.00","Oscar","Mason","10000","John","Doe","Mason"],["Cable Organizer","15.00","John","Mason","10000","Jane","Doe","Plumber"]],"tableName":"o-p-m-j1-j2-s1-s2-filtered"}')
+  }) 
+})
+

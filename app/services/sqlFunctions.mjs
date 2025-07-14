@@ -84,16 +84,13 @@ export const sqlInnerJoin = (table1, table2, table1JoiningHeader, table2JoiningH
 }
 
 //TODO : NEEDS URGENT REFACTOR  !!!!!
-export const whereClause = (sqlKeywords, sqlOperators, words, finalTable) => {
-    const whereClauseStartIndex = words.findIndex(word => word === sqlKeywords.WHERE);
-    if (whereClauseStartIndex === -1) return finalTable;
+export const whereClause = (sqlKeywords, sqlOperators, whereClauseWords, finalTable) => {
+    if (!whereClauseWords.length) return finalTable;
 
-    const clause = words.slice(whereClauseStartIndex);
-
-    let leftVal = clause[1];
-    let rightVal = clause[3];
+    let leftVal = whereClauseWords[1];
+    let rightVal = whereClauseWords[3];
     if (sqlKeywords[leftVal] || sqlKeywords[rightVal]) throw new Error(`invalid names for values in ${sqlKeywords.WHERE} clause`);
-    const operator = clause[2];
+    const operator = whereClauseWords[2];
     if (!sqlOperators[operator]) throw new Error(`no operator found in ${sqlKeywords.WHERE} clause`);
 
     const valTypes = {

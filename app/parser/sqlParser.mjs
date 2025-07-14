@@ -7,7 +7,7 @@ export const SqlParser = (input, tables) => {
     // parse subQueries "(query)" push the result table into tables and updates the input with the result table name
     input = handleSubQueries(sqlKeywords, input, tables);
 
-    const words = cleanQueryInput(sqlKeywords, nextCompositeKeyWordsWord, equivalentKeywords, input);
+    const [words, whereClauseWords] = cleanQueryInput(sqlKeywords, nextCompositeKeyWordsWord, equivalentKeywords, input);
 
     //saves aliases for selected columns, remove them form the query
     const selectedColumnsHeaderAliases = columnsHeadersAliasesHandler(sqlKeywords, words);
@@ -25,8 +25,7 @@ export const SqlParser = (input, tables) => {
     parseAllJoins(sqlKeywords, words, tables)
 
     let finalTable = parseSelect(sqlKeywords, words, tables);
-
-    finalTable = whereClause(sqlKeywords, sqlOperators, words, finalTable);
+    finalTable = whereClause(sqlKeywords, sqlOperators, whereClauseWords, finalTable);
 
     //removes aliases and tablename from column headers
     normalizeHeaders(finalTable);
@@ -53,7 +52,6 @@ const parseAllJoins = (sqlKeywords, words, tables) => {
                 currIntermediaryTable = applySqlJoinQuery(sqlInnerJoin, query, tables);
                 break;
         }
-
         tables.push(currIntermediaryTable);
         //updates query
         words.splice(currIndex - 1, endIndex + 2 - currIndex, currIntermediaryTable.tableName);
