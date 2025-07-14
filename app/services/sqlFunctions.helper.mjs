@@ -27,6 +27,7 @@ export const getColumnValuesByIndexFromTable = (twoDArr, columnIndex) => {
 
 //Checks that the selectedcolumn could be => tableName + '.' + header || table.alias + '.' + header || header
 const isPossibleColumnHeadWriting = (selectedColumnHead, header) => {
+    if (selectedColumnHead === header) {return true;}
     const splittedHeader = header.split('.');
     if (splittedHeader[0] === selectedColumnHead) return true;
     for (let i = 1; i < splittedHeader.length; i++) {

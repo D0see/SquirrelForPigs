@@ -71,7 +71,7 @@ const parseSelect = (words, tables) => {
     }
     const selectedColumns = words.slice(selectIndex + 1, lastElemIndex);
     const selectedFromTable = findTableInTableArray(words[lastElemIndex + 1], tables);
-    return sqlSelect(selectedColumns, selectedFromTable);
+    return sqlSelect(allKeywords, selectedColumns, selectedFromTable);
 }
 
 //For subqueries ("Select ... From (subquery)") we parse the input and call sql Parser on every query present between 2 parentheses

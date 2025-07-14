@@ -37,4 +37,5 @@ export const allKeywords = {
     'AS' : 'AS',
     'ON' : 'ON',
     'FROM' : 'FROM',
+    '*' : '*',
 }
