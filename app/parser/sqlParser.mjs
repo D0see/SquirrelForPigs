@@ -3,44 +3,13 @@ import { allKeywords, joinKeywords, nextCompositeKeyWordsWord, equivalentKeyword
 import { cleanQueryInput, tablesAliasesHandler, buildDescriptiveHeaders, turnRightJoinIntoLeftJoin, findEndIndexOfKeywordQuery, normalizeHeaders, findTableInTableArray, columnsHeadersAliasesHandler, applyHeadersAliases, applySqlJoinQuery } from "./sqlParser.helper.mjs";
 
 export const SqlParser = (input, tables) => {
-
-
-    const inputArr = [input];
-
-    //For subqueries ("Select ... From (subquery)") we parse the input and call sql Parser on every query present between 2 parentheses
-    //TODO : MUST REFACTOR !!!
-    const handleSubQueries = (inputArr, tables) => {
-        const openPar = inputArr[0].indexOf('(');
-
-        const findCorrectClosingPar = (openPar, inputArr) => {
-            let subQueryCounter = 0;
-            for (let i = openPar + 1; i < inputArr[0].length; i++) {
-                if (inputArr[0][i] === '(') {
-                    subQueryCounter++;
-                    continue;
-                } else if (inputArr[0][i] === ')') {
-                    if (!subQueryCounter) return i;
-                    subQueryCounter--;
-                }
-            }
-            return -1
-        }
-
-        const closedPar = findCorrectClosingPar(openPar, inputArr);
-        if (openPar === -1 || closedPar === -1) return inputArr[0];
-        const subQuery = inputArr[0].slice(openPar + 1, closedPar);
-        const subQueryResult = SqlParser(subQuery, tables);
-        tables.push(subQueryResult);
-
-        inputArr[0] = inputArr[0].slice(0, openPar).concat(subQueryResult.tableName).concat(inputArr[0].slice(closedPar + 1));
-        inputArr[0] = handleSubQueries(inputArr, tables);
-        return inputArr[0];
-    }
     
-    input = handleSubQueries(inputArr, tables);
+    // parse subQueries "(query)" push the result table into tables and updates the input with the result table name
+    input = handleSubQueries(input, tables);
 
     const words = cleanQueryInput(allKeywords, nextCompositeKeyWordsWord, equivalentKeywords, input);
 
+    //saves aliases for selected columns, remove them form the query
     const selectedColumnsHeaderAliases = columnsHeadersAliasesHandler(words);
 
     //updates tables aliases in place and remove them for the query  
@@ -103,4 +72,34 @@ const parseSelect = (words, tables) => {
     const selectedColumns = words.slice(selectIndex + 1, lastElemIndex);
     const selectedFromTable = findTableInTableArray(words[lastElemIndex + 1], tables);
     return sqlSelect(selectedColumns, selectedFromTable);
+}
+
+//For subqueries ("Select ... From (subquery)") we parse the input and call sql Parser on every query present between 2 parentheses
+const handleSubQueries = (input, tables) => {
+    const openPar = input.indexOf('(');
+
+    const findCorrectClosingPar = (openPar, input) => {
+        let subQueryCounter = 0;
+        for (let i = openPar + 1; i < input.length; i++) {
+            if (input[i] === '(') {
+                subQueryCounter++;
+                continue;
+            } else if (input[i] === ')') {
+                if (!subQueryCounter) return i;
+                subQueryCounter--;
+            }
+        }
+        return -1
+    }
+
+    const closedPar = findCorrectClosingPar(openPar, input);
+    if (openPar === -1 || closedPar === -1) return input;
+
+    const subQuery = input.slice(openPar + 1, closedPar);
+    const subQueryResult = SqlParser(subQuery, tables);
+    tables.push(subQueryResult);
+
+    input = input.slice(0, openPar).concat(subQueryResult.tableName).concat(input.slice(closedPar + 1));
+    input = handleSubQueries(input, tables);
+    return input;
 }

@@ -29,9 +29,7 @@ export const findTableInTableArray = (tableName, tableArr) => {
 
 export const findEndIndexOfKeywordQuery = (keywords, words, index) => {
     for (let i = index; i < words.length; i++) {
-        if (keywords[words[i + 1]]) {
-            return i;
-        }
+        if (keywords[words[i + 1]]) return i;
     }
     return words.length - 1
 }
@@ -43,13 +41,14 @@ export const columnsHeadersAliasesHandler = (words) => {
     const selectIndex = words.findIndex(word => word === "SELECT");
     let fromIndex = words.findIndex(word => word === "FROM");
     for(let i = selectIndex + 1; i < fromIndex - 1; i++) {
-        if (words[i + 1] != "AS") {
+        if (words[i + 1] === "AS") {
+            columnsAliases.push(words[i + 2]);
+            words.splice(i + 1, 2);
+            fromIndex -= 2;
+        } else {
             columnsAliases.push('');
-            continue;
-        };
-        columnsAliases.push(words[i + 2]);
-        words.splice(i + 1, 2);
-        fromIndex -= 2;
+        }
+        
     }
     return columnsAliases;
 }
@@ -94,7 +93,7 @@ export const buildDescriptiveHeaders = (tables) => {
         for (let i = 0; i < table.table[0].length; i++) {
             if (table.table[0][i].split('.').length < 2) table.table[0][i] += '.' + table.tableName;
             if (table.alias) table.table[0][i] += '.' + table.alias;
-            //its shit
+            //TODO : fix this
         }
     }
 }
@@ -103,7 +102,6 @@ export const buildDescriptiveHeaders = (tables) => {
 export const normalizeHeaders = (table) => {
     for (let i = 0; i < table.table[0].length; i++) {
         const header = table.table[0][i].split('.');
-        console.log(header);
         table.table[0][i] = header.length >= 3 ? header[2] + '.' + header[0] : header[0];
     }
 }
@@ -123,14 +121,14 @@ export const turnRightJoinIntoLeftJoin = (words) => {
     }
 }
 
-export const applySqlJoinQuery = (sqlJoinQueryCallback, query, tables) => {
+export const applySqlJoinQuery = (sqlJoinMethodCallback, query, tables) => {
     const table1 = findTableInTableArray(query[0], tables);
     let tablesWithoutTable1 = tables;
     if (table1.alias) {
         tablesWithoutTable1 = tables.filter(table => table.alias != table1.alias);
     }
     const table2 = findTableInTableArray(query[2], tablesWithoutTable1);
-    const resultTable = sqlJoinQueryCallback(table1, table2, query[4], query[6], query[5]);
+    const resultTable = sqlJoinMethodCallback(table1, table2, query[4], query[6], query[5]);
     return resultTable;
 }
 

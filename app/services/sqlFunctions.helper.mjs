@@ -2,7 +2,7 @@
 export const appendColumnToTwoDArr = (values, table) => {
     const newColumnPos = table[0].length;
     for (let y = 0; y < values.length; y++) {
-        if (!table[y]) {table.push([]);} 
+        if (!table[y]) table.push([]);
         table[y][newColumnPos] = values[y] ?? '';
     }
 }
@@ -40,9 +40,7 @@ const isPossibleColumnHeadWriting = (selectedColumnHead, header) => {
 export const getColumnHeadIndex = (selectedColumnHead, table) => {
     const result = [];
     for (const [colIndex, header] of table.table[0].entries()) {
-        if (isPossibleColumnHeadWriting(selectedColumnHead, header)) {
-            result.push(colIndex);
-        };
+        if (isPossibleColumnHeadWriting(selectedColumnHead, header)) result.push(colIndex);
     }
     if (result.length > 1) throw new Error('Ambiguous column head : ' + `${selectedColumnHead}`);
     if (result.length === 0) throw new Error('Couldnt find column head : ' + `${selectedColumnHead}`);
