@@ -1,6 +1,6 @@
-import { sqlLeftJoin, sqlInnerJoin, sqlSelect, whereClause } from "../services/sqlFunctions.mjs";
+import { sqlLeftJoin, sqlInnerJoin, sqlSelect, sqlWhereCompareColumnToColumn, sqlWhereCompareHeaderToString, sqlWhereCompareStringToString } from "../services/sqlFunctions.mjs";
 import { sqlKeywords, sqlOperators, joinKeywords, nextCompositeKeyWordsWord, equivalentKeywords } from "../utils/keywords.mjs";
-import { cleanQueryInput, tablesAliasesHandler, buildDescriptiveHeaders, turnRightJoinIntoLeftJoin, findEndIndexOfKeywordQuery, normalizeHeaders, findTableInTableArray, columnsHeadersAliasesHandler, applyHeadersAliases, applySqlJoinQuery } from "./sqlParser.helper.mjs";
+import { cleanQueryInput, tablesAliasesHandler, buildDescriptiveHeaders, turnRightJoinIntoLeftJoin, findEndIndexOfKeywordQuery, normalizeHeaders, findTableInTableArray, columnsHeadersAliasesHandler, applyHeadersAliases, paramIsStringRepresentation } from "./sqlParser.helper.mjs";
 
 export const SqlParser = (input, tables) => {
     
@@ -25,7 +25,7 @@ export const SqlParser = (input, tables) => {
     parseAllJoins(sqlKeywords, words, tables)
 
     let finalTable = parseSelect(sqlKeywords, words, tables);
-    finalTable = whereClause(sqlKeywords, sqlOperators, whereClauseWords, finalTable);
+    finalTable = parseWhereClause(sqlKeywords, sqlOperators, whereClauseWords, finalTable);
 
     //removes aliases and tablename from column headers
     normalizeHeaders(finalTable);
@@ -59,6 +59,17 @@ const parseAllJoins = (sqlKeywords, words, tables) => {
     }
 }
 
+const applySqlJoinQuery = (sqlJoinMethodCallback, query, tables) => {
+    const table1 = findTableInTableArray(query[0], tables);
+    let tablesWithoutTable1 = tables;
+    if (table1.alias) {
+        tablesWithoutTable1 = tables.filter(table => table.alias != table1.alias);
+    }
+    const table2 = findTableInTableArray(query[2], tablesWithoutTable1);
+    const resultTable = sqlJoinMethodCallback(table1, table2, query[4], query[6], query[5]);
+    return resultTable;
+}
+
 const parseSelect = (sqlKeywords, words, tables) => {
     const selectIndex = words.findIndex(word => word === sqlKeywords.SELECT);
     if (selectIndex === -1) throw new Error(`missing ${sqlKeywords.SELECT} keyword"`);
@@ -78,7 +89,7 @@ const parseSelect = (sqlKeywords, words, tables) => {
 const handleSubQueries = (sqlKeywords, input, tables) => {
     const openPar = input.indexOf(sqlKeywords.SUBQUERY_START);
 
-    const findCorrectClosingPar = (sqlKeywords, openPar, input) => {
+    const findQueryEndSymbol = (sqlKeywords, openPar, input) => {
         let subQueryCounter = 0;
         for (let i = openPar + 1; i < input.length; i++) {
             if (input[i] === sqlKeywords.SUBQUERY_START) {
@@ -92,7 +103,7 @@ const handleSubQueries = (sqlKeywords, input, tables) => {
         return -1
     }
 
-    const closedPar = findCorrectClosingPar(sqlKeywords, openPar, input);
+    const closedPar = findQueryEndSymbol(sqlKeywords, openPar, input);
     if (openPar === -1 || closedPar === -1) return input;
 
     const subQuery = input.slice(openPar + 1, closedPar);
@@ -102,4 +113,44 @@ const handleSubQueries = (sqlKeywords, input, tables) => {
     input = input.slice(0, openPar).concat(subQueryResult.tableName).concat(input.slice(closedPar + 1));
     input = handleSubQueries(sqlKeywords, input, tables);
     return input;
+}
+
+//TODO : NEEDS URGENT REFACTOR  !!!!!
+const parseWhereClause = (sqlKeywords, sqlOperators, whereClauseWords, finalTable) => {
+    if (!whereClauseWords.length) return finalTable;
+
+    const parameters = {
+        left : {
+            val : whereClauseWords[1],
+            type : 'header',
+        },
+        right : {
+            val : whereClauseWords[3],
+            type : 'header',
+        },
+    };
+    if (sqlKeywords[parameters.left.val] || sqlKeywords[parameters.left.val]) throw new Error(`invalid names for values in ${sqlKeywords.WHERE} clause`);
+
+    const operator = whereClauseWords[2];
+    if (!sqlOperators[operator]) throw new Error(`no operator found in ${sqlKeywords.WHERE} clause`);
+
+    Object.values(parameters).forEach((parameter) => {
+        if (paramIsStringRepresentation(parameter.val)) {
+            parameter.type = 'string';
+            parameter.val = parameter.val.slice(1, parameter.val.length -1);
+        }
+    });
+    
+    if (parameters.left.type === 'header' && parameters.right.type === 'header') {
+        return sqlWhereCompareColumnToColumn(parameters.left.val, parameters.right.val, finalTable, sqlOperators, operator);
+
+    } else if (parameters.left.type === 'string' && parameters.right.type === 'string') {
+        return sqlWhereCompareStringToString(parameters.left.val, parameters.right.val, finalTable, sqlOperators, operator);
+
+    } else {
+        return sqlWhereCompareHeaderToString(
+            (parameters.left.type === 'header' ? parameters.left.val : parameters.right.val), 
+            (parameters.left.type === 'string' ? parameters.left.val : parameters.right.val), 
+            finalTable, sqlOperators, operator);
+    }
 }

@@ -83,52 +83,40 @@ export const sqlInnerJoin = (table1, table2, table1JoiningHeader, table2JoiningH
     };
 }
 
-//TODO : NEEDS URGENT REFACTOR  !!!!!
-export const whereClause = (sqlKeywords, sqlOperators, whereClauseWords, finalTable) => {
-    if (!whereClauseWords.length) return finalTable;
-
-    let leftVal = whereClauseWords[1];
-    let rightVal = whereClauseWords[3];
-    if (sqlKeywords[leftVal] || sqlKeywords[rightVal]) throw new Error(`invalid names for values in ${sqlKeywords.WHERE} clause`);
-    const operator = whereClauseWords[2];
-    if (!sqlOperators[operator]) throw new Error(`no operator found in ${sqlKeywords.WHERE} clause`);
-
-    const valTypes = {
-        left : 'header',
-        right : 'header'
-    }
-    
-    if ((leftVal.startsWith('"') && leftVal.endsWith('"')) || (leftVal.startsWith("'") && leftVal.endsWith("'"))) {
-        valTypes.left = 'string';
-        leftVal = leftVal.slice(1, leftVal.length -1);
-    }
-    if ((rightVal.startsWith('"') && rightVal.endsWith('"')) || (rightVal.startsWith("'") && rightVal.endsWith("'"))) {
-        valTypes.right = 'string';
-        rightVal = rightVal.slice(1, rightVal.length -1);
-    }
-
+//TODO : INCORPORATE DIFFERENTS OPERATORS
+export const sqlWhereCompareColumnToColumn = (leftVal, rightVal, finalTable, sqlOperators, operator) => {
     const wheredtwoDArr = [structuredClone(finalTable.table[0])];
+    const headerColIndex1 = getColumnHeadIndex(leftVal, finalTable);
+    const headerColIndex2 = getColumnHeadIndex(rightVal, finalTable);
 
-    if (valTypes.left === 'header' && valTypes.right === 'header') {
-        const headerColIndex1 = getColumnHeadIndex(leftVal, finalTable);
-        const headerColIndex2 = getColumnHeadIndex(rightVal, finalTable);
-        for (let i = 0; i < finalTable.table.length; i++) {
-            if (finalTable.table[i][headerColIndex1] === finalTable.table[i][headerColIndex2]) {
-                    wheredtwoDArr.push(finalTable.table[i]);
-            }
-        }
-    } else if (valTypes.left === 'string' && valTypes.right === 'string') {
-        if (leftVal === rightVal) {
-            wheredtwoDArr.push(...finalTable.table.slice(1));
-        }
-    } else {
-        const headerColIndex = getColumnHeadIndex((valTypes.left === 'header' ? leftVal : rightVal), finalTable);
-        for (let i = 0; i < finalTable.table.length; i++) {
-            if (finalTable.table[i][headerColIndex] === (valTypes.left === 'string' ? leftVal : rightVal)) {
+    for (let i = 0; i < finalTable.table.length; i++) {
+        if (finalTable.table[i][headerColIndex1] === finalTable.table[i][headerColIndex2]) {
                 wheredtwoDArr.push(finalTable.table[i]);
-            }
-        } 
+        }
     }
+
+    finalTable.table = wheredtwoDArr;
+    return finalTable;
+}
+
+//TODO : INCORPORATE DIFFERENTS OPERATORS
+export const sqlWhereCompareStringToString = (leftVal, rightVal, finalTable, sqlOperators, operator) => {
+    const wheredtwoDArr = [structuredClone(finalTable.table[0])];
+    if (leftVal === rightVal) wheredtwoDArr.push(...finalTable.table.slice(1));
+    finalTable.table = wheredtwoDArr;
+    return finalTable;
+}
+
+//TODO : INCORPORATE DIFFERENTS OPERATORS
+export const sqlWhereCompareHeaderToString = (headerVal, stringVal, finalTable, sqlOperators, operator) => {
+    const wheredtwoDArr = [structuredClone(finalTable.table[0])];
+    const headerColIndex = getColumnHeadIndex(headerVal, finalTable);
+
+    for (let i = 0; i < finalTable.table.length; i++) {
+        if (finalTable.table[i][headerColIndex] === stringVal) {
+            wheredtwoDArr.push(finalTable.table[i]);
+        }
+    } 
 
     finalTable.table = wheredtwoDArr;
     return finalTable;
