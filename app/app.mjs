@@ -23,6 +23,7 @@ sqlQuerySubsmissionButton.addEventListener("click", (e) => {
         return;
     }
     if (newTable) {
-        queryResultVisualizer.appendChild(tableObjToHTMLTable(newTable, "queryResult"))
+        const htmlTable = tableObjToHTMLTable(newTable, "queryResult")
+        queryResultVisualizer.appendChild(htmlTable)
     };
 })

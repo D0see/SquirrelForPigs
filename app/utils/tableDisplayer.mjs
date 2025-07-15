@@ -3,42 +3,39 @@ export const tableObjToHTMLTable = (tableObj, tableType) => {
     const twoDArr = tableObj.table;
     const tableName = tableObj.tableName;
 
+    const tableContainer = document.createElement('div');
+    tableContainer.classList.add(`${tableType}`);
     const table = document.createElement('table');
-    table.classList.add(`${tableType}-table`);
+    tableContainer.appendChild(table);
 
     // builds caption
     const caption = document.createElement('caption');
     caption.innerText = tableName;
-    caption.classList.add(`${tableType}-caption`);
+
     table.appendChild(caption);
 
     // builds thead
     const tableHead = document.createElement('thead');
-    tableHead.classList.add(`${tableType}-thead`);
     table.appendChild(tableHead);
     const tableBody = document.createElement('tbody');
-    tableBody.classList.add(`${tableType}-tbody`);
     table.appendChild(tableBody);
 
     // initialises headers
     for (const header of twoDArr[0]) {
-        const currHead = document.createElement('th');
-        currHead.classList.add(`${tableType}-th`);
+        const currHead = document.createElement('th');    
         currHead.innerText = header;
         tableHead.appendChild(currHead);
     }
 
     // initialises data
-    for (const data of twoDArr.slice(1)) {
-        const currRow = document.createElement('tr');
-        currRow.classList.add(`${tableType}-tr`);
+    for (const row of twoDArr.slice(1)) {
+        const currRow = document.createElement('tr')    
         tableBody.appendChild(currRow);
-        data.forEach(str => {
-            const currStr = document.createElement('td');
-            currStr.classList.add(`${tableType}-td`);
-            currStr.innerText = str;
-            currRow.appendChild(currStr);
+        row.forEach(cellData => {
+            const htmlCell = document.createElement('td');
+        htmlCell.innerText = cellData;
+            currRow.appendChild(htmlCell);
         });
     }
-    return table;
+    return tableContainer;
 }

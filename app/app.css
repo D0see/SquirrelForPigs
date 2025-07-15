@@ -60,33 +60,33 @@ body {
 
 /* queryResult */
 
-.queryResult-table {
+.queryResult table {
     max-width: 75%;
     min-width: 50%;
 }
 
-.queryResult-caption {
+.queryResult caption {
     padding: 5px;
     text-transform: uppercase;
 }
 
-.queryResult-thead {
+.queryResult thead {
     background-color: darkgray;
 }
 
-.queryResult-tbody {
+.queryResult tbody {
 
 }
 
-.queryResult-th {
+.queryResult th {
     padding: 10px;
 }
 
-.queryResult-tr {
+.queryResult tr {
     
 }
 
-.queryResult-td {
+.queryResult td {
     background-color: lightgrey;
     text-align: center;
     padding: 5px;

@@ -5,7 +5,7 @@ import { cleanQueryInput, tablesAliasesHandler, buildDescriptiveHeaders, turnRig
 export const SqlParser = (input, tables) => {
     
     // parse subQueries "(query)" push the result table into tables and updates the input with the result table name
-    input = handleSubQueries(sqlKeywords, input, tables);
+    input = parseSubQueries(sqlKeywords, input, tables);
 
     const [words, whereClauseWords] = cleanQueryInput(sqlKeywords, nextCompositeKeyWordsWord, equivalentKeywords, input);
 
@@ -25,6 +25,7 @@ export const SqlParser = (input, tables) => {
     parseAllJoins(sqlKeywords, words, tables)
 
     let finalTable = parseSelect(sqlKeywords, words, tables);
+
     finalTable = parseWhereClause(sqlKeywords, sqlOperators, whereClauseWords, finalTable);
 
     //removes aliases and tablename from column headers
@@ -86,7 +87,7 @@ const parseSelect = (sqlKeywords, words, tables) => {
 }
 
 //For subqueries ("Select ... From (subquery)") we parse the input and call sql Parser on every query present between 2 parentheses
-const handleSubQueries = (sqlKeywords, input, tables) => {
+const parseSubQueries = (sqlKeywords, input, tables) => {
     const openPar = input.indexOf(sqlKeywords.SUBQUERY_START);
 
     const closedPar = findQueryEndSymbol(sqlKeywords, openPar, input);
@@ -97,10 +98,9 @@ const handleSubQueries = (sqlKeywords, input, tables) => {
     tables.push(subQueryResult);
 
     input = input.slice(0, openPar).concat(subQueryResult.tableName).concat(input.slice(closedPar + 1));
-    input = handleSubQueries(sqlKeywords, input, tables);
+    input = parseSubQueries(sqlKeywords, input, tables);
     return input;
 }
-
 
 const parseWhereClause = (sqlKeywords, sqlOperators, whereClauseWords, finalTable) => {
     if (!whereClauseWords.length) return finalTable;
