@@ -1,6 +1,6 @@
-import { sqlLeftJoin, sqlInnerJoin, sqlSelect, sqlWhereCompareColumnToColumn, sqlWhereCompareHeaderToString, sqlWhereCompareStringToString } from "../services/sqlFunctions.mjs";
+import { sqlLeftJoin, sqlInnerJoin, sqlSelect, sqlWhereCompareColumnToColumn, sqlWhereCompareHeaderToString, sqlWhereCompareStringToString } from "./sql.logic/sqlFunctions.mjs";
 import { sqlKeywords, sqlOperators, joinKeywords, nextCompositeKeyWordsWord, equivalentKeywords } from "../utils/keywords.mjs";
-import { cleanQueryInput, tablesAliasesHandler, buildDescriptiveHeaders, turnRightJoinIntoLeftJoin, findEndIndexOfKeywordQuery, normalizeHeaders, findTableInTableArray, columnsHeadersAliasesHandler, applyHeadersAliases, paramIsStringRepresentation } from "./sqlParser.helper.mjs";
+import { cleanQueryInput, tablesAliasesHandler, buildDescriptiveHeaders, turnRightJoinIntoLeftJoin, findEndIndexOfKeywordQuery, normalizeHeaders, findTableInTableArray, columnsHeadersAliasesHandler, applyHeadersAliases, paramIsStringRepresentation, findQueryEndSymbol } from "./sqlParser.helper.mjs";
 
 export const SqlParser = (input, tables) => {
     
@@ -89,20 +89,6 @@ const parseSelect = (sqlKeywords, words, tables) => {
 const handleSubQueries = (sqlKeywords, input, tables) => {
     const openPar = input.indexOf(sqlKeywords.SUBQUERY_START);
 
-    const findQueryEndSymbol = (sqlKeywords, openPar, input) => {
-        let subQueryCounter = 0;
-        for (let i = openPar + 1; i < input.length; i++) {
-            if (input[i] === sqlKeywords.SUBQUERY_START) {
-                subQueryCounter++;
-                continue;
-            } else if (input[i] === sqlKeywords.SUBQUERY_END) {
-                if (!subQueryCounter) return i;
-                subQueryCounter--;
-            }
-        }
-        return -1
-    }
-
     const closedPar = findQueryEndSymbol(sqlKeywords, openPar, input);
     if (openPar === -1 || closedPar === -1) return input;
 
@@ -115,7 +101,7 @@ const handleSubQueries = (sqlKeywords, input, tables) => {
     return input;
 }
 
-//TODO : NEEDS URGENT REFACTOR  !!!!!
+
 const parseWhereClause = (sqlKeywords, sqlOperators, whereClauseWords, finalTable) => {
     if (!whereClauseWords.length) return finalTable;
 

@@ -86,6 +86,20 @@ export const tablesAliasesHandler = (sqlKeywords, words, tables) => {
     }
 }
 
+export const findQueryEndSymbol = (sqlKeywords, openPar, input) => {
+    let subQueryCounter = 0;
+    for (let i = openPar + 1; i < input.length; i++) {
+        if (input[i] === sqlKeywords.SUBQUERY_START) {
+            subQueryCounter++;
+            continue;
+        } else if (input[i] === sqlKeywords.SUBQUERY_END) {
+            if (!subQueryCounter) return i;
+            subQueryCounter--;
+        }
+    }
+    return -1
+}
+
 
 //#endregion
 
