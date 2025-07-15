@@ -1,5 +1,5 @@
 import { sqlLeftJoin, sqlInnerJoin, sqlSelect, sqlWhereCompareColumnToColumn, sqlWhereCompareHeaderToString, sqlWhereCompareStringToString } from "./sql.logic/sqlFunctions.mjs";
-import { sqlKeywords, sqlOperators, joinKeywords, nextCompositeKeyWordsWord, equivalentKeywords } from "../utils/keywords.mjs";
+import { sqlKeywords, sqlOperators, joinKeywords, nextCompositeKeyWordsWord, equivalentKeywords, reservedKeyWords } from "../utils/keywords.mjs";
 import { cleanQueryInput, tablesAliasesHandler, buildDescriptiveHeaders, turnRightJoinIntoLeftJoin, findEndIndexOfKeywordQuery, normalizeHeaders, findTableInTableArray, columnsHeadersAliasesHandler, applyHeadersAliases, paramIsStringRepresentation, findQueryEndSymbol } from "./sqlParser.helper.mjs";
 
 export const SqlParser = (input, tables) => {
@@ -7,26 +7,26 @@ export const SqlParser = (input, tables) => {
     // parse subQueries "(query)" push the result table into tables and updates the input with the result table name
     input = parseSubQueries(sqlKeywords, input, tables);
 
-    const [words, whereClauseWords] = cleanQueryInput(sqlKeywords, nextCompositeKeyWordsWord, equivalentKeywords, input);
+    const [selectQuery, whereClause] = cleanQueryInput(sqlKeywords, nextCompositeKeyWordsWord, equivalentKeywords, input);
 
     //saves aliases for selected columns, remove them form the query
-    const selectedColumnsHeaderAliases = columnsHeadersAliasesHandler(sqlKeywords, words);
+    const selectedColumnsHeaderAliases = columnsHeadersAliasesHandler(sqlKeywords, selectQuery);
 
     //updates tables aliases in place and remove them for the query  
-    tablesAliasesHandler(sqlKeywords, words, tables);
+    tablesAliasesHandler(sqlKeywords, reservedKeyWords, selectQuery, tables);
 
     //updates tables headers in place based on their aliases and names (table.Name : a, table.alias : b => header.a.b)
     buildDescriptiveHeaders(tables);
 
     //updates the query in place "table1 RIGHTJOIN table2 on table1.header = table2.header" => "table2 LEFTJOIN table1 on table2.header = table1.header"
-    turnRightJoinIntoLeftJoin(sqlKeywords, words);
+    turnRightJoinIntoLeftJoin(sqlKeywords, selectQuery);
 
     //executes all joins in the query, updates the query with the new joined tables names and push them into tables
-    parseAllJoins(sqlKeywords, words, tables)
+    parseAllJoins(sqlKeywords, selectQuery, tables)
 
-    let finalTable = parseSelect(sqlKeywords, words, tables);
+    let finalTable = parseSelect(sqlKeywords, selectQuery, tables);
 
-    finalTable = parseWhereClause(sqlKeywords, sqlOperators, whereClauseWords, finalTable);
+    finalTable = parseWhereClause(sqlKeywords, sqlOperators, whereClause, finalTable);
 
     //removes aliases and tablename from column headers
     normalizeHeaders(finalTable);

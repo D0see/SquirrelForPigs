@@ -19,12 +19,13 @@ export const sqlKeywords = {
     'WHERE' : 'WHERE',
 }
 
+export const reservedKeyWords = Object.values(sqlKeywords);
+
 export const sqlOperators = { 
     '=' : 'EQUAL',
     '!=' : 'DIFFERENT_FROM',
 }
 
-//TODO : make this programatic
 export const nextCompositeKeyWordsWord = {
     [sqlKeywords.LEFT] : {
         [sqlKeywords.JOIN] : true,
@@ -39,13 +40,11 @@ export const nextCompositeKeyWordsWord = {
     [sqlKeywords.INNER] : {[sqlKeywords.JOIN] : true,},
 }
 
-//TODO : this needs to depends on sqlKeywords
 export const joinKeywords = {
     [sqlKeywords.LEFT_JOIN] : true,
     [sqlKeywords.INNER_JOIN] : true,
 }
 
-//TODO : same
 export const equivalentKeywords = {
     [sqlKeywords.JOIN] : sqlKeywords.INNER_JOIN,
     [sqlKeywords.LEFT_OUTER_JOIN] : sqlKeywords.LEFT_JOIN,

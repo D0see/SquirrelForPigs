@@ -1,7 +1,5 @@
 //#region INPUT HANDLING
 
-//TODO : optimize this + urgent refactor
-
 const buildCompositeKeywords = (nextCompositeKeyWordsWord, words) => {
     for (let i = 0; i < words.length; i++) {
         if (nextCompositeKeyWordsWord[words[i]] && nextCompositeKeyWordsWord[words[i]][words[i + 1]]) {
@@ -12,6 +10,10 @@ const buildCompositeKeywords = (nextCompositeKeyWordsWord, words) => {
     }
 }
 
+// for testing
+export { buildCompositeKeywords as _buildCompositeKeywords }; 
+
+//TODO : optimize this + urgent refactor
 export const cleanQueryInput = (sqlKeywords, nextCompositeKeyWordsWord, equivalentKeywords, input) => {
 
     //builds a map of for every sqlKeywords value
@@ -31,9 +33,9 @@ export const cleanQueryInput = (sqlKeywords, nextCompositeKeyWordsWord, equivale
     const whereIndex = query.findIndex(word => word === sqlKeywords.WHERE);
     if (whereIndex === -1) return [query, []]
 
-    const whereClauseWords = query.slice(whereIndex);
-    query = query.slice(0, whereIndex);
-    return [query, whereClauseWords];
+    const whereClause = query.slice(whereIndex);
+    const selectQuery = query.slice(0, whereIndex);
+    return [selectQuery, whereClause];
 }
 
 export const turnRightJoinIntoLeftJoin = (sqlKeywords, words) => {
@@ -58,7 +60,7 @@ export const findEndIndexOfKeywordQuery = (keywords, words, index) => {
     return words.length - 1
 }
 
-export const tablesAliasesHandler = (sqlKeywords, words, tables) => {
+export const tablesAliasesHandler = (sqlKeywords, reservedKeyWords, words, tables) => {
     for (let i = 0; i < words.length; i++) {
         if (words[i] === sqlKeywords.ALIAS_ASSIGNEMENT) {
             let table = findTableInTableArray(words[i - 1], tables);
@@ -66,7 +68,7 @@ export const tablesAliasesHandler = (sqlKeywords, words, tables) => {
 
             //Error handling
             if (!table) throw new Error(`No table with name : ${words[i - 1]}`);
-            if (!alias || sqlKeywords[alias]) throw new Error(`Invalid or absent alias for table : ${table.tableName}`);
+            if (!alias || reservedKeyWords.includes(alias)) throw new Error(`Invalid or absent alias for table : ${table.tableName}`);
             //Check for name conflict between specified alias and tables names and aliases
             const aliasOrNameCollidingTables = tables.filter(table => [table.tableName, table.alias].includes(alias));
             if (aliasOrNameCollidingTables.length) throw new Error(`Name collision for alias : ${alias}`);
