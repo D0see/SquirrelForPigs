@@ -391,4 +391,3 @@ describe(SqlParser.name, () => {
     expect(result).toBe('{"table":[["product_bought","price","client_firstname","client_job","client_salary","manager_firstname","manager_lastname","manager_job"],["Laptop","1200.00","John","Mason","10000","Jane","Doe","Plumber"],["Mouse","25.50","John","Mason","10000","Jane","Doe","Plumber"],["Desk Lamp","35.00","John","Mason","10000","Jane","Doe","Plumber"],["USB Hub","20.00","John","Mason","10000","Jane","Doe","Plumber"],["SSD","110.00","John","Mason","10000","Jane","Doe","Plumber"],["Power Supply","95.00","Jobless","Mason","10000","","",""],["Notebook","3.00","George","Mason","10000","John","Doe","Mason"],["Webcam","80.00","Kevin","Mason","10000","John","Doe","Mason"],["Gaming Mouse","65.00","Oscar","Mason","10000","John","Doe","Mason"],["Cable Organizer","15.00","John","Mason","10000","Jane","Doe","Plumber"]],"tableName":"o-p-m-j1-j2-s1-s2-filtered"}')
   }) 
 })
-

@@ -17,6 +17,7 @@ export const sqlKeywords = {
     'SUBQUERY_START' : '(',
     'SUBQUERY_END' : ')',
     'WHERE' : 'WHERE',
+    'COMMA' : ',',
 }
 
 export const reservedKeyWords = Object.values(sqlKeywords);

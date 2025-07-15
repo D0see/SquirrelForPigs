@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { findTableInTableArray, findEndIndexOfKeywordQuery, _buildCompositeKeywords, cleanQueryInput, turnRightJoinIntoLeftJoin, tablesAliasesHandler } from './sqlParser.helper.mjs'
+import { sqlKeywords, reservedKeyWords, sqlOperators, nextCompositeKeyWordsWord, joinKeywords, equivalentKeywords } from '../utils/keywords.mjs';
 
 const testingData = [{
         table: [
@@ -151,59 +152,6 @@ describe(findEndIndexOfKeywordQuery.name, () => {
 
 //KEYWORDS
 
-const sqlKeywords = {
-    'LEFT_JOIN' : 'LEFT JOIN',
-    'RIGHT_JOIN' : 'RIGHT JOIN',
-    'INNER_JOIN' : 'INNER JOIN',
-    'LEFT_OUTER_JOIN' : 'LEFT OUTER JOIN',
-    'RIGHT_OUTER_JOIN' : 'RIGHT OUTER JOIN',
-    'OUTER' : 'OUTER', 
-    'SELECT' : 'SELECT',
-    'LEFT' : 'LEFT',
-    'RIGHT' : 'RIGHT',
-    'INNER' : 'INNER',
-    'JOIN' : 'JOIN',
-    'ALIAS_ASSIGNEMENT' : 'AS',
-    'ON' : 'ON',
-    'FROM' : 'FROM',
-    'SELECT_ALL_COLUMNS' : '*',
-    'SUBQUERY_START' : '(',
-    'SUBQUERY_END' : ')',
-    'WHERE' : 'WHERE',
-}
-
-const reservedKeyWords = Object.values(sqlKeywords);
-
-const sqlOperators = { 
-    '=' : 'EQUAL',
-    '!=' : 'DIFFERENT_FROM',
-}
-
-const nextCompositeKeyWordsWord = {
-    [sqlKeywords.LEFT] : {
-        [sqlKeywords.JOIN] : true,
-        [sqlKeywords.OUTER] : true,
-    },
-    [sqlKeywords.RIGHT] : {
-        [sqlKeywords.JOIN] : true,
-        [sqlKeywords.OUTER] : true,
-    },
-    [sqlKeywords.LEFT + ' ' + sqlKeywords.OUTER] : {[sqlKeywords.JOIN] : true,},
-    [sqlKeywords.RIGHT + ' ' + sqlKeywords.OUTER] : {[sqlKeywords.JOIN] : true,},
-    [sqlKeywords.INNER] : {[sqlKeywords.JOIN] : true,},
-}
-
-const joinKeywords = {
-    [sqlKeywords.LEFT_JOIN] : true,
-    [sqlKeywords.INNER_JOIN] : true,
-}
-
-const equivalentKeywords = {
-    [sqlKeywords.JOIN] : sqlKeywords.INNER_JOIN,
-    [sqlKeywords.LEFT_OUTER_JOIN] : sqlKeywords.LEFT_JOIN,
-    [sqlKeywords.RIGHT_OUTER_JOIN] : sqlKeywords.RIGHT_JOIN,
-}
-
 describe(_buildCompositeKeywords.name, () => {
   it("functional test 1", () => {
     //ARRANGE
@@ -239,6 +187,21 @@ describe(cleanQueryInput.name, () => {
     expect(whereClauseWords).toStrictEqual(["WHERE", "'Mason'", "=", "j1.occupation"]);
   }) 
 })
+
+ describe(cleanQueryInput.name, () => {
+  it("should handle commas", () => {
+    //ARRANGE
+    const input = "select o.product as product_bought, o.amount AS price, p.firstName AS client_firstname, j1.occupation as client_job, s1.salary AS client_salary, m.firstName AS manager_firstname, m.lastName AS manager_lastname, j2.occupation AS manager_job, FROM order AS o inner JoiN people AS p on o.userId = p.id LEFT JOIN people AS m on p.idManager = m.id LEFT JOIN job AS j1 on p.jobId = j1.id left Join job AS j2 on m.jobId = j2.id left join salary AS s1 on j1.idSalary = s1.id LEFT JOIN salary AS s2 on j2.idSalary = s2.id where 'Mason' = j1.occupation"
+
+    //ACT
+    const [selectQuery, whereClauseWords] = cleanQueryInput(sqlKeywords, nextCompositeKeyWordsWord, equivalentKeywords, input);
+
+    //ASSERT
+    expect(selectQuery).toStrictEqual(["SELECT","o.product","AS","product_bought","o.amount","AS","price","p.firstName","AS","client_firstname","j1.occupation","AS","client_job","s1.salary","AS","client_salary","m.firstName","AS","manager_firstname","m.lastName","AS","manager_lastname","j2.occupation","AS","manager_job","FROM","order","AS","o","INNER JOIN","people","AS","p","ON","o.userId","=","p.id","LEFT JOIN","people","AS","m","ON","p.idManager","=","m.id","LEFT JOIN","job","AS","j1","ON","p.jobId","=","j1.id","LEFT JOIN","job","AS","j2","ON","m.jobId","=","j2.id","LEFT JOIN","salary","AS","s1","ON","j1.idSalary","=","s1.id","LEFT JOIN","salary","AS","s2","ON","j2.idSalary","=","s2.id"]);
+    expect(whereClauseWords).toStrictEqual(["WHERE", "'Mason'", "=", "j1.occupation"]);
+  }) 
+})
+
 
 describe(turnRightJoinIntoLeftJoin.name, () => {
   it("functional test 1", () => {
@@ -353,3 +316,4 @@ describe(tablesAliasesHandler.name, () => {
     expect(words).toStrictEqual(['select', '*', 'from', 'p', 'left join', 'p2', 'ON', 'p.idManager', '=', 'p2.id'])
   }) 
 })
+

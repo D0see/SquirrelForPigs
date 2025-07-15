@@ -22,8 +22,12 @@ export const cleanQueryInput = (sqlKeywords, nextCompositeKeyWordsWord, equivale
         return acc;
     }, {});
 
+    //removes commas
+    input = input.replace(/,/g, '')
+
     //removes empty spaces
     let query = input.split(' ').map(word => word.trim()).filter(word => word);
+
     //make sure keyword are uppercase
     query = query.map(word => keywordsObj[word.toUpperCase()] ? word.toUpperCase() : word);
     buildCompositeKeywords(nextCompositeKeyWordsWord, query);
@@ -32,7 +36,6 @@ export const cleanQueryInput = (sqlKeywords, nextCompositeKeyWordsWord, equivale
 
     const whereIndex = query.findIndex(word => word === sqlKeywords.WHERE);
     if (whereIndex === -1) return [query, []]
-
     const whereClause = query.slice(whereIndex);
     const selectQuery = query.slice(0, whereIndex);
     return [selectQuery, whereClause];
