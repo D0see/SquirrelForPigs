@@ -22,11 +22,14 @@ export const SqlParser = (input, tables) => {
     turnRightJoinIntoLeftJoin(sqlKeywords, selectQuery);
 
     //executes all joins in the query, updates the query with the new joined tables names and push them into tables
-    parseAllJoins(sqlKeywords, selectQuery, tables)
+    parseAllJoins(sqlKeywords, selectQuery, tables);
 
-    let finalTable = parseSelect(sqlKeywords, selectQuery, tables);
+    //here query should look like => Select columnNames from finalTableName
+    let finalTable = findTableInTableArray(selectQuery[selectQuery.length - 1], tables);
 
     finalTable = parseWhereClause(sqlKeywords, sqlOperatorsJsEquivalent, whereClause, finalTable);
+
+    finalTable = parseSelect(sqlKeywords, selectQuery, tables);
 
     //removes aliases and tablename from column headers
     normalizeHeaders(finalTable);

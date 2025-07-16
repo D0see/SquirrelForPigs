@@ -418,4 +418,16 @@ describe(SqlParser.name, () => {
   }) 
 })
 
+ describe(SqlParser.name, () => {
+  it("SIMPLE QUERY WITH WHERE CLAUSE WHERE COLUMN COMPARED ISNT SELECTED should pass functionnal test 24", () => {
+    //ARRANGE
+    const query = "select firstName lastName from people where id < 4";
+    const tablesObj = structuredClone(testingData);
 
+    //ACT
+    const result = JSON.stringify(SqlParser(query, tablesObj));
+
+    //ASSERT
+    expect(result).toBe('{"table":[["firstName","lastName"],["John","Doe"],["Jane","Doe"],["Bob","Dylan"]],"tableName":"people-filtered"}')
+  }) 
+})
