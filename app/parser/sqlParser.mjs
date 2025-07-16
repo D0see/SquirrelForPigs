@@ -1,6 +1,6 @@
 import { sqlLeftJoin, sqlInnerJoin, sqlSelect, sqlWhereCompareColumnToColumn, sqlWhereCompareHeaderToString, sqlWhereCompareStringToString } from "./sql.logic/sqlFunctions.mjs";
 import { sqlKeywords, sqlOperatorsJsEquivalent, joinKeywords, nextCompositeKeyWordsWord, equivalentKeywords, reservedKeyWords, dataTypes } from "../utils/keywords.mjs";
-import { cleanQueryInput, tablesAliasesHandler, buildDescriptiveHeaders, turnRightJoinIntoLeftJoin, findEndIndexOfKeywordQuery, normalizeHeaders, findTableInTableArray, columnsHeadersAliasesHandler, applyHeadersAliases, paramIsStringRepresentation, findQueryEndSymbol } from "./sqlParser.helper.mjs";
+import { cleanQueryInput, tablesAliasesHandler, buildDescriptiveHeaders, turnRightJoinIntoLeftJoin, findEndIndexOfKeywordQuery, normalizeHeaders, findTableInTableArray, columnsHeadersAliasesHandler, applyHeadersAliases, paramIsDirectValueRepresentation, findQueryEndSymbol } from "./sqlParser.helper.mjs";
 
 export const SqlParser = (input, tables) => {
     
@@ -121,9 +121,8 @@ const parseWhereClause = (sqlKeywords, sqlOperatorsJsEquivalent, whereClauseWord
     if (!sqlOperatorsJsEquivalent[operator]) throw new Error(`no operator found in ${sqlKeywords.WHERE} clause`);
 
     Object.values(parameters).forEach((parameter) => {
-        if (paramIsStringRepresentation(parameter.val)) {
+        if (paramIsDirectValueRepresentation(parameter.val)) {
             parameter.type = 'string';
-            parameter.val = parameter.val.slice(1, parameter.val.length -1);
         }
     });
     

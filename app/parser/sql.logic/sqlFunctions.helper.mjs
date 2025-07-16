@@ -39,6 +39,7 @@ const isPossibleColumnHeadWriting = (selectedColumnHead, header) => {
 
 // ("columnHead", [...tables]) => colIndex
 export const getColumnHeadIndex = (selectedColumnHead, table) => {
+    console.log(selectedColumnHead)
     const result = [];
     for (const [colIndex, header] of table.table[0].entries()) {
         if (isPossibleColumnHeadWriting(selectedColumnHead, header)) result.push(colIndex);
@@ -52,8 +53,9 @@ export const getColumnHeadIndex = (selectedColumnHead, table) => {
 
 // TODO : refactor all -> rethink how you do types dummy
 export const compareData = (dataTypes, sqlOperatorsJsEquivalent, operator, data1, data2) => {
+    console.log(data1, data2)
     if (!data1 || !data2) return;
-    
+
     const leftVal = {
         val : data1,
         type : inferDataType(dataTypes, data1),
@@ -61,6 +63,13 @@ export const compareData = (dataTypes, sqlOperatorsJsEquivalent, operator, data1
     const rightVal = {
         val : data2,
         type : inferDataType(dataTypes, data2),
+    }
+
+    //handles strings TODO : ITS AWFUL FIXFIXFIXFIX
+    for (const data of [leftVal, rightVal]) {
+        if (data.type === 'VARCHAR' && ["'",'"'].includes(data.val[0]) && ["'",'"'].includes(data.val[data.val.length - 1])) {
+            data.val = data.val.slice(1, data.val.length - 1)
+        }
     }
 
     if (leftVal.type != rightVal.type) throw new Error('cant compare values of different types');
@@ -80,7 +89,7 @@ export const compareData = (dataTypes, sqlOperatorsJsEquivalent, operator, data1
 }
 
 export const inferDataType = (dataTypes, param) => {
-    if (!isNaN(param)) {
+    if (!isNaN(param) && !['"','"'].includes(param[0]) && !['"','"'].includes(param[param.length - 1])) {
         return dataTypes.NUMBER;
     } else if (isDate(param)) {
         return dataTypes.DATETIME;

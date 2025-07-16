@@ -166,6 +166,6 @@ export const normalizeHeaders = (table) => {
 
 //#region UTILS
 
-export const paramIsStringRepresentation = (param) => {
-    return ((param.startsWith('"') && param.endsWith('"')) || (param.startsWith("'") && param.endsWith("'")));
+export const paramIsDirectValueRepresentation = (param) => {
+    return ((param.startsWith('"') && param.endsWith('"')) || (param.startsWith("'") && param.endsWith("'") || !isNaN(param)));
 }
