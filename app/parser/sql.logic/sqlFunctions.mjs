@@ -1,4 +1,4 @@
-import { appendColumnToTwoDArr, getColumnByIndexFromTable, getColumnHeadIndex, getColumnValuesByIndexFromTable } from './sqlFunctions.helper.mjs';
+import { appendColumnToTwoDArr, getColumnByIndexFromTable, getColumnHeadIndex, getColumnValuesByIndexFromTable, compareData } from './sqlFunctions.helper.mjs';
 
 export const sqlSelect = (sqlKeywords, ColumnsHeadersSelected, tableSelected) => {
     const newTable = [[]];
@@ -23,7 +23,7 @@ export const sqlSelect = (sqlKeywords, ColumnsHeadersSelected, tableSelected) =>
 
 // For a join we first join the whole tables then select the correct headers
 // For a join to work header 1 must reference a table1 header and header2 must reference a table2 header
-export const sqlLeftJoin = (table1, table2, table1JoiningHeader, table2JoiningHeader, condOperator) => {
+export const sqlLeftJoin = (table1, table2, table1JoiningHeader, table2JoiningHeader, sqlOperators, condOperator) => {
 
     const newTable = JSON.parse(JSON.stringify(table1.table));
     table2.table[0].forEach(header => {newTable[0].push(header)});
@@ -54,7 +54,7 @@ export const sqlLeftJoin = (table1, table2, table1JoiningHeader, table2JoiningHe
     };
 }
 
-export const sqlInnerJoin = (table1, table2, table1JoiningHeader, table2JoiningHeader, condOperator) => {
+export const sqlInnerJoin = (table1, table2, table1JoiningHeader, table2JoiningHeader, sqlOperators, condOperator) => {
     //build headers
     const newTable = [JSON.parse(JSON.stringify(table1.table[0])).concat(JSON.parse(JSON.stringify(table2.table[0])))];
 
@@ -83,15 +83,14 @@ export const sqlInnerJoin = (table1, table2, table1JoiningHeader, table2JoiningH
     };
 }
 
-//TODO : INCORPORATE DIFFERENTS OPERATORS
-export const sqlWhereCompareColumnToColumn = (leftVal, rightVal, finalTable, sqlOperators, operator) => {
+export const sqlWhereCompareColumnToColumn = (leftVal, rightVal, finalTable, sqlOperatorsJsEquivalent, operator, dataTypes) => {
     const wheredtwoDArr = [structuredClone(finalTable.table[0])];
     const headerColIndex1 = getColumnHeadIndex(leftVal, finalTable);
     const headerColIndex2 = getColumnHeadIndex(rightVal, finalTable);
 
-    for (let i = 0; i < finalTable.table.length; i++) {
-        if (finalTable.table[i][headerColIndex1] === finalTable.table[i][headerColIndex2]) {
-                wheredtwoDArr.push(finalTable.table[i]);
+    for (let i = 1; i < finalTable.table.length; i++) {
+        if (compareData(dataTypes, sqlOperatorsJsEquivalent, operator, finalTable.table[i][headerColIndex1], finalTable.table[i][headerColIndex2])) {
+            wheredtwoDArr.push(finalTable.table[i]);
         }
     }
 
@@ -99,21 +98,21 @@ export const sqlWhereCompareColumnToColumn = (leftVal, rightVal, finalTable, sql
     return finalTable;
 }
 
-//TODO : INCORPORATE DIFFERENTS OPERATORS
-export const sqlWhereCompareStringToString = (leftVal, rightVal, finalTable, sqlOperators, operator) => {
+export const sqlWhereCompareStringToString = (leftVal, rightVal, finalTable, sqlOperatorsJsEquivalent, operator, dataTypes) => {
     const wheredtwoDArr = [structuredClone(finalTable.table[0])];
-    if (leftVal === rightVal) wheredtwoDArr.push(...finalTable.table.slice(1));
+    if (compareData(dataTypes, sqlOperatorsJsEquivalent, operator, leftVal, rightVal)) {
+        wheredtwoDArr.push(...finalTable.table.slice(1));
+    } 
     finalTable.table = wheredtwoDArr;
     return finalTable;
 }
 
-//TODO : INCORPORATE DIFFERENTS OPERATORS
-export const sqlWhereCompareHeaderToString = (headerVal, stringVal, finalTable, sqlOperators, operator) => {
+export const sqlWhereCompareHeaderToString = (headerVal, stringVal, finalTable, sqlOperatorsJsEquivalent, operator, dataTypes) => {
     const wheredtwoDArr = [structuredClone(finalTable.table[0])];
     const headerColIndex = getColumnHeadIndex(headerVal, finalTable);
 
-    for (let i = 0; i < finalTable.table.length; i++) {
-        if (finalTable.table[i][headerColIndex] === stringVal) {
+    for (let i = 1; i < finalTable.table.length; i++) {
+        if (compareData(dataTypes, sqlOperatorsJsEquivalent, operator, finalTable.table[i][headerColIndex], stringVal)) {
             wheredtwoDArr.push(finalTable.table[i]);
         }
     } 

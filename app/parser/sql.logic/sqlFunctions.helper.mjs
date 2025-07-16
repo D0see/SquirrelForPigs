@@ -47,3 +47,57 @@ export const getColumnHeadIndex = (selectedColumnHead, table) => {
     if (result.length === 0) throw new Error('Couldnt find column head : ' + `${selectedColumnHead}`);
     return result[0]; 
 }
+
+//#region Data comparison
+
+// TODO : refactor all -> rethink how you do types dummy
+export const compareData = (dataTypes, sqlOperatorsJsEquivalent, operator, data1, data2) => {
+    if (!data1 || !data2) return;
+    
+    const leftVal = {
+        val : data1,
+        type : inferDataType(dataTypes, data1),
+    }
+    const rightVal = {
+        val : data2,
+        type : inferDataType(dataTypes, data2),
+    }
+
+    if (leftVal.type != rightVal.type) throw new Error('cant compare values of different types');
+
+    if (!sqlOperatorsJsEquivalent[operator]) throw new Error('not a valid comparison operator');
+
+    const jsOperator = sqlOperatorsJsEquivalent[operator];
+
+    switch(leftVal.type) {
+        case dataTypes.NUMBER :
+            return eval(`${leftVal.val}` + ` ${jsOperator} ` + `${rightVal.val}`);
+        case dataTypes.DATETIME :
+            return eval(`${Date.parse(leftVal.val)}` + ` ${jsOperator} ` + `${Date.parse(rightVal.val)}`);
+        case dataTypes.VARCHAR :
+            return eval(`"${leftVal.val}"` + ` ${jsOperator} ` + `"${rightVal.val}"`)
+    }
+}
+
+export const inferDataType = (dataTypes, param) => {
+    if (!isNaN(param)) {
+        return dataTypes.NUMBER;
+    } else if (isDate(param)) {
+        return dataTypes.DATETIME;
+    } else {
+        return dataTypes.VARCHAR;
+    }
+}
+
+// yyyy-mm-dd
+const isDate = (param) => {
+    return (param.length === 10 &&
+        !isNaN(param.slice(0, 4)) &&
+        param[4] === '-' &&
+        !isNaN(param.slice(5, 7)) &&
+        param[7] === '-' &&
+        !isNaN(param.slice(8, 10))
+    ) 
+}
+
+//# endregion

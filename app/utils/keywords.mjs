@@ -22,9 +22,36 @@ export const sqlKeywords = {
 
 export const reservedKeyWords = Object.values(sqlKeywords);
 
+
 export const sqlOperators = { 
-    '=' : 'EQUAL',
-    '!=' : 'DIFFERENT_FROM',
+    'EQUAL' : '=',
+    'DIFFERENT_FROM' : '!=',
+    'STRICTLY_INFERIOR' : '<',
+    'STRICTLY_SUPERIOR' : '>',
+    'INFERIOR_OR_EQUAL' : '<=',
+    'SUPERIOR_OR_EQUAL' : '>=',
+}
+
+export const sqlOperatorsJsEquivalent = {
+    [sqlOperators.EQUAL] : '===',
+    [sqlOperators.DIFFERENT_FROM] : '!=',
+    [sqlOperators.STRICTLY_INFERIOR] : '<',
+    [sqlOperators.STRICTLY_SUPERIOR] : '>',
+    [sqlOperators.INFERIOR_OR_EQUAL] : '<=',
+    [sqlOperators.SUPERIOR_OR_EQUAL] : '>=',
+    
+}
+
+export const dataTypes = {
+    'NUMBER' : 'NUMBER',
+    'DATETIME' : 'DATETIME',
+    'VARCHAR' : 'VARCHAR',
+}
+
+export const dataPrecedenceValue = {
+    [dataTypes.NUMBER] : 1,
+    [dataTypes.DATETIME] : 2,
+    [dataTypes.VARCHAR] : 3,
 }
 
 export const nextCompositeKeyWordsWord = {
