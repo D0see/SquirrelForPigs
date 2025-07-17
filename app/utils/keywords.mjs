@@ -22,6 +22,8 @@ export const sqlKeywords = {
 
 export const reservedKeyWords = Object.values(sqlKeywords);
 
+export const multipleConditionnalKeyword = 'AND'
+
 
 export const sqlOperators = { 
     'EQUAL' : '=',

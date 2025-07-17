@@ -39,7 +39,6 @@ const isPossibleColumnHeadWriting = (selectedColumnHead, header) => {
 
 // ("columnHead", [...tables]) => colIndex
 export const getColumnHeadIndex = (selectedColumnHead, table) => {
-    console.log(selectedColumnHead)
     const result = [];
     for (const [colIndex, header] of table.table[0].entries()) {
         if (isPossibleColumnHeadWriting(selectedColumnHead, header)) result.push(colIndex);
@@ -53,7 +52,6 @@ export const getColumnHeadIndex = (selectedColumnHead, table) => {
 
 // TODO : refactor all -> rethink how you do types dummy
 export const compareData = (dataTypes, sqlOperatorsJsEquivalent, operator, data1, data2) => {
-    console.log(data1, data2)
     if (!data1 || !data2) return;
 
     const leftVal = {

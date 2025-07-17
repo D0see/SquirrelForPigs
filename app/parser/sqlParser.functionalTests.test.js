@@ -431,3 +431,31 @@ describe(SqlParser.name, () => {
     expect(result).toBe('{"table":[["firstName","lastName"],["John","Doe"],["Jane","Doe"],["Bob","Dylan"]],"tableName":"people-filtered"}')
   }) 
 })
+
+ describe(SqlParser.name, () => {
+  it("MULTIPLE WHERE QUERY (WHERE AND) should pass functionnal test 25", () => {
+    //ARRANGE
+    const query = "select * from people where id < 10 AND lastName = 'Doe' AND firstName = 'John'";
+    const tablesObj = structuredClone(testingData);
+
+    //ACT
+    const result = JSON.stringify(SqlParser(query, tablesObj));
+
+    //ASSERT
+    expect(result).toBe('{"table":[["id","firstName","lastName","jobId","idManager"],["1","John","Doe","1","2"]],"tableName":"people-filtered"}')
+  }) 
+})
+
+ describe(SqlParser.name, () => {
+  it("Poorly written and keyword should pass functionnal test 26", () => {
+    //ARRANGE
+    const query = "select * from people where id < 10 AnD lastName = 'Doe' and firstName = 'John'";
+    const tablesObj = structuredClone(testingData);
+
+    //ACT
+    const result = JSON.stringify(SqlParser(query, tablesObj));
+
+    //ASSERT
+    expect(result).toBe('{"table":[["id","firstName","lastName","jobId","idManager"],["1","John","Doe","1","2"]],"tableName":"people-filtered"}')
+  }) 
+})

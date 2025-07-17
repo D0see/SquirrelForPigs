@@ -1,5 +1,5 @@
 import { sqlLeftJoin, sqlInnerJoin, sqlSelect, sqlWhereCompareColumnToColumn, sqlWhereCompareHeaderToString, sqlWhereCompareStringToString } from "./sql.logic/sqlFunctions.mjs";
-import { sqlKeywords, sqlOperatorsJsEquivalent, joinKeywords, nextCompositeKeyWordsWord, equivalentKeywords, reservedKeyWords, dataTypes } from "../utils/keywords.mjs";
+import { sqlKeywords, sqlOperatorsJsEquivalent, multipleConditionnalKeyword, joinKeywords, nextCompositeKeyWordsWord, equivalentKeywords, reservedKeyWords, dataTypes } from "../utils/keywords.mjs";
 import { cleanQueryInput, tablesAliasesHandler, buildDescriptiveHeaders, turnRightJoinIntoLeftJoin, findEndIndexOfKeywordQuery, normalizeHeaders, findTableInTableArray, columnsHeadersAliasesHandler, applyHeadersAliases, paramIsDirectValueRepresentation, findQueryEndSymbol } from "./sqlParser.helper.mjs";
 
 export const SqlParser = (input, tables) => {
@@ -7,7 +7,7 @@ export const SqlParser = (input, tables) => {
     // parse subQueries "(query)" push the result table into tables and updates the input with the result table name
     input = parseSubQueries(sqlKeywords, input, tables);
 
-    const [selectQuery, whereClause] = cleanQueryInput(sqlKeywords, nextCompositeKeyWordsWord, equivalentKeywords, input);
+    const [selectQuery, whereClauses] = cleanQueryInput(sqlKeywords, nextCompositeKeyWordsWord, equivalentKeywords, multipleConditionnalKeyword, input);
 
     //saves aliases for selected columns, remove them form the query
     const selectedColumnsHeaderAliases = columnsHeadersAliasesHandler(sqlKeywords, selectQuery);
@@ -27,8 +27,10 @@ export const SqlParser = (input, tables) => {
     //here query should look like => Select columnNames from finalTableName
     let finalTable = findTableInTableArray(selectQuery[selectQuery.length - 1], tables);
 
-    finalTable = parseWhereClause(sqlKeywords, sqlOperatorsJsEquivalent, whereClause, finalTable);
-
+    whereClauses.forEach(whereClause => {
+        finalTable = parseWhereClause(sqlKeywords, sqlOperatorsJsEquivalent, whereClause, finalTable);
+    })
+    
     finalTable = parseSelect(sqlKeywords, selectQuery, tables);
 
     //removes aliases and tablename from column headers

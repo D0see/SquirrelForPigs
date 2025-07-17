@@ -14,7 +14,7 @@ const buildCompositeKeywords = (nextCompositeKeyWordsWord, words) => {
 export { buildCompositeKeywords as _buildCompositeKeywords }; 
 
 //TODO : optimize this + urgent refactor
-export const cleanQueryInput = (sqlKeywords, nextCompositeKeyWordsWord, equivalentKeywords, input) => {
+export const cleanQueryInput = (sqlKeywords, nextCompositeKeyWordsWord, equivalentKeywords, multipleConditionnalKeyword, input) => {
 
     //builds a map of for every sqlKeywords value
     const keywordsObj = Object.values(sqlKeywords).reduce((acc, val) => {
@@ -35,10 +35,28 @@ export const cleanQueryInput = (sqlKeywords, nextCompositeKeyWordsWord, equivale
     query = query.map(word => equivalentKeywords[word] ? equivalentKeywords[word] : word);
 
     const whereIndex = query.findIndex(word => word === sqlKeywords.WHERE);
+
     if (whereIndex === -1) return [query, []]
     const whereClause = query.slice(whereIndex);
+
+    // this the composite where clause into multiple where clause
+    const whereClauses = buildMultipleWhereClauses(sqlKeywords, multipleConditionnalKeyword, whereClause);
+
     const selectQuery = query.slice(0, whereIndex);
-    return [selectQuery, whereClause];
+    return [selectQuery, whereClauses];
+}
+
+const buildMultipleWhereClauses = (sqlKeywords, multipleConditionnalKeyword, inputArr) => {
+    const result = [];
+    let start = 0;
+    for (let i = 1; i < inputArr.length; i++) {
+        if (multipleConditionnalKeyword === inputArr[i]) {
+            result.push([sqlKeywords.WHERE, ...inputArr.slice(start + 1, i)]);
+            start = i;
+        }
+        if (i === inputArr.length - 1) result.push([sqlKeywords.WHERE, ...inputArr.slice(start + 1)]);
+    }
+    return result;
 }
 
 export const turnRightJoinIntoLeftJoin = (sqlKeywords, words) => {
