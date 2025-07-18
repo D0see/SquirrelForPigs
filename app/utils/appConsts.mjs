@@ -20,6 +20,7 @@ export const sqlKeywords = {
     'SUBQUERY_END' : ')',
     'WHERE' : 'WHERE',
     'COMMA' : ',',
+    'LIMIT' : 'LIMIT',
 }
 
 export const multipleConditionnalKeyword = 'AND';

@@ -7,31 +7,33 @@ export const SqlParser = (input, tables) => {
     // parse subQueries "(query)" push the result table into tables and updates the input with the result table name
     input = parseSubQueries(sqlConsts, input, tables);
 
-    const [selectQuery, whereClauses] = cleanQueryInput(sqlConsts, input);
+    const [queryBody, whereClauses, limitClause] = cleanQueryInput(sqlConsts, input);
 
     //saves aliases for selected columns, remove them form the query
-    const selectedColumnsHeaderAliases = columnsHeadersAliasesHandler(sqlConsts, selectQuery);
+    const selectedColumnsHeaderAliases = columnsHeadersAliasesHandler(sqlConsts, queryBody);
 
     //updates tables aliases in place and remove them for the query  
-    tablesAliasesHandler(sqlConsts, selectQuery, tables);
+    tablesAliasesHandler(sqlConsts, queryBody, tables);
 
     //updates tables headers in place based on their aliases and names (table.Name : a, table.alias : b => header.a.b)
     buildDescriptiveHeaders(tables);
 
     //updates the query in place "table1 RIGHTJOIN table2 on table1.header = table2.header" => "table2 LEFTJOIN table1 on table2.header = table1.header"
-    turnRightJoinIntoLeftJoin(sqlConsts, selectQuery);
+    turnRightJoinIntoLeftJoin(sqlConsts, queryBody);
 
     //executes all joins in the query, updates the query with the new joined tables names and push them into tables
-    parseAllJoins(sqlConsts, selectQuery, tables);
+    parseAllJoins(sqlConsts, queryBody, tables);
 
     //here query should look like => Select columnNames from finalTableName
-    let finalTable = findTableInTableArray(selectQuery[selectQuery.length - 1], tables);
+    let finalTable = findTableInTableArray(queryBody[queryBody.length - 1], tables);
 
     whereClauses.forEach(whereClause => {
         finalTable = parseWhereClause(sqlConsts, whereClause, finalTable);
     })
+
+    finalTable = parseLimitClause(limitClause, finalTable);
     
-    finalTable = parseSelect(sqlConsts, selectQuery, tables);
+    finalTable = parseSelect(sqlConsts, queryBody, tables);
 
     //removes aliases and tablename from column headers
     normalizeHeaders(finalTable);
@@ -152,4 +154,11 @@ const parseWhereClause = (sqlConsts, whereClauseWords, finalTable) => {
             (parameters.left.type === 'string' ? parameters.left.val : parameters.right.val), 
             finalTable, operator, dataTypes);
     }
+}
+
+const parseLimitClause = (limitClause, finalTable) => {
+    if (!isNaN(limitClause[1])) {
+        finalTable.table = finalTable.table.slice(0, parseInt(limitClause[1]) + 1);
+    }
+    return finalTable;
 }

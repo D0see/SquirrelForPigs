@@ -38,16 +38,23 @@ export const cleanQueryInput = (sqlConsts, input) => {
     //replaces obsolete keywords for equivalent ones
     query = query.map(word => equivalentKeywords[word] ? equivalentKeywords[word] : word);
 
+    let queryBody = query;
     const whereIndex = query.findIndex(word => word === sqlKeywords.WHERE);
+    let whereClause = query.slice(whereIndex);
+    let whereClauses = []
+    const limitIndex =  query.findIndex(word => word === sqlKeywords.LIMIT);
+    let limitClause = query.slice(limitIndex, limitIndex + 2);
+    if (limitIndex !== -1) {
+        whereClause = whereClause.slice(0, limitIndex);
+        queryBody = query.slice(0, limitIndex);
+    }
+    if (whereIndex !== -1) {
+        // this the composite where clause into multiple where clause
+        whereClauses = buildMultipleWhereClauses(sqlKeywords, multipleConditionnalKeyword, whereClause);
+        queryBody = query.slice(0, whereIndex);
+    }
 
-    if (whereIndex === -1) return [query, []]
-    const whereClause = query.slice(whereIndex);
-
-    // this the composite where clause into multiple where clause
-    const whereClauses = buildMultipleWhereClauses(sqlKeywords, multipleConditionnalKeyword, whereClause);
-
-    const selectQuery = query.slice(0, whereIndex);
-    return [selectQuery, whereClauses];
+    return [queryBody, whereClauses, limitClause];
 }
 
 const buildMultipleWhereClauses = (sqlKeywords, multipleConditionnalKeyword, inputArr) => {
