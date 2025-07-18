@@ -1,6 +1,9 @@
+import { sqlConsts } from '../../utils/appConsts.mjs';
 import { appendColumnToTwoDArr, getColumnByIndexFromTable, getColumnHeadIndex, getColumnValuesByIndexFromTable, compareData } from './sqlFunctions.helper.mjs';
 
-export const sqlSelect = (sqlKeywords, ColumnsHeadersSelected, tableSelected) => {
+export const sqlSelect = (sqlConsts, ColumnsHeadersSelected, tableSelected) => {
+    const { sqlKeywords } = sqlConsts;
+
     const newTable = [[]];
     for (const head of ColumnsHeadersSelected) {
         if (head === sqlKeywords.SELECT_ALL_COLUMNS) {
@@ -23,7 +26,8 @@ export const sqlSelect = (sqlKeywords, ColumnsHeadersSelected, tableSelected) =>
 
 // For a join we first join the whole tables then select the correct headers
 // For a join to work header 1 must reference a table1 header and header2 must reference a table2 header
-export const sqlLeftJoin = (dataTypes, table1, table2, table1JoiningHeader, table2JoiningHeader, sqlOperatorsJsEquivalent, operator) => {
+export const sqlLeftJoin = (sqlConsts, dataTypes, table1, table2, table1JoiningHeader, table2JoiningHeader, operator) => {
+    const { sqlOperatorsJsEquivalent } = sqlConsts;
 
     const newTable = JSON.parse(JSON.stringify(table1.table));
     table2.table[0].forEach(header => {newTable[0].push(header)});
@@ -54,7 +58,9 @@ export const sqlLeftJoin = (dataTypes, table1, table2, table1JoiningHeader, tabl
     };
 }
 
-export const sqlInnerJoin = (dataTypes, table1, table2, table1JoiningHeader, table2JoiningHeader, sqlOperatorsJsEquivalent, operator) => {
+export const sqlInnerJoin = (sqlConsts, dataTypes, table1, table2, table1JoiningHeader, table2JoiningHeader, operator) => {
+    const { sqlOperatorsJsEquivalent } = sqlConsts;
+
     //build headers
     const newTable = [JSON.parse(JSON.stringify(table1.table[0])).concat(JSON.parse(JSON.stringify(table2.table[0])))];
 
@@ -84,9 +90,12 @@ export const sqlInnerJoin = (dataTypes, table1, table2, table1JoiningHeader, tab
     };
 }
 
+//TODO IMPLEMENT
 export const fullOuterJoin = () => {}
 
-export const sqlWhereCompareColumnToColumn = (leftVal, rightVal, finalTable, sqlOperatorsJsEquivalent, operator, dataTypes) => {
+export const sqlWhereCompareColumnToColumn = (sqlConsts, leftVal, rightVal, finalTable, operator, dataTypes) => {
+    const { sqlOperatorsJsEquivalent } = sqlConsts;
+
     const wheredtwoDArr = [structuredClone(finalTable.table[0])];
     const headerColIndex1 = getColumnHeadIndex(leftVal, finalTable);
     const headerColIndex2 = getColumnHeadIndex(rightVal, finalTable);
@@ -101,7 +110,9 @@ export const sqlWhereCompareColumnToColumn = (leftVal, rightVal, finalTable, sql
     return finalTable;
 }
 
-export const sqlWhereCompareStringToString = (leftVal, rightVal, finalTable, sqlOperatorsJsEquivalent, operator, dataTypes) => {
+export const sqlWhereCompareStringToString = (sqlConsts, leftVal, rightVal, finalTable, operator, dataTypes) => {
+    const { sqlOperatorsJsEquivalent } = sqlConsts;
+
     const wheredtwoDArr = [structuredClone(finalTable.table[0])];
     if (compareData(dataTypes, sqlOperatorsJsEquivalent, operator, leftVal, rightVal)) {
         wheredtwoDArr.push(...finalTable.table.slice(1));
@@ -110,7 +121,9 @@ export const sqlWhereCompareStringToString = (leftVal, rightVal, finalTable, sql
     return finalTable;
 }
 
-export const sqlWhereCompareHeaderToString = (headerVal, stringVal, finalTable, sqlOperatorsJsEquivalent, operator, dataTypes) => {
+export const sqlWhereCompareHeaderToString = (sqlConsts, headerVal, stringVal, finalTable, operator, dataTypes) => {
+    const { sqlOperatorsJsEquivalent } = sqlConsts;
+
     const wheredtwoDArr = [structuredClone(finalTable.table[0])];
     const headerColIndex = getColumnHeadIndex(headerVal, finalTable);
 

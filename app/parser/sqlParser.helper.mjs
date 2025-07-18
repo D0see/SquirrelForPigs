@@ -14,7 +14,8 @@ const buildCompositeKeywords = (nextCompositeKeyWordsWord, words) => {
 export { buildCompositeKeywords as _buildCompositeKeywords }; 
 
 //TODO : optimize this + urgent refactor
-export const cleanQueryInput = (sqlKeywords, nextCompositeKeyWordsWord, equivalentKeywords, multipleConditionnalKeyword, input) => {
+export const cleanQueryInput = (sqlConsts, input) => {
+    const {sqlKeywords, nextCompositeKeyWordsWord, equivalentKeywords, multipleConditionnalKeyword} = sqlConsts;
 
     //builds a map of for every sqlKeywords value
     const keywordsObj = Object.values(sqlKeywords).reduce((acc, val) => {
@@ -62,7 +63,8 @@ const buildMultipleWhereClauses = (sqlKeywords, multipleConditionnalKeyword, inp
     return result;
 }
 
-export const turnRightJoinIntoLeftJoin = (sqlKeywords, words) => {
+export const turnRightJoinIntoLeftJoin = (sqlConsts, words) => {
+    const { sqlKeywords } = sqlConsts;
     for (let i = 0; i < words.length; i++) {
         if (words[i] === sqlKeywords.RIGHT_JOIN) {
             words[i] = sqlKeywords.LEFT_JOIN;
@@ -84,7 +86,9 @@ export const findEndIndexOfKeywordQuery = (keywords, words, index) => {
     return words.length - 1
 }
 
-export const tablesAliasesHandler = (sqlKeywords, reservedKeyWords, words, tables) => {
+export const tablesAliasesHandler = (sqlConsts, words, tables) => {
+    const { sqlKeywords, reservedKeyWords } = sqlConsts;
+    
     for (let i = 0; i < words.length; i++) {
         if (words[i] === sqlKeywords.ALIAS_ASSIGNEMENT) {
             let table = findTableInTableArray(words[i - 1], tables);
@@ -139,7 +143,9 @@ export const findTableInTableArray = (tableName, tableArr) => {
 
 // words => columnAliases = ['','',"aliasforcolumn3",'']
 // updates words to remove columns aliases affectations
-export const columnsHeadersAliasesHandler = (sqlKeywords, words) => {
+export const columnsHeadersAliasesHandler = (sqlConsts, words) => {
+    const { sqlKeywords } = sqlConsts;
+
     const columnsAliases = []
     const selectIndex = words.findIndex(word => word === sqlKeywords.SELECT);
     let fromIndex = words.findIndex(word => word === sqlKeywords.FROM);

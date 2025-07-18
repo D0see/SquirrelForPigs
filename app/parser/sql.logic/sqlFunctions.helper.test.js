@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { inferDataType, compareData } from './sqlFunctions.helper.mjs';
-import { sqlOperators, sqlOperatorsJsEquivalent, dataTypes } from '../../utils/keywords.mjs';
+import { sqlOperators, sqlOperatorsJsEquivalent, dataTypes } from '../../utils/appConsts.mjs';
 
  describe(inferDataType.name, () => {
   it("should return dataTypes.NUMBER when the param string contains only digits", () => {

@@ -1,3 +1,5 @@
+//MODIFYABLE SQL KEYWORDS
+
 export const sqlKeywords = {
     'LEFT_JOIN' : 'LEFT JOIN',
     'RIGHT_JOIN' : 'RIGHT JOIN',
@@ -20,10 +22,13 @@ export const sqlKeywords = {
     'COMMA' : ',',
 }
 
-export const reservedKeyWords = Object.values(sqlKeywords);
+export const multipleConditionnalKeyword = 'AND';
 
-export const multipleConditionnalKeyword = 'AND'
-
+export const dataTypes = {
+    'NUMBER' : 'NUMBER',
+    'DATETIME' : 'DATETIME',
+    'VARCHAR' : 'VARCHAR',
+}
 
 export const sqlOperators = { 
     'EQUAL' : '=',
@@ -41,20 +46,11 @@ export const sqlOperatorsJsEquivalent = {
     [sqlOperators.STRICTLY_SUPERIOR] : '>',
     [sqlOperators.INFERIOR_OR_EQUAL] : '<=',
     [sqlOperators.SUPERIOR_OR_EQUAL] : '>=',
-    
 }
 
-export const dataTypes = {
-    'NUMBER' : 'NUMBER',
-    'DATETIME' : 'DATETIME',
-    'VARCHAR' : 'VARCHAR',
-}
+// AUTO GENERATED DO NOT TOUCH
 
-export const dataPrecedenceValue = {
-    [dataTypes.NUMBER] : 1,
-    [dataTypes.DATETIME] : 2,
-    [dataTypes.VARCHAR] : 3,
-}
+export const reservedKeyWords = Object.values(sqlKeywords);
 
 export const nextCompositeKeyWordsWord = {
     [sqlKeywords.LEFT] : {
@@ -79,4 +75,16 @@ export const equivalentKeywords = {
     [sqlKeywords.JOIN] : sqlKeywords.INNER_JOIN,
     [sqlKeywords.LEFT_OUTER_JOIN] : sqlKeywords.LEFT_JOIN,
     [sqlKeywords.RIGHT_OUTER_JOIN] : sqlKeywords.RIGHT_JOIN,
+}
+
+export const sqlConsts = {
+    sqlKeywords,
+    multipleConditionnalKeyword,
+    dataTypes,
+    sqlOperators,
+    sqlOperatorsJsEquivalent,
+    reservedKeyWords,
+    nextCompositeKeyWordsWord,
+    joinKeywords,
+    equivalentKeywords
 }

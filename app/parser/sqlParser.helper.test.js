@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { findTableInTableArray, findEndIndexOfKeywordQuery, _buildCompositeKeywords, cleanQueryInput, turnRightJoinIntoLeftJoin, tablesAliasesHandler } from './sqlParser.helper.mjs'
-import { sqlKeywords, reservedKeyWords, sqlOperators, nextCompositeKeyWordsWord, multipleConditionnalKeyword, equivalentKeywords } from '../utils/keywords.mjs';
+import { sqlConsts, sqlKeywords, reservedKeyWords, sqlOperators, nextCompositeKeyWordsWord, multipleConditionnalKeyword, equivalentKeywords } from '../utils/appConsts.mjs';
 
 const testingData = [{
         table: [
@@ -180,7 +180,7 @@ describe(cleanQueryInput.name, () => {
     const input = "select o.product as product_bought o.amount AS price p.firstName AS client_firstname j1.occupation as client_job s1.salary AS client_salary m.firstName AS manager_firstname m.lastName AS manager_lastname j2.occupation AS manager_job FROM order AS o inner JoiN people AS p on o.userId = p.id LEFT JOIN people AS m on p.idManager = m.id LEFT JOIN job AS j1 on p.jobId = j1.id left Join job AS j2 on m.jobId = j2.id left join salary AS s1 on j1.idSalary = s1.id LEFT JOIN salary AS s2 on j2.idSalary = s2.id where 'Mason' = j1.occupation"
 
     //ACT
-    const [selectQuery, whereClauseWords] = cleanQueryInput(sqlKeywords, nextCompositeKeyWordsWord, equivalentKeywords, multipleConditionnalKeyword, input);
+    const [selectQuery, whereClauseWords] = cleanQueryInput(sqlConsts, input);
 
     //ASSERT
     expect(selectQuery).toStrictEqual(["SELECT","o.product","AS","product_bought","o.amount","AS","price","p.firstName","AS","client_firstname","j1.occupation","AS","client_job","s1.salary","AS","client_salary","m.firstName","AS","manager_firstname","m.lastName","AS","manager_lastname","j2.occupation","AS","manager_job","FROM","order","AS","o","INNER JOIN","people","AS","p","ON","o.userId","=","p.id","LEFT JOIN","people","AS","m","ON","p.idManager","=","m.id","LEFT JOIN","job","AS","j1","ON","p.jobId","=","j1.id","LEFT JOIN","job","AS","j2","ON","m.jobId","=","j2.id","LEFT JOIN","salary","AS","s1","ON","j1.idSalary","=","s1.id","LEFT JOIN","salary","AS","s2","ON","j2.idSalary","=","s2.id"]);
@@ -194,7 +194,7 @@ describe(cleanQueryInput.name, () => {
     const input = "select o.product as product_bought, o.amount AS price, p.firstName AS client_firstname, j1.occupation as client_job, s1.salary AS client_salary, m.firstName AS manager_firstname, m.lastName AS manager_lastname, j2.occupation AS manager_job, FROM order AS o inner JoiN people AS p on o.userId = p.id LEFT JOIN people AS m on p.idManager = m.id LEFT JOIN job AS j1 on p.jobId = j1.id left Join job AS j2 on m.jobId = j2.id left join salary AS s1 on j1.idSalary = s1.id LEFT JOIN salary AS s2 on j2.idSalary = s2.id where 'Mason' = j1.occupation"
 
     //ACT
-    const [selectQuery, whereClauseWords] = cleanQueryInput(sqlKeywords, nextCompositeKeyWordsWord, equivalentKeywords, multipleConditionnalKeyword, input);
+    const [selectQuery, whereClauseWords] = cleanQueryInput(sqlConsts, input);
 
     //ASSERT
     expect(selectQuery).toStrictEqual(["SELECT","o.product","AS","product_bought","o.amount","AS","price","p.firstName","AS","client_firstname","j1.occupation","AS","client_job","s1.salary","AS","client_salary","m.firstName","AS","manager_firstname","m.lastName","AS","manager_lastname","j2.occupation","AS","manager_job","FROM","order","AS","o","INNER JOIN","people","AS","p","ON","o.userId","=","p.id","LEFT JOIN","people","AS","m","ON","p.idManager","=","m.id","LEFT JOIN","job","AS","j1","ON","p.jobId","=","j1.id","LEFT JOIN","job","AS","j2","ON","m.jobId","=","j2.id","LEFT JOIN","salary","AS","s1","ON","j1.idSalary","=","s1.id","LEFT JOIN","salary","AS","s2","ON","j2.idSalary","=","s2.id"]);
@@ -202,14 +202,13 @@ describe(cleanQueryInput.name, () => {
   }) 
 })
 
-
 describe(turnRightJoinIntoLeftJoin.name, () => {
   it("functional test 1", () => {
     //ARRANGE
     const words = ['select', '*', 'from', 'people', 'RIGHT JOIN', 'job', 'on', 'people.idJob', '=', 'job.id'];
 
     //ACT
-    turnRightJoinIntoLeftJoin(sqlKeywords, words);
+    turnRightJoinIntoLeftJoin(sqlConsts, words);
 
     //ASSERT
     expect(words).toStrictEqual(['select', '*', 'from', 'job', 'LEFT JOIN', 'people', 'on', 'job.id', '=', 'people.idJob']);
@@ -224,7 +223,7 @@ describe(tablesAliasesHandler.name, () => {
     const peopleTable = tables.find(table => table.tableName === "people");
 
     //ACT
-    tablesAliasesHandler(sqlKeywords, reservedKeyWords, words, tables)
+    tablesAliasesHandler(sqlConsts, words, tables)
 
     //ASSERT
     expect(peopleTable.alias).toBe("p");
@@ -240,7 +239,7 @@ describe(tablesAliasesHandler.name, () => {
     //ACT
 
     //ASSERT
-    expect(() => tablesAliasesHandler(sqlKeywords, reservedKeyWords, words, tables)).toThrowError("no table with name : brouette");
+    expect(() => tablesAliasesHandler(sqlConsts, words, tables)).toThrowError("no table with name : brouette");
   }) 
 })
 
@@ -253,7 +252,7 @@ describe(tablesAliasesHandler.name, () => {
     //ACT
 
     //ASSERT
-    expect(() => tablesAliasesHandler(sqlKeywords, reservedKeyWords, words, tables)).toThrowError("Invalid or absent alias for table : people");
+    expect(() => tablesAliasesHandler(sqlConsts, words, tables)).toThrowError("Invalid or absent alias for table : people");
   }) 
 })
 
@@ -266,7 +265,7 @@ describe(tablesAliasesHandler.name, () => {
     //ACT
 
     //ASSERT
-    expect(() => tablesAliasesHandler(sqlKeywords, reservedKeyWords, words, tables)).toThrowError("Invalid or absent alias for table : people");
+    expect(() => tablesAliasesHandler(sqlConsts, words, tables)).toThrowError("Invalid or absent alias for table : people");
   }) 
 })
 
@@ -280,7 +279,7 @@ describe(tablesAliasesHandler.name, () => {
     //ACT
 
     //ASSERT
-    expect(() => tablesAliasesHandler(sqlKeywords, reservedKeyWords, words, tables)).toThrowError("Name collision for alias : p");
+    expect(() => tablesAliasesHandler(sqlConsts, words, tables)).toThrowError("Name collision for alias : p");
   }) 
 })
 
@@ -292,7 +291,7 @@ describe(tablesAliasesHandler.name, () => {
     const startingTablesLength = tables.length;
 
     //ACT
-    tablesAliasesHandler(sqlKeywords, reservedKeyWords, words, tables);
+    tablesAliasesHandler(sqlConsts, words, tables);
     const endingTablesLength = tables.length;
     const peopleTable1 = tables.find(table => table.alias === 'p');
     const peopleTable2 = tables.find(table => table.alias === 'p2');
@@ -310,7 +309,7 @@ describe(tablesAliasesHandler.name, () => {
     const tables = structuredClone(testingData);
 
     //ACT
-    tablesAliasesHandler(sqlKeywords, reservedKeyWords, words, tables);
+    tablesAliasesHandler(sqlConsts, words, tables);
 
     //ASSERT
     expect(words).toStrictEqual(['select', '*', 'from', 'p', 'left join', 'p2', 'ON', 'p.idManager', '=', 'p2.id'])
