@@ -52,10 +52,10 @@ const parseAllJoins = (sqlKeywords, words, tables) => {
 
         switch (word) {
             case sqlKeywords.LEFT_JOIN :
-                currIntermediaryTable = applySqlJoinQuery(sqlLeftJoin, query, tables);      
+                currIntermediaryTable = applySqlJoinQuery(dataTypes, sqlLeftJoin, query, tables);      
                 break;
             case sqlKeywords.INNER_JOIN :
-                currIntermediaryTable = applySqlJoinQuery(sqlInnerJoin, query, tables);
+                currIntermediaryTable = applySqlJoinQuery(dataTypes, sqlInnerJoin, query, tables);
                 break;
         }
         tables.push(currIntermediaryTable);
@@ -65,14 +65,14 @@ const parseAllJoins = (sqlKeywords, words, tables) => {
     }
 }
 
-const applySqlJoinQuery = (sqlJoinMethodCallback, query, tables) => {
+const applySqlJoinQuery = (dataTypes, sqlJoinMethodCallback, query, tables) => {
     const table1 = findTableInTableArray(query[0], tables);
     let tablesWithoutTable1 = tables;
     if (table1.alias) {
         tablesWithoutTable1 = tables.filter(table => table.alias != table1.alias);
     }
     const table2 = findTableInTableArray(query[2], tablesWithoutTable1);
-    const resultTable = sqlJoinMethodCallback(table1, table2, query[4], query[6], sqlOperatorsJsEquivalent, query[5]);
+    const resultTable = sqlJoinMethodCallback(dataTypes, table1, table2, query[4], query[6], sqlOperatorsJsEquivalent, query[5]);
     return resultTable;
 }
 

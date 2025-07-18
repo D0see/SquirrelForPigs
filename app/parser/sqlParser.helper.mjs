@@ -29,7 +29,10 @@ export const cleanQueryInput = (sqlKeywords, nextCompositeKeyWordsWord, equivale
     let query = input.split(' ').map(word => word.trim()).filter(word => word);
 
     //make sure keyword are uppercase
-    query = query.map(word => keywordsObj[word.toUpperCase()] ? word.toUpperCase() : word);
+    query = query.map(word => 
+        keywordsObj[word.toUpperCase()] || 
+        word.toUpperCase() === multipleConditionnalKeyword.toUpperCase() 
+        ? word.toUpperCase() : word);
     buildCompositeKeywords(nextCompositeKeyWordsWord, query);
     //replaces obsolete keywords for equivalent ones
     query = query.map(word => equivalentKeywords[word] ? equivalentKeywords[word] : word);
