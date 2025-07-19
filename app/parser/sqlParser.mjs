@@ -8,11 +8,10 @@ export const SqlParser = (input, tables) => {
     input = parseSubQueries(sqlConsts, input, tables);
 
     const query = cleanInput(sqlConsts, input);
-    console.log(query.join('","'));
 
     const [queryBody, whereClauses, orderByClause, limitClause] = splitQuery(sqlConsts, query);
 
-    // console.log(queryBody, whereClauses, orderByClause, limitClause);
+    console.log(queryBody, whereClauses, orderByClause, limitClause);
     //here i should validate the clauses
 
     //saves aliases for selected columns, remove them form the query

@@ -572,3 +572,16 @@ describe(SqlParser.name, () => {
   }) 
 })
 
+ describe(SqlParser.name, () => {
+  it("COMPLEX QUERY -- 33", () => {
+    //ARRANGE
+    const query = 'select * from people left join job on people.jobId = job.id left join salary on job.idSalary = salary.id where people.id > 10 order by salary limit 5';
+    const tablesObj = structuredClone(testingData);
+
+    //ACT
+    const result = JSON.stringify(SqlParser(query, tablesObj));
+
+    //ASSERT
+    expect(result).toBe('{"table":[["id","firstName","lastName","jobId","idManager","id","occupation","idSalary","id","salary"],["11","Ivan","Petrov","3","3","3","Bouncer","3","3","20000"],["15","Michael","Lee","3","3","3","Bouncer","3","3","20000"],["19","Queen","Moore","3","3","3","Bouncer","3","3","20000"],["14","Laura","Martinez","2","2","2","Plumber","2","2","15000"],["18","Paul","Allen","2","2","2","Plumber","2","2","15000"]],"tableName":"people-job-salary-filtered"}')
+  }) 
+})
