@@ -13,15 +13,10 @@ const buildCompositeKeywords = (nextCompositeKeyWordsWord, words) => {
 // for testing
 export { buildCompositeKeywords as _buildCompositeKeywords }; 
 
-//TODO : optimize this + urgent refactor
+//TODO : optimize this + urgent refactor 
+//TODO : SHOULD BE SPLITTED IN 2 FUNCTIONS CLEANING INPUT AND SPLITTING QUERIES
 export const cleanQueryInput = (sqlConsts, input) => {
-    const {sqlKeywords, nextCompositeKeyWordsWord, equivalentKeywords, multipleConditionnalKeyword} = sqlConsts;
-
-    //builds a map of for every sqlKeywords value
-    const keywordsObj = Object.values(sqlKeywords).reduce((acc, val) => {
-        acc[val] = true;
-        return acc;
-    }, {});
+    const {sqlKeywords, reservedKeyWords, nextCompositeKeyWordsWord, equivalentKeywords, multipleConditionnalKeyword} = sqlConsts;
 
     //removes commas
     input = input.replace(/,/g, '')
@@ -31,30 +26,54 @@ export const cleanQueryInput = (sqlConsts, input) => {
 
     //make sure keyword are uppercase
     query = query.map(word => 
-        keywordsObj[word.toUpperCase()] || 
+        reservedKeyWords[word.toUpperCase()] || 
         word.toUpperCase() === multipleConditionnalKeyword.toUpperCase() 
         ? word.toUpperCase() : word);
+
     buildCompositeKeywords(nextCompositeKeyWordsWord, query);
+
     //replaces obsolete keywords for equivalent ones
     query = query.map(word => equivalentKeywords[word] ? equivalentKeywords[word] : word);
 
+
+    /*SPLITTING QUERIES
+        SELECT 
+        FROM 
+        JOIN 
+        WHERE 
+        GROUP BY 
+        HAVING 
+        ORDER BY 
+        LIMIT */
+        
     let queryBody = query;
+
     const whereIndex = query.findIndex(word => word === sqlKeywords.WHERE);
     let whereClause = query.slice(whereIndex);
-    let whereClauses = []
+    let whereClauses = [];
+    
+    const orderByIndex = query.findIndex(word => word === sqlKeywords.ORDER_BY);
+    let orderByClause = [];
+    
     const limitIndex =  query.findIndex(word => word === sqlKeywords.LIMIT);
     let limitClause = query.slice(limitIndex, limitIndex + 2);
-    if (limitIndex !== -1) {
-        whereClause = whereClause.slice(0, limitIndex);
-        queryBody = query.slice(0, limitIndex);
+    
+    //incrementaly reduce the queryBody based on present clauses
+    if (limitIndex !== -1) queryBody = query.slice(0, limitIndex);
+    if (orderByIndex !== -1) {
+        orderByClause = query.slice(orderByIndex);
+        queryBody = query.slice(0, orderByIndex);
     }
+        
     if (whereIndex !== -1) {
         // this the composite where clause into multiple where clause
+        if (limitIndex !== -1) whereClause = query.slice(whereIndex, limitIndex);
+        if (orderByIndex !== -1) whereClause = query.slice(whereIndex, orderByIndex);
         whereClauses = buildMultipleWhereClauses(sqlKeywords, multipleConditionnalKeyword, whereClause);
         queryBody = query.slice(0, whereIndex);
     }
 
-    return [queryBody, whereClauses, limitClause];
+    return [queryBody, whereClauses, orderByClause, limitClause];
 }
 
 const buildMultipleWhereClauses = (sqlKeywords, multipleConditionnalKeyword, inputArr) => {
@@ -103,7 +122,7 @@ export const tablesAliasesHandler = (sqlConsts, words, tables) => {
 
             //Error handling
             if (!table) throw new Error(`No table with name : ${words[i - 1]}`);
-            if (!alias || reservedKeyWords.includes(alias)) throw new Error(`Invalid or absent alias for table : ${table.tableName}`);
+            if (!alias || reservedKeyWords[alias]) throw new Error(`Invalid or absent alias for table : ${table.tableName}`);
             //Check for name conflict between specified alias and tables names and aliases
             const aliasOrNameCollidingTables = tables.filter(table => [table.tableName, table.alias].includes(alias));
             if (aliasOrNameCollidingTables.length) throw new Error(`Name collision for alias : ${alias}`);

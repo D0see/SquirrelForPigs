@@ -1,4 +1,4 @@
-import { sqlLeftJoin, sqlInnerJoin, sqlSelect, sqlWhereCompareColumnToColumn, sqlWhereCompareHeaderToString, sqlWhereCompareStringToString } from "./sql.logic/sqlFunctions.mjs";
+import { sqlLeftJoin, sqlInnerJoin, sqlSelect, sqlWhereCompareColumnToColumn, sqlWhereCompareHeaderToString, sqlWhereCompareStringToString, sqlOrderBy } from "./sql.logic/sqlFunctions.mjs";
 import { sqlConsts } from "../utils/appConsts.mjs";
 import { cleanQueryInput, tablesAliasesHandler, buildDescriptiveHeaders, turnRightJoinIntoLeftJoin, findEndIndexOfKeywordQuery, normalizeHeaders, findTableInTableArray, columnsHeadersAliasesHandler, applyHeadersAliases, paramIsDirectValueRepresentation, findQueryEndSymbol } from "./sqlParser.helper.mjs";
 
@@ -7,7 +7,10 @@ export const SqlParser = (input, tables) => {
     // parse subQueries "(query)" push the result table into tables and updates the input with the result table name
     input = parseSubQueries(sqlConsts, input, tables);
 
-    const [queryBody, whereClauses, limitClause] = cleanQueryInput(sqlConsts, input);
+    const [queryBody, whereClauses, orderByClause, limitClause] = cleanQueryInput(sqlConsts, input);
+
+    console.log(queryBody, whereClauses, orderByClause, limitClause);
+    //here i should validate the clauses
 
     //saves aliases for selected columns, remove them form the query
     const selectedColumnsHeaderAliases = columnsHeadersAliasesHandler(sqlConsts, queryBody);
@@ -30,6 +33,8 @@ export const SqlParser = (input, tables) => {
     whereClauses.forEach(whereClause => {
         finalTable = parseWhereClause(sqlConsts, whereClause, finalTable);
     })
+
+    finalTable = parseOrderByClause(orderByClause, finalTable);
 
     finalTable = parseLimitClause(limitClause, finalTable);
     
@@ -154,6 +159,14 @@ const parseWhereClause = (sqlConsts, whereClauseWords, finalTable) => {
             (parameters.left.type === 'string' ? parameters.left.val : parameters.right.val), 
             finalTable, operator, dataTypes);
     }
+}
+
+const parseOrderByClause = (orderBy, finalTable) => {
+    if (!orderBy.length) return finalTable;
+    const columnName = orderBy[1];
+    const extraKeyword = orderBy[2];
+    finalTable = sqlOrderBy(finalTable, columnName, extraKeyword);
+    return finalTable;
 }
 
 const parseLimitClause = (limitClause, finalTable) => {

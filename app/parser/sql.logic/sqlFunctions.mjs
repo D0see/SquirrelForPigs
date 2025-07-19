@@ -136,3 +136,10 @@ export const sqlWhereCompareHeaderToString = (sqlConsts, headerVal, stringVal, f
     finalTable.table = wheredtwoDArr;
     return finalTable;
 }
+
+export const sqlOrderBy = (finalTable, columnName, extraKeyword) => {
+    const compareIndex = getColumnHeadIndex(columnName, finalTable);
+    const sortedTable = [finalTable.table[0]].concat(finalTable.table.slice(1).sort((rowA, rowB) => (rowB[compareIndex] || 0) - (rowA[compareIndex] || 0)));
+    finalTable.table = sortedTable;
+    return finalTable;
+}

@@ -21,6 +21,9 @@ export const sqlKeywords = {
     'WHERE' : 'WHERE',
     'COMMA' : ',',
     'LIMIT' : 'LIMIT',
+    'ORDER_BY' :'ORDER BY',
+    'ORDER' : 'ORDER',
+    'BY' : 'BY',
 }
 
 export const multipleConditionnalKeyword = 'AND';
@@ -51,7 +54,11 @@ export const sqlOperatorsJsEquivalent = {
 
 // AUTO GENERATED DO NOT TOUCH
 
-export const reservedKeyWords = Object.values(sqlKeywords);
+export const reservedKeyWords = Object.values(sqlKeywords).reduce((acc, val) => {
+        acc[val] = true;
+        return acc;
+    }, {});
+reservedKeyWords[sqlKeywords.multipleConditionnalKeyword] = true;
 
 export const nextCompositeKeyWordsWord = {
     [sqlKeywords.LEFT] : {
@@ -65,6 +72,7 @@ export const nextCompositeKeyWordsWord = {
     [sqlKeywords.LEFT + ' ' + sqlKeywords.OUTER] : {[sqlKeywords.JOIN] : true,},
     [sqlKeywords.RIGHT + ' ' + sqlKeywords.OUTER] : {[sqlKeywords.JOIN] : true,},
     [sqlKeywords.INNER] : {[sqlKeywords.JOIN] : true,},
+    [sqlKeywords.ORDER] : {[sqlKeywords.BY] : true},
 }
 
 export const joinKeywords = {
