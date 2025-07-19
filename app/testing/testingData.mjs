@@ -91,6 +91,6 @@ export default [{
             ['34', '3', 'Bluetooth Speaker', '90.00', '2023-11-19'],
             ['35', '4', 'Laptop Bag', '70.00', '2023-11-20']
         ],
-        tableName: 'order'
+        tableName: 'commande'
     }
 ]

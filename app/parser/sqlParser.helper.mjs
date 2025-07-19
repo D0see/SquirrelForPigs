@@ -14,8 +14,7 @@ const buildCompositeKeywords = (nextCompositeKeyWordsWord, words) => {
 export { buildCompositeKeywords as _buildCompositeKeywords }; 
 
 //TODO : optimize this + urgent refactor 
-//TODO : SHOULD BE SPLITTED IN 2 FUNCTIONS CLEANING INPUT AND SPLITTING QUERIES
-export const cleanQueryInput = (sqlConsts, input) => {
+export const cleanInput = (sqlConsts, input) => {
     const {sqlKeywords, reservedKeyWords, nextCompositeKeyWordsWord, equivalentKeywords, multipleConditionnalKeyword} = sqlConsts;
 
     //removes commas
@@ -36,6 +35,12 @@ export const cleanQueryInput = (sqlConsts, input) => {
     //replaces obsolete keywords for equivalent ones
     query = query.map(word => equivalentKeywords[word] ? equivalentKeywords[word] : word);
 
+    return query;
+}
+
+//TODO : optimize this + urgent refactor 
+export const splitQuery = (sqlConsts, query) => {
+    const {sqlKeywords, multipleConditionnalKeyword} = sqlConsts;
 
     /*SPLITTING QUERIES
         SELECT 

@@ -1,15 +1,18 @@
 import { sqlLeftJoin, sqlInnerJoin, sqlSelect, sqlWhereCompareColumnToColumn, sqlWhereCompareHeaderToString, sqlWhereCompareStringToString, sqlOrderBy } from "./sql.logic/sqlFunctions.mjs";
 import { sqlConsts } from "../utils/appConsts.mjs";
-import { cleanQueryInput, tablesAliasesHandler, buildDescriptiveHeaders, turnRightJoinIntoLeftJoin, findEndIndexOfKeywordQuery, normalizeHeaders, findTableInTableArray, columnsHeadersAliasesHandler, applyHeadersAliases, paramIsDirectValueRepresentation, findQueryEndSymbol } from "./sqlParser.helper.mjs";
+import { cleanInput, splitQuery, tablesAliasesHandler, buildDescriptiveHeaders, turnRightJoinIntoLeftJoin, findEndIndexOfKeywordQuery, normalizeHeaders, findTableInTableArray, columnsHeadersAliasesHandler, applyHeadersAliases, paramIsDirectValueRepresentation, findQueryEndSymbol } from "./sqlParser.helper.mjs";
 
 export const SqlParser = (input, tables) => {
     
     // parse subQueries "(query)" push the result table into tables and updates the input with the result table name
     input = parseSubQueries(sqlConsts, input, tables);
 
-    const [queryBody, whereClauses, orderByClause, limitClause] = cleanQueryInput(sqlConsts, input);
+    const query = cleanInput(sqlConsts, input);
+    console.log(query.join('","'));
 
-    console.log(queryBody, whereClauses, orderByClause, limitClause);
+    const [queryBody, whereClauses, orderByClause, limitClause] = splitQuery(sqlConsts, query);
+
+    // console.log(queryBody, whereClauses, orderByClause, limitClause);
     //here i should validate the clauses
 
     //saves aliases for selected columns, remove them form the query
