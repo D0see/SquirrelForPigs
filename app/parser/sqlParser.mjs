@@ -34,7 +34,7 @@ export const SqlParser = (input, tables) => {
         finalTable = parseWhereClause(sqlConsts, whereClause, finalTable);
     })
 
-    finalTable = parseOrderByClause(orderByClause, finalTable);
+    finalTable = parseOrderByClause(sqlConsts, orderByClause, finalTable);
 
     finalTable = parseLimitClause(limitClause, finalTable);
     
@@ -161,11 +161,10 @@ const parseWhereClause = (sqlConsts, whereClauseWords, finalTable) => {
     }
 }
 
-const parseOrderByClause = (orderBy, finalTable) => {
+const parseOrderByClause = (sqlConsts, orderBy, finalTable) => {
     if (!orderBy.length) return finalTable;
-    const columnName = orderBy[1];
-    const extraKeyword = orderBy[2];
-    finalTable = sqlOrderBy(finalTable, columnName, extraKeyword);
+    const [_, columnName, extraKeyword] = orderBy;
+    finalTable = sqlOrderBy(sqlConsts, finalTable, columnName, extraKeyword);
     return finalTable;
 }
 

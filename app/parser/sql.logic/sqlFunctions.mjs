@@ -1,4 +1,3 @@
-import { sqlConsts } from '../../utils/appConsts.mjs';
 import { appendColumnToTwoDArr, getColumnByIndexFromTable, getColumnHeadIndex, getColumnValuesByIndexFromTable, compareData } from './sqlFunctions.helper.mjs';
 
 export const sqlSelect = (sqlConsts, ColumnsHeadersSelected, tableSelected) => {
@@ -137,9 +136,16 @@ export const sqlWhereCompareHeaderToString = (sqlConsts, headerVal, stringVal, f
     return finalTable;
 }
 
-export const sqlOrderBy = (finalTable, columnName, extraKeyword) => {
+export const sqlOrderBy = (appConsts, finalTable, columnName, extraKeyword) => {
+    const { sqlKeywords } = appConsts;
     const compareIndex = getColumnHeadIndex(columnName, finalTable);
-    const sortedTable = [finalTable.table[0]].concat(finalTable.table.slice(1).sort((rowA, rowB) => (rowB[compareIndex] || 0) - (rowA[compareIndex] || 0)));
+
+    let sortedTable;
+    if ( extraKeyword === sqlKeywords.DESC) {
+        sortedTable = [finalTable.table[0]].concat(finalTable.table.slice(1).sort((rowA, rowB) => (rowA[compareIndex] || 0) - (rowB[compareIndex] || 0)));
+    } else if (extraKeyword === sqlKeywords.ASC || !extraKeyword) {
+        sortedTable = [finalTable.table[0]].concat(finalTable.table.slice(1).sort((rowA, rowB) => (rowB[compareIndex] || 0) - (rowA[compareIndex] || 0)));
+    }
     finalTable.table = sortedTable;
     return finalTable;
 }

@@ -19,7 +19,8 @@ export const cleanQueryInput = (sqlConsts, input) => {
     const {sqlKeywords, reservedKeyWords, nextCompositeKeyWordsWord, equivalentKeywords, multipleConditionnalKeyword} = sqlConsts;
 
     //removes commas
-    input = input.replace(/,/g, '')
+    const commaRegex = new RegExp(sqlKeywords.COMMA, 'g');
+    input = input.replace(commaRegex, '') 
 
     //removes empty spaces
     let query = input.split(' ').map(word => word.trim()).filter(word => word);
@@ -63,6 +64,7 @@ export const cleanQueryInput = (sqlConsts, input) => {
     if (orderByIndex !== -1) {
         orderByClause = query.slice(orderByIndex);
         queryBody = query.slice(0, orderByIndex);
+        if (limitIndex !== -1) orderByClause = query.slice(orderByIndex, limitIndex);
     }
         
     if (whereIndex !== -1) {

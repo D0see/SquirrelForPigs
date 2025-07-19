@@ -531,7 +531,7 @@ describe(SqlParser.name, () => {
 })
 
  describe(SqlParser.name, () => {
-  it("ORDER BY -- 30", () => {
+  it("ORDER BY NO EXTRA KEYWORD -- 30", () => {
     //ARRANGE
     const query = 'select * from people order by id';
     const tablesObj = structuredClone(testingData);
@@ -543,3 +543,32 @@ describe(SqlParser.name, () => {
     expect(result).toBe('{"table":[["id","firstName","lastName","jobId","idManager"],["20","Rachel","Taylor","4","4"],["19","Queen","Moore","3","3"],["18","Paul","Allen","2","2"],["17","Oscar","Hall","1","1"],["16","Nina","White","4","4"],["15","Michael","Lee","3","3"],["14","Laura","Martinez","2","2"],["13","Kevin","Johnson","1","1"],["12","Julia","Williams","4","4"],["11","Ivan","Petrov","3","3"],["10","Hannah","Adams","2","2"],["9","George","Clark","1","1"],["8","Emily","Jones","4","2"],["7","Charlie","Brown","3","3"],["6","Alice","Smith","2","2"],["5","Jobless","Murphy","1",""],["4","Cillian","Murphy","4",""],["3","Bob","Dylan","3",""],["2","Jane","Doe","2",""],["1","John","Doe","1","2"]],"tableName":"people-filtered"}')
   }) 
 })
+
+ describe(SqlParser.name, () => {
+  it("ORDER BY EXTRA KEYWORD DESC -- 31", () => {
+    //ARRANGE
+    const query = 'select * from people where id <= 15 ORDER BY idManager DESC LIMIT 15';
+    const tablesObj = structuredClone(testingData);
+
+    //ACT
+    const result = JSON.stringify(SqlParser(query, tablesObj));
+
+    //ASSERT
+    expect(result).toBe('{"table":[["id","firstName","lastName","jobId","idManager"],["2","Jane","Doe","2",""],["3","Bob","Dylan","3",""],["4","Cillian","Murphy","4",""],["5","Jobless","Murphy","1",""],["9","George","Clark","1","1"],["13","Kevin","Johnson","1","1"],["1","John","Doe","1","2"],["6","Alice","Smith","2","2"],["8","Emily","Jones","4","2"],["10","Hannah","Adams","2","2"],["14","Laura","Martinez","2","2"],["7","Charlie","Brown","3","3"],["11","Ivan","Petrov","3","3"],["15","Michael","Lee","3","3"],["12","Julia","Williams","4","4"]],"tableName":"people-filtered"}')
+  }) 
+})
+
+ describe(SqlParser.name, () => {
+  it("ORDER BY EXTRA KEYWORD ASC -- 32", () => {
+    //ARRANGE
+    const query = 'select * from people where id <= 15 ORDER BY idManager ASC LIMIT 15';
+    const tablesObj = structuredClone(testingData);
+
+    //ACT
+    const result = JSON.stringify(SqlParser(query, tablesObj));
+
+    //ASSERT
+    expect(result).toBe('{"table":[["id","firstName","lastName","jobId","idManager"],["12","Julia","Williams","4","4"],["7","Charlie","Brown","3","3"],["11","Ivan","Petrov","3","3"],["15","Michael","Lee","3","3"],["1","John","Doe","1","2"],["6","Alice","Smith","2","2"],["8","Emily","Jones","4","2"],["10","Hannah","Adams","2","2"],["14","Laura","Martinez","2","2"],["9","George","Clark","1","1"],["13","Kevin","Johnson","1","1"],["2","Jane","Doe","2",""],["3","Bob","Dylan","3",""],["4","Cillian","Murphy","4",""],["5","Jobless","Murphy","1",""]],"tableName":"people-filtered"}')
+  }) 
+})
+

@@ -24,6 +24,8 @@ export const sqlKeywords = {
     'ORDER_BY' :'ORDER BY',
     'ORDER' : 'ORDER',
     'BY' : 'BY',
+    'ASC' : 'ASC',
+    'DESC' : 'DESC'
 }
 
 export const multipleConditionnalKeyword = 'AND';
