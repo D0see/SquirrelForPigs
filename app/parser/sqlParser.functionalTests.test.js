@@ -585,3 +585,19 @@ describe(SqlParser.name, () => {
     expect(result).toBe('{"table":[["id","firstName","lastName","jobId","idManager","id","occupation","idSalary","id","salary"],["11","Ivan","Petrov","3","3","3","Bouncer","3","3","20000"],["15","Michael","Lee","3","3","3","Bouncer","3","3","20000"],["19","Queen","Moore","3","3","3","Bouncer","3","3","20000"],["14","Laura","Martinez","2","2","2","Plumber","2","2","15000"],["18","Paul","Allen","2","2","2","Plumber","2","2","15000"]],"tableName":"people-job-salary-filtered"}')
   }) 
 })
+
+ describe(SqlParser.name, () => {
+  it("FULL OUTER JOIN -- 34", () => {
+    //ARRANGE
+    const query = 'select * from people full outer join job on people.jobId = job.id';
+    const tablesObj = structuredClone(testingData);
+
+    //ACT
+    const result = JSON.stringify(SqlParser(query, tablesObj));
+
+    //ASSERT
+    expect(result).toBe('{"table":[["id","firstName","lastName","jobId","idManager","id","occupation","idSalary"],["1","John","Doe","1","2","1","Mason","1"],["2","Jane","Doe","2","","2","Plumber","2"],["3","Bob","Dylan","3","","3","Bouncer","3"],["4","Cillian","Murphy","4","","4","Barman","1"],["5","Jobless","Murphy","1","","1","Mason","1"],["6","Alice","Smith","2","2","2","Plumber","2"],["7","Charlie","Brown","3","3","3","Bouncer","3"],["8","Emily","Jones","4","2","4","Barman","1"],["9","George","Clark","1","1","1","Mason","1"],["10","Hannah","Adams","2","2","2","Plumber","2"],["11","Ivan","Petrov","3","3","3","Bouncer","3"],["12","Julia","Williams","4","4","4","Barman","1"],["13","Kevin","Johnson","1","1","1","Mason","1"],["14","Laura","Martinez","2","2","2","Plumber","2"],["15","Michael","Lee","3","3","3","Bouncer","3"],["16","Nina","White","4","4","4","Barman","1"],["17","Oscar","Hall","1","1","1","Mason","1"],["18","Paul","Allen","2","2","2","Plumber","2"],["19","Queen","Moore","3","3","3","Bouncer","3"],["20","Rachel","Taylor","4","4","4","Barman","1"],["","","","","","5","Electrician","2"],["","","","","","6","Carpenter","3"],["","","","","","7","Technician","2"],["","","","","","8","Engineer","3"],["","","","","","9","Mechanic","2"],["","","","","","10","Painter","1"]],"tableName":"people-job-filtered"}')
+  }) 
+})
+
+

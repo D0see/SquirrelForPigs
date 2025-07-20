@@ -90,7 +90,60 @@ export const sqlInnerJoin = (sqlConsts, dataTypes, table1, table2, table1Joining
 }
 
 //TODO IMPLEMENT
-export const fullOuterJoin = () => {}
+export const sqlFullOuterJoin = (sqlConsts, dataTypes, table1, table2, table1JoiningHeader, table2JoiningHeader, operator) => {
+    const { sqlOperatorsJsEquivalent } = sqlConsts;
+
+    const newTable = JSON.parse(JSON.stringify(table1.table.slice(0, 1)));
+    table2.table[0].forEach(header => {newTable[0].push(header)});
+
+    const joiningHeaderIndexT1 = getColumnHeadIndex(table1JoiningHeader, table1);
+    const joiningHeaderIndexT2 = getColumnHeadIndex(table2JoiningHeader, table2);
+    console.log(table1, table2)
+    //LEFT JOIN LOGIC
+    table1.table.forEach((row, rowIndex) => {
+        if (!rowIndex) return;
+        const values = getColumnValuesByIndexFromTable(table2.table, joiningHeaderIndexT2);
+        let hasMatched = false;
+        for (const [index, value] of values.entries()) {
+            if (compareData(dataTypes, sqlOperatorsJsEquivalent, operator, row[joiningHeaderIndexT1], value)) {
+                newTable.push([...row, ...table2.table[index + 1]]);
+                hasMatched = true;
+            }
+        }
+    })
+
+    console.log(table1.table[0].length, joiningHeaderIndexT2)
+    const joiningHeaderIndexT2InNewTable = table1.table[0].length + joiningHeaderIndexT2;
+    table2.table.forEach((t2Row) => {
+        for (const row of newTable) {
+            if (t2Row[joiningHeaderIndexT2] === row[joiningHeaderIndexT2InNewTable]) {
+                return;
+            }
+        }
+        newTable.push([...new Array(table1.table[0].length).map(val => ''), ...t2Row]);
+    })
+
+    // //PUSH NOT JOINED DATA AT THE END
+    // table2.table.forEach((row, rowIndex)) {
+    //     if (!rowIndex) return;
+    //     for (const row of table1.table.slice(1)) {
+    //         if (row[])
+    //     }
+    // }
+
+    //fill empty cells with empty values
+    newTable.forEach((row, index) => {
+        if (index === 0) return;
+        while (row.length < newTable[0].length) {
+            row.push('')
+        }
+    });
+
+    return {
+        table : newTable,
+        tableName : `${table1.alias ? table1.alias : table1.tableName}-${table2.alias ? table2.alias : table2.tableName}`
+    };
+}
 
 export const sqlWhereCompareColumnToColumn = (sqlConsts, leftVal, rightVal, finalTable, operator, dataTypes) => {
     const { sqlOperatorsJsEquivalent } = sqlConsts;

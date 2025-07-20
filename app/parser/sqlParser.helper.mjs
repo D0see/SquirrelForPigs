@@ -13,7 +13,6 @@ const buildCompositeKeywords = (nextCompositeKeyWordsWord, words) => {
 // for testing
 export { buildCompositeKeywords as _buildCompositeKeywords }; 
 
-//TODO : optimize this + urgent refactor 
 export const cleanInput = (sqlConsts, input) => {
     const {sqlKeywords, reservedKeyWords, nextCompositeKeyWordsWord, equivalentKeywords, multipleConditionnalKeyword} = sqlConsts;
 
@@ -38,7 +37,6 @@ export const cleanInput = (sqlConsts, input) => {
     return query;
 }
 
-//TODO : optimize this + urgent refactor 
 export const splitQuery = (sqlConsts, query) => {
     const {sqlKeywords, multipleConditionnalKeyword} = sqlConsts;
 
