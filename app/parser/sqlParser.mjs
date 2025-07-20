@@ -12,9 +12,9 @@ export const SqlParser = (input, tables) => {
     const [queryBody, whereClauses, orderByClause, limitClause] = splitQuery(sqlConsts, query);
 
     console.log(queryBody, whereClauses, orderByClause, limitClause);
-    //here i should validate the clauses
+    //TODO :here i should validate the clauses
 
-    //saves aliases for selected columns, remove them form the query
+    //saves aliases for selected columns, remove them from the query
     const selectedColumnsHeaderAliases = columnsHeadersAliasesHandler(sqlConsts, queryBody);
 
     //updates tables aliases in place and remove them for the query  
@@ -52,11 +52,9 @@ export const SqlParser = (input, tables) => {
 
 const parseAllJoins = (sqlConsts, words, tables) => {
     const { sqlKeywords, joinKeywords, dataTypes } = sqlConsts;
-    console.log("inParseAllJoins")
     let currIntermediaryTable;
     for (let currIndex = 0; currIndex < words.length; currIndex++) {
         const word = words[currIndex];
-        console.log(word);
         if (!joinKeywords[word]) continue;
 
         const endIndex = findEndIndexOfKeywordQuery(joinKeywords, words, currIndex);
@@ -70,7 +68,6 @@ const parseAllJoins = (sqlConsts, words, tables) => {
                 currIntermediaryTable = applySqlJoinQuery(sqlConsts, dataTypes, sqlInnerJoin, query, tables);
                 break;
             case sqlKeywords.FULL_OUTER_JOIN :
-                console.log("in full outer join")
                 currIntermediaryTable = applySqlJoinQuery(sqlConsts, dataTypes, sqlFullOuterJoin, query, tables);
                 break;
         }

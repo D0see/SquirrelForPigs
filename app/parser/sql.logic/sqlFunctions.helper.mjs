@@ -70,11 +70,16 @@ export const compareData = (dataTypes, sqlOperatorsJsEquivalent, operator, data1
         }
     }
 
+    const jsOperator = sqlOperatorsJsEquivalent[operator];
+
+    //handles null
+    if (leftVal.type === dataTypes.NULL || rightVal.type === dataTypes.NULL) {
+        return eval(`${leftVal.val}` + ` ${jsOperator} ` + `${rightVal.val}`);
+    }
+
     if (leftVal.type != rightVal.type) throw new Error('cant compare values of different types');
 
     if (!sqlOperatorsJsEquivalent[operator]) throw new Error('not a valid comparison operator');
-
-    const jsOperator = sqlOperatorsJsEquivalent[operator];
 
     switch(leftVal.type) {
         case dataTypes.NUMBER :
@@ -87,7 +92,9 @@ export const compareData = (dataTypes, sqlOperatorsJsEquivalent, operator, data1
 }
 
 export const inferDataType = (dataTypes, param) => {
-    if (!isNaN(param) && !['"','"'].includes(param[0]) && !['"','"'].includes(param[param.length - 1])) {
+    if (param === 'null') {
+        return dataTypes.NULL;
+    } else if (!isNaN(param) && !['"','"'].includes(param[0]) && !['"','"'].includes(param[param.length - 1])) {
         return dataTypes.NUMBER;
     } else if (isDate(param)) {
         return dataTypes.DATETIME;

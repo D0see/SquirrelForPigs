@@ -36,6 +36,7 @@ export const dataTypes = {
     'NUMBER' : 'NUMBER',
     'DATETIME' : 'DATETIME',
     'VARCHAR' : 'VARCHAR',
+    'NULL' : 'null'
 }
 
 export const sqlOperators = { 

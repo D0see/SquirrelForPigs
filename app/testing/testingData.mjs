@@ -2,10 +2,10 @@ export default [{
         table: [
             ['id', 'firstName', 'lastName', 'jobId', 'idManager'],
             ['1', 'John', 'Doe', '1', '2'],
-            ['2', 'Jane', 'Doe', '2', undefined],
-            ['3', 'Bob', 'Dylan', '3', undefined],
-            ['4', 'Cillian', 'Murphy', '4', undefined],
-            ['5', 'Jobless', 'Murphy', '1', undefined],
+            ['2', 'Jane', 'Doe', '2', 'null'],
+            ['3', 'Bob', 'Dylan', '3', 'null'],
+            ['4', 'Cillian', 'Murphy', '4', 'null'],
+            ['5', 'Jobless', 'Murphy', '1', 'null'],
             ['6', 'Alice', 'Smith', '2', '2'],
             ['7', 'Charlie', 'Brown', '3', '3'],
             ['8', 'Emily', 'Jones', '4', '2'],
@@ -55,7 +55,7 @@ export default [{
         table: [
             ['id', 'userId', 'product', 'amount', 'createdAt'],
             ['1', '1', 'Laptop', '1200.00', '2023-06-01'],
-            ['1', undefined, 'Laptop', '1200.00', '2023-06-01'],
+            ['1', 'null', 'Laptop', '1200.00', '2023-06-01'],
             ['2', '2', 'Phone', '800.00', '2023-07-01'],
             ['3', '1', 'Mouse', '25.50', '2023-07-15'],
             ['4', '3', 'Keyboard', '45.00', '2023-08-10'],

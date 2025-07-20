@@ -47,7 +47,7 @@ export const sqlLeftJoin = (sqlConsts, dataTypes, table1, table2, table1JoiningH
     newTable.forEach((row, index) => {
         if (index === 0) return;
         while (row.length < newTable[0].length) {
-            row.push('')
+            row.push(dataTypes.NULL)
         }
     });
 
@@ -79,7 +79,7 @@ export const sqlInnerJoin = (sqlConsts, dataTypes, table1, table2, table1Joining
     newTable.forEach((row, index) => {
         if (index === 0) return;
         while (row.length < newTable[0].length) {
-            row.push('')
+            row.push(dataTypes.NULL)
         }
     });
 
@@ -98,21 +98,28 @@ export const sqlFullOuterJoin = (sqlConsts, dataTypes, table1, table2, table1Joi
 
     const joiningHeaderIndexT1 = getColumnHeadIndex(table1JoiningHeader, table1);
     const joiningHeaderIndexT2 = getColumnHeadIndex(table2JoiningHeader, table2);
-    console.log(table1, table2)
+
     //LEFT JOIN LOGIC
     table1.table.forEach((row, rowIndex) => {
         if (!rowIndex) return;
         const values = getColumnValuesByIndexFromTable(table2.table, joiningHeaderIndexT2);
-        let hasMatched = false;
         for (const [index, value] of values.entries()) {
             if (compareData(dataTypes, sqlOperatorsJsEquivalent, operator, row[joiningHeaderIndexT1], value)) {
                 newTable.push([...row, ...table2.table[index + 1]]);
-                hasMatched = true;
             }
         }
     })
 
-    console.log(table1.table[0].length, joiningHeaderIndexT2)
+    const joiningHeaderIndexT1InNewTable = joiningHeaderIndexT1;
+    table1.table.forEach((t1Row) => {
+        for (const row of newTable) {
+            if (t1Row[joiningHeaderIndexT1] === row[joiningHeaderIndexT1InNewTable]) {
+                return;
+            }
+        }
+        newTable.push([...t1Row]);
+    })
+
     const joiningHeaderIndexT2InNewTable = table1.table[0].length + joiningHeaderIndexT2;
     table2.table.forEach((t2Row) => {
         for (const row of newTable) {
@@ -120,22 +127,14 @@ export const sqlFullOuterJoin = (sqlConsts, dataTypes, table1, table2, table1Joi
                 return;
             }
         }
-        newTable.push([...new Array(table1.table[0].length).map(val => ''), ...t2Row]);
+        const arr =  new Array(table1.table[0].length).fill(dataTypes.NULL);
+        newTable.push([...arr, ...t2Row]);
     })
 
-    // //PUSH NOT JOINED DATA AT THE END
-    // table2.table.forEach((row, rowIndex)) {
-    //     if (!rowIndex) return;
-    //     for (const row of table1.table.slice(1)) {
-    //         if (row[])
-    //     }
-    // }
-
-    //fill empty cells with empty values
     newTable.forEach((row, index) => {
         if (index === 0) return;
         while (row.length < newTable[0].length) {
-            row.push('')
+            row.push(dataTypes.NULL)
         }
     });
 
@@ -190,14 +189,24 @@ export const sqlWhereCompareHeaderToString = (sqlConsts, headerVal, stringVal, f
 }
 
 export const sqlOrderBy = (appConsts, finalTable, columnName, extraKeyword) => {
-    const { sqlKeywords } = appConsts;
+    const { sqlKeywords, dataTypes } = appConsts;
     const compareIndex = getColumnHeadIndex(columnName, finalTable);
 
     let sortedTable;
-    if ( extraKeyword === sqlKeywords.DESC) {
-        sortedTable = [finalTable.table[0]].concat(finalTable.table.slice(1).sort((rowA, rowB) => (rowA[compareIndex] || 0) - (rowB[compareIndex] || 0)));
-    } else if (extraKeyword === sqlKeywords.ASC || !extraKeyword) {
-        sortedTable = [finalTable.table[0]].concat(finalTable.table.slice(1).sort((rowA, rowB) => (rowB[compareIndex] || 0) - (rowA[compareIndex] || 0)));
+    if (extraKeyword === sqlKeywords.ASC || !extraKeyword) {
+            sortedTable = [finalTable.table[0]].concat(finalTable.table.slice(1).sort((rowA, rowB) => {
+                let compareA = (rowA[compareIndex] === dataTypes.NULL) ? Infinity : rowA[compareIndex] || 0;
+                let compareB = (rowB[compareIndex] === dataTypes.NULL) ? Infinity : rowB[compareIndex] || 0;
+                return (compareA) - (compareB)
+            }
+        ));
+    } else if (extraKeyword === sqlKeywords.DESC) {
+            sortedTable = [finalTable.table[0]].concat(finalTable.table.slice(1).sort((rowA, rowB) => {
+                let compareA = (rowA[compareIndex] === dataTypes.NULL) ? -Infinity : rowA[compareIndex] || 0;
+                let compareB = (rowB[compareIndex] === dataTypes.NULL) ? -Infinity : rowB[compareIndex] || 0;
+                return (compareB) - (compareA)
+            }
+        ));
     }
     finalTable.table = sortedTable;
     return finalTable;
