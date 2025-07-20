@@ -51,34 +51,22 @@ export const splitQuery = (sqlConsts, query) => {
         HAVING 
         ORDER BY 
         LIMIT */
-        
-    let queryBody = query;
 
-    const whereIndex = query.findIndex(word => word === sqlKeywords.WHERE);
-    let whereClause = query.slice(whereIndex);
+    let whereIndex = query.findIndex(word => word === sqlKeywords.WHERE);
+    whereIndex = whereIndex === -1 ? Infinity : whereIndex;
     let whereClauses = [];
     
-    const orderByIndex = query.findIndex(word => word === sqlKeywords.ORDER_BY);
-    let orderByClause = [];
+    let orderByIndex = query.findIndex(word => word === sqlKeywords.ORDER_BY);
+    orderByIndex = orderByIndex === -1 ? Infinity : orderByIndex;
     
-    const limitIndex =  query.findIndex(word => word === sqlKeywords.LIMIT);
-    let limitClause = query.slice(limitIndex, limitIndex + 2);
-    
-    //incrementaly reduce the queryBody based on present clauses
-    if (limitIndex !== -1) queryBody = query.slice(0, limitIndex);
-    if (orderByIndex !== -1) {
-        orderByClause = query.slice(orderByIndex);
-        queryBody = query.slice(0, orderByIndex);
-        if (limitIndex !== -1) orderByClause = query.slice(orderByIndex, limitIndex);
-    }
-        
-    if (whereIndex !== -1) {
-        // this the composite where clause into multiple where clause
-        if (limitIndex !== -1) whereClause = query.slice(whereIndex, limitIndex);
-        if (orderByIndex !== -1) whereClause = query.slice(whereIndex, orderByIndex);
-        whereClauses = buildMultipleWhereClauses(sqlKeywords, multipleConditionnalKeyword, whereClause);
-        queryBody = query.slice(0, whereIndex);
-    }
+    let limitIndex =  query.findIndex(word => word === sqlKeywords.LIMIT);
+    limitIndex = limitIndex === -1 ? Infinity : limitIndex;
+
+    let queryBody = query.slice(0, Math.min(whereIndex, orderByIndex, limitIndex));
+    let whereClause = query.slice(whereIndex, Math.min(orderByIndex, limitIndex));
+    if (whereClause.length) whereClauses = buildMultipleWhereClauses(sqlKeywords, multipleConditionnalKeyword, whereClause);
+    let orderByClause = query.slice(orderByIndex, limitIndex);
+    let limitClause = query.slice(limitIndex);
 
     return [queryBody, whereClauses, orderByClause, limitClause];
 }
@@ -162,7 +150,6 @@ export const findQueryEndSymbol = (sqlKeywords, openPar, input) => {
     }
     return -1
 }
-
 
 //#endregion
 
