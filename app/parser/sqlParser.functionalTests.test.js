@@ -642,3 +642,18 @@ describe(SqlParser.name, () => {
   }) 
 })
 
+ describe(SqlParser.name, () => {
+  it("WHERE COMPARING TO NULL -- 40", () => {
+    //ARRANGE
+    const query = 'select * from people where idManager = null';
+    const tablesObj = structuredClone(testingData);
+
+    //ACT
+    const result = JSON.stringify(SqlParser(query, tablesObj));
+
+    //ASSERT
+    expect(result).toBe('{"table":[["id","firstName","lastName","jobId","idManager"],["2","Jane","Doe","2","null"],["3","Bob","Dylan","3","null"],["4","Cillian","Murphy","4","null"],["5","Jobless","Murphy","1","null"]],"tableName":"people-filtered"}')
+  }) 
+})
+
+

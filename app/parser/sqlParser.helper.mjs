@@ -213,6 +213,7 @@ export const normalizeHeaders = (table) => {
 
 //#region UTILS
 
-export const paramIsDirectValueRepresentation = (param) => {
-    return ((param.startsWith('"') && param.endsWith('"')) || (param.startsWith("'") && param.endsWith("'") || !isNaN(param)));
+export const paramIsDirectValueRepresentation = (sqlConsts, param) => {
+    const { dataTypes } = sqlConsts;
+    return ((param.startsWith('"') && param.endsWith('"')) || (param.startsWith("'") && param.endsWith("'") || !isNaN(param) || param === dataTypes.NULL));
 }

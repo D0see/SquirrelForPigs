@@ -145,7 +145,7 @@ const parseWhereClause = (sqlConsts, whereClauseWords, finalTable) => {
     if (!sqlOperatorsJsEquivalent[operator]) throw new Error(`no operator found in ${sqlKeywords.WHERE} clause`);
 
     Object.values(parameters).forEach((parameter) => {
-        if (paramIsDirectValueRepresentation(parameter.val)) {
+        if (paramIsDirectValueRepresentation(sqlConsts, parameter.val)) {
             parameter.type = 'string';
         }
     });
