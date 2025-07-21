@@ -1,4 +1,4 @@
-import { appendColumnToTwoDArr, getColumnByIndexFromTable, getColumnHeadIndex, getColumnValuesByIndexFromTable, compareData } from './sqlFunctions.helper.mjs';
+import { appendColumnToTwoDArr, getColumnByIndexFromTable, getColumnHeadIndex, getColumnValuesByIndexFromTable, compareData, inferDataType } from './sqlFunctions.helper.mjs';
 
 export const sqlSelect = (sqlConsts, ColumnsHeadersSelected, tableSelected) => {
     const { sqlKeywords } = sqlConsts;
@@ -90,7 +90,7 @@ export const sqlInnerJoin = (sqlConsts, dataTypes, table1, table2, table1Joining
 }
 
 //TODO IMPLEMENT
-export const sqlFullOuterJoin = (sqlConsts, dataTypes, table1, table2, table1JoiningHeader, table2JoiningHeader, operator) => {
+export const sqlFullJoin = (sqlConsts, dataTypes, table1, table2, table1JoiningHeader, table2JoiningHeader, operator) => {
     const { sqlOperatorsJsEquivalent } = sqlConsts;
 
     const newTable = JSON.parse(JSON.stringify(table1.table.slice(0, 1)));
@@ -193,21 +193,72 @@ export const sqlOrderBy = (appConsts, finalTable, columnName, extraKeyword) => {
     const compareIndex = getColumnHeadIndex(columnName, finalTable);
 
     let sortedTable;
-    if (extraKeyword === sqlKeywords.ASC || !extraKeyword) {
-            sortedTable = [finalTable.table[0]].concat(finalTable.table.slice(1).sort((rowA, rowB) => {
-                let compareA = (rowA[compareIndex] === dataTypes.NULL) ? Infinity : rowA[compareIndex] || 0;
-                let compareB = (rowB[compareIndex] === dataTypes.NULL) ? Infinity : rowB[compareIndex] || 0;
-                return (compareA) - (compareB)
-            }
-        ));
-    } else if (extraKeyword === sqlKeywords.DESC) {
-            sortedTable = [finalTable.table[0]].concat(finalTable.table.slice(1).sort((rowA, rowB) => {
-                let compareA = (rowA[compareIndex] === dataTypes.NULL) ? -Infinity : rowA[compareIndex] || 0;
-                let compareB = (rowB[compareIndex] === dataTypes.NULL) ? -Infinity : rowB[compareIndex] || 0;
-                return (compareB) - (compareA)
-            }
-        ));
+
+
+    // infer type to sort
+    let typeToSort;
+    for (const row of finalTable.table.slice(1)) {
+        typeToSort = inferDataType(dataTypes, row[compareIndex]);
+        if (typeToSort !== dataTypes.NULL) {
+            break;
+        }
     }
+
+    switch(typeToSort) {
+        
+        case dataTypes.NUMBER :
+            if (extraKeyword === sqlKeywords.ASC || !extraKeyword) {
+                sortedTable = [finalTable.table[0]].concat(finalTable.table.slice(1).sort((rowA, rowB) => {
+                    let compareA = (rowA[compareIndex] === dataTypes.NULL) ? Infinity : rowA[compareIndex] ;
+                    let compareB = (rowB[compareIndex] === dataTypes.NULL) ? Infinity : rowB[compareIndex] ;
+                    return (compareA) - (compareB);
+                }));
+            } else if (extraKeyword === sqlKeywords.DESC) {
+                sortedTable = [finalTable.table[0]].concat(finalTable.table.slice(1).sort((rowA, rowB) => {
+                    let compareA = (rowA[compareIndex] === dataTypes.NULL) ? -Infinity : rowA[compareIndex] ;
+                    let compareB = (rowB[compareIndex] === dataTypes.NULL) ? -Infinity : rowB[compareIndex] ;
+                    return (compareB) - (compareA);
+                }));
+            }
+            break;
+
+        case dataTypes.VARCHAR :
+            if (extraKeyword === sqlKeywords.ASC || !extraKeyword) {
+                sortedTable = [finalTable.table[0]].concat(finalTable.table.slice(1).sort((rowA, rowB) => {
+                    if (rowA[compareIndex] === dataTypes.NULL) return 1;
+                    if (rowB[compareIndex] === dataTypes.NULL) return -1;
+                    return (rowA[compareIndex]).toString().localeCompare((rowB[compareIndex]).toString());
+                }));
+            } else if (extraKeyword === sqlKeywords.DESC) {
+                sortedTable = [finalTable.table[0]].concat(finalTable.table.slice(1).sort((rowA, rowB) => {
+                    if (rowA[compareIndex] === dataTypes.NULL) return 1;
+                    if (rowB[compareIndex] === dataTypes.NULL) return -1;
+                    return (rowB[compareIndex]).toString().localeCompare((rowA[compareIndex]).toString());
+                }));
+            }
+            break;
+
+        case dataTypes.DATETIME :
+            if (extraKeyword === sqlKeywords.ASC || !extraKeyword) {
+                sortedTable = [finalTable.table[0]].concat(finalTable.table.slice(1).sort((rowA, rowB) => {
+                    if (rowA[compareIndex] === dataTypes.NULL) return 1;
+                    if (rowB[compareIndex] === dataTypes.NULL) return -1;
+                    const DateA = new Date(rowA[compareIndex]);
+                    const DateB = new Date(rowB[compareIndex]);
+                    return DateA.getTime() - DateB.getTime();
+                }));
+            } else if (extraKeyword === sqlKeywords.DESC) {
+                sortedTable = [finalTable.table[0]].concat(finalTable.table.slice(1).sort((rowA, rowB) => {
+                    if (rowA[compareIndex] === dataTypes.NULL) return 1;
+                    if (rowB[compareIndex] === dataTypes.NULL) return -1;
+                    const DateA = new Date(rowA[compareIndex]);
+                    const DateB = new Date(rowB[compareIndex]);
+                    return DateB.getTime() - DateA.getTime();
+                }));
+            }
+            break;     
+    }
+
     finalTable.table = sortedTable;
     return finalTable;
 }

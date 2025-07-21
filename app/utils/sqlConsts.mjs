@@ -7,6 +7,7 @@ export const sqlKeywords = {
     'LEFT_OUTER_JOIN' : 'LEFT OUTER JOIN',
     'RIGHT_OUTER_JOIN' : 'RIGHT OUTER JOIN',
     'FULL_OUTER_JOIN' : 'FULL OUTER JOIN',
+    'FULL_JOIN' : 'FULL JOIN',
     'FULL' : 'FULL',
     'OUTER' : 'OUTER', 
     'SELECT' : 'SELECT',
@@ -77,7 +78,10 @@ export const nextCompositeKeyWordsWord = {
     [sqlKeywords.LEFT + ' ' + sqlKeywords.OUTER] : {[sqlKeywords.JOIN] : true,},
     [sqlKeywords.RIGHT + ' ' + sqlKeywords.OUTER] : {[sqlKeywords.JOIN] : true,},
     [sqlKeywords.INNER] : {[sqlKeywords.JOIN] : true,},
-    [sqlKeywords.FULL] : {[sqlKeywords.OUTER] : true},
+    [sqlKeywords.FULL] : {
+        [sqlKeywords.OUTER] : true,
+        [sqlKeywords.JOIN] : true,
+    },
     [sqlKeywords.FULL + ' ' + sqlKeywords.OUTER] : {[sqlKeywords.JOIN] : true},
     [sqlKeywords.ORDER] : {[sqlKeywords.BY] : true},
 }
@@ -85,13 +89,14 @@ export const nextCompositeKeyWordsWord = {
 export const joinKeywords = {
     [sqlKeywords.LEFT_JOIN] : true,
     [sqlKeywords.INNER_JOIN] : true,
-    [sqlKeywords.FULL_OUTER_JOIN] : true,
+    [sqlKeywords.FULL_JOIN] : true,
 }
 
 export const equivalentKeywords = {
     [sqlKeywords.JOIN] : sqlKeywords.INNER_JOIN,
     [sqlKeywords.LEFT_OUTER_JOIN] : sqlKeywords.LEFT_JOIN,
     [sqlKeywords.RIGHT_OUTER_JOIN] : sqlKeywords.RIGHT_JOIN,
+    [sqlKeywords.FULL_OUTER_JOIN] : sqlKeywords.FULL_JOIN,
 }
 
 export const sqlConsts = {

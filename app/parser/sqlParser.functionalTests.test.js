@@ -613,3 +613,32 @@ describe(SqlParser.name, () => {
     expect(result).toBe('{"table":[["id","firstName","lastName","jobId","idManager"],["9","George","Clark","1","1"],["13","Kevin","Johnson","1","1"],["1","John","Doe","1","2"],["6","Alice","Smith","2","2"],["8","Emily","Jones","4","2"],["10","Hannah","Adams","2","2"],["14","Laura","Martinez","2","2"],["7","Charlie","Brown","3","3"],["11","Ivan","Petrov","3","3"],["15","Michael","Lee","3","3"],["12","Julia","Williams","4","4"],["2","Jane","Doe","2","null"],["3","Bob","Dylan","3","null"],["4","Cillian","Murphy","4","null"],["5","Jobless","Murphy","1","null"]],"tableName":"people-filtered"}')
   }) 
 })
+
+ describe(SqlParser.name, () => {
+  it("ORDER BY WITH A STRING -- 38", () => {
+    //ARRANGE
+    const query = 'select * from people full outer join job on people.jobId = job.id order by firstName ASC';
+    const tablesObj = structuredClone(testingData);
+
+    //ACT
+    const result = JSON.stringify(SqlParser(query, tablesObj));
+
+    //ASSERT
+    expect(result).toBe('{"table":[["id","firstName","lastName","jobId","idManager","id","occupation","idSalary"],["6","Alice","Smith","2","2","2","Plumber","2"],["3","Bob","Dylan","3","null","3","Bouncer","3"],["7","Charlie","Brown","3","3","3","Bouncer","3"],["4","Cillian","Murphy","4","null","4","Barman","1"],["8","Emily","Jones","4","2","4","Barman","1"],["9","George","Clark","1","1","1","Mason","1"],["10","Hannah","Adams","2","2","2","Plumber","2"],["11","Ivan","Petrov","3","3","3","Bouncer","3"],["2","Jane","Doe","2","null","2","Plumber","2"],["5","Jobless","Murphy","1","null","1","Mason","1"],["1","John","Doe","1","2","1","Mason","1"],["12","Julia","Williams","4","4","4","Barman","1"],["13","Kevin","Johnson","1","1","1","Mason","1"],["14","Laura","Martinez","2","2","2","Plumber","2"],["15","Michael","Lee","3","3","3","Bouncer","3"],["16","Nina","White","4","4","4","Barman","1"],["17","Oscar","Hall","1","1","1","Mason","1"],["18","Paul","Allen","2","2","2","Plumber","2"],["19","Queen","Moore","3","3","3","Bouncer","3"],["20","Rachel","Taylor","4","4","4","Barman","1"],["null","null","null","null","null","5","Electrician","2"],["null","null","null","null","null","6","Carpenter","3"],["null","null","null","null","null","7","Technician","2"],["null","null","null","null","null","8","Engineer","3"],["null","null","null","null","null","9","Mechanic","2"],["null","null","null","null","null","10","Painter","1"]],"tableName":"people-job-filtered"}')
+  }) 
+})
+
+ describe(SqlParser.name, () => {
+  it("ORDER BY WITH A DATE -- 38", () => {
+    //ARRANGE
+    const query = 'select * from commande order by createdAt DESC';
+    const tablesObj = structuredClone(testingData);
+
+    //ACT
+    const result = JSON.stringify(SqlParser(query, tablesObj));
+
+    //ASSERT
+    expect(result).toBe('{"table":[["id","userId","product","amount","createdAt"],["35","4","Laptop Bag","70.00","2023-11-20"],["34","3","Bluetooth Speaker","90.00","2023-11-19"],["33","2","Flash Drive","12.00","2023-11-18"],["32","1","Cable Organizer","15.00","2023-11-17"],["31","20","Router","85.00","2023-11-16"],["30","19","Smartwatch","210.00","2023-11-15"],["29","18","Mechanical Keyboard","130.00","2023-11-14"],["28","17","Gaming Mouse","65.00","2023-11-13"],["27","16","Portable Monitor","180.00","2023-11-12"],["26","15","Micro SD Card","20.00","2023-11-11"],["25","14","Laptop Stand","50.00","2023-11-10"],["24","13","Webcam","80.00","2023-11-09"],["23","12","Headphones","150.00","2023-11-08"],["22","11","Drawing Tablet","400.00","2023-11-07"],["21","10","Pen Pack","5.00","2023-11-06"],["20","9","Notebook","3.00","2023-11-05"],["19","8","Office Chair","250.00","2023-11-04"],["18","7","Desk","300.00","2023-11-03"],["17","6","RAM","60.00","2023-11-02"],["16","5","Power Supply","95.00","2023-11-01"],["15","2","Router","75.00","2023-10-30"],["14","1","SSD","110.00","2023-10-25"],["13","4","Graphics Tablet","340.00","2023-10-20"],["12","3","Microphone","130.00","2023-10-15"],["11","2","External HDD","90.00","2023-10-10"],["10","1","USB Hub","20.00","2023-10-03"],["9","4","Chair","150.00","2023-10-01"],["8","1","Desk Lamp","35.00","2023-09-12"],["7","3","Webcam","70.00","2023-09-05"],["6","2","Tablet","600.00","2023-09-01"],["5","4","Monitor","220.00","2023-08-15"],["4","3","Keyboard","45.00","2023-08-10"],["3","1","Mouse","25.50","2023-07-15"],["2","2","Phone","800.00","2023-07-01"],["1","1","Laptop","1200.00","2023-06-01"],["1","null","Laptop","1200.00","2023-06-01"]],"tableName":"commande-filtered"}')
+  }) 
+})
+

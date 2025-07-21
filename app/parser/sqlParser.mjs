@@ -1,5 +1,5 @@
-import { sqlLeftJoin, sqlInnerJoin, sqlFullOuterJoin, sqlSelect, sqlWhereCompareColumnToColumn, sqlWhereCompareHeaderToString, sqlWhereCompareStringToString, sqlOrderBy } from "./sql.logic/sqlFunctions.mjs";
-import { sqlConsts } from "../utils/appConsts.mjs";
+import { sqlLeftJoin, sqlInnerJoin, sqlFullJoin, sqlSelect, sqlWhereCompareColumnToColumn, sqlWhereCompareHeaderToString, sqlWhereCompareStringToString, sqlOrderBy } from "./sql.logic/sqlFunctions.mjs";
+import { sqlConsts } from "../utils/sqlConsts.mjs";
 import { cleanInput, splitQuery, tablesAliasesHandler, buildDescriptiveHeaders, turnRightJoinIntoLeftJoin, findEndIndexOfKeywordQuery, normalizeHeaders, findTableInTableArray, columnsHeadersAliasesHandler, applyHeadersAliases, paramIsDirectValueRepresentation, findQueryEndSymbol } from "./sqlParser.helper.mjs";
 
 export const SqlParser = (input, tables) => {
@@ -46,7 +46,7 @@ export const SqlParser = (input, tables) => {
     normalizeHeaders(finalTable);
 
     applyHeadersAliases(finalTable, selectedColumnsHeaderAliases)
-
+    console.log(finalTable);
     return finalTable;
 } 
 
@@ -67,8 +67,8 @@ const parseAllJoins = (sqlConsts, words, tables) => {
             case sqlKeywords.INNER_JOIN :
                 currIntermediaryTable = applySqlJoinQuery(sqlConsts, dataTypes, sqlInnerJoin, query, tables);
                 break;
-            case sqlKeywords.FULL_OUTER_JOIN :
-                currIntermediaryTable = applySqlJoinQuery(sqlConsts, dataTypes, sqlFullOuterJoin, query, tables);
+            case sqlKeywords.FULL_JOIN :
+                currIntermediaryTable = applySqlJoinQuery(sqlConsts, dataTypes, sqlFullJoin, query, tables);
                 break;
         }
         tables.push(currIntermediaryTable);
