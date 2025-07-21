@@ -629,7 +629,7 @@ describe(SqlParser.name, () => {
 })
 
  describe(SqlParser.name, () => {
-  it("ORDER BY WITH A DATE -- 38", () => {
+  it("ORDER BY WITH A DATE -- 39", () => {
     //ARRANGE
     const query = 'select * from commande order by createdAt DESC';
     const tablesObj = structuredClone(testingData);

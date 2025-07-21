@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { cleanInput, splitQuery, findTableInTableArray, findEndIndexOfKeywordQuery, _buildCompositeKeywords, cleanQueryInput, turnRightJoinIntoLeftJoin, tablesAliasesHandler } from './sqlParser.helper.mjs'
-import { sqlConsts, sqlKeywords, reservedKeyWords, sqlOperators, nextCompositeKeyWordsWord, multipleConditionnalKeyword, equivalentKeywords } from '../utils/appConsts.mjs';
+import { sqlConsts, sqlKeywords, reservedKeyWords, sqlOperators, nextCompositeKeyWordsWord, multipleConditionnalKeyword, equivalentKeywords } from '../utils/sqlConsts.mjs';
 
 const testingData = [{
         table: [
@@ -106,7 +106,7 @@ describe(findTableInTableArray.name, () => {
     const tableArr = [{tableName: 'hey'}, {tableName: 'hey'}, {tableName: 'test'}, {tableName: 'hey'}];
 
     //ACT
-    const result  = findTableInTableArray(name, tableArr);
+    const result  = findTableInTableArray(sqlConsts, name, tableArr);
 
     //ASSERT
     expect(result.tableName).toBe(name)
@@ -119,7 +119,7 @@ describe(findTableInTableArray.name, () => {
     //ACT
 
     //ASSERT
-    expect(() => findTableInTableArray(name, tableArr)).toThrow(`no table with name : ${name}`)
+    expect(() => findTableInTableArray(sqlConsts, name, tableArr)).toThrow(`No table with name : ${name}`)
   }) 
 })
 
@@ -248,7 +248,7 @@ describe(tablesAliasesHandler.name, () => {
     //ACT
 
     //ASSERT
-    expect(() => tablesAliasesHandler(sqlConsts, words, tables)).toThrowError("no table with name : brouette");
+    expect(() => tablesAliasesHandler(sqlConsts, words, tables)).toThrowError("No table with name : brouette");
   }) 
 })
 
@@ -261,7 +261,7 @@ describe(tablesAliasesHandler.name, () => {
     //ACT
 
     //ASSERT
-    expect(() => tablesAliasesHandler(sqlConsts, words, tables)).toThrowError("Invalid or absent alias for table : people");
+    expect(() => tablesAliasesHandler(sqlConsts, words, tables)).toThrowError("Invalid or absent alias for table with name : people");
   }) 
 })
 
@@ -274,7 +274,7 @@ describe(tablesAliasesHandler.name, () => {
     //ACT
 
     //ASSERT
-    expect(() => tablesAliasesHandler(sqlConsts, words, tables)).toThrowError("Invalid or absent alias for table : people");
+    expect(() => tablesAliasesHandler(sqlConsts, words, tables)).toThrowError("Invalid or absent alias for table with name : people");
   }) 
 })
 

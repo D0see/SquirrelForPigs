@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { inferDataType, compareData } from './sqlFunctions.helper.mjs';
-import { sqlOperators, sqlOperatorsJsEquivalent, dataTypes } from '../../utils/appConsts.mjs';
+import { sqlOperators, sqlOperatorsJsEquivalent, dataTypes, sqlConsts } from '../../utils/sqlConsts.mjs';
 
  describe(inferDataType.name, () => {
   it("should return dataTypes.NUMBER when the param string contains only digits", () => {
@@ -44,7 +44,7 @@ import { sqlOperators, sqlOperatorsJsEquivalent, dataTypes } from '../../utils/a
     //ACT
     
     //ASSERT
-    expect(() => compareData(dataTypes, sqlOperatorsJsEquivalent, equalOperator, data1, data2)).toThrowError('cant compare values of different types')
+    expect(() => compareData(sqlConsts, sqlOperatorsJsEquivalent, equalOperator, data1, data2)).toThrowError('cant compare values of different types')
   }) 
   it("should throw an error if the operator isnt valid", () => {
     //ARRANGE
@@ -54,7 +54,7 @@ import { sqlOperators, sqlOperatorsJsEquivalent, dataTypes } from '../../utils/a
     //ACT
     
     //ASSERT
-    expect(() => compareData(dataTypes, sqlOperatorsJsEquivalent, operator, data1, data2)).toThrowError('not a valid comparison operator')
+    expect(() => compareData(sqlConsts, sqlOperatorsJsEquivalent, operator, data1, data2)).toThrowError('not a valid comparison operator')
   }) 
   it("should return true if values are the same (dates) and operator is =", () => {
     //ARRANGE
@@ -62,7 +62,7 @@ import { sqlOperators, sqlOperatorsJsEquivalent, dataTypes } from '../../utils/a
     const equalOperator = sqlOperators.EQUAL;
 
     //ACT
-    const result = compareData(dataTypes, sqlOperatorsJsEquivalent, equalOperator, data1, data2)
+    const result = compareData(sqlConsts, sqlOperatorsJsEquivalent, equalOperator, data1, data2)
 
     //ASSERT
     expect(result).toBe(true)
@@ -73,7 +73,7 @@ import { sqlOperators, sqlOperatorsJsEquivalent, dataTypes } from '../../utils/a
     const equalOperator = sqlOperators.EQUAL;
 
     //ACT
-    const result = compareData(dataTypes, sqlOperatorsJsEquivalent, equalOperator, data1, data2)
+    const result = compareData(sqlConsts, sqlOperatorsJsEquivalent, equalOperator, data1, data2)
 
     //ASSERT
     expect(result).toBe(true)
@@ -84,7 +84,7 @@ import { sqlOperators, sqlOperatorsJsEquivalent, dataTypes } from '../../utils/a
     const equalOperator = sqlOperators.EQUAL;
 
     //ACT
-    const result = compareData(dataTypes, sqlOperatorsJsEquivalent, equalOperator, data1, data2)
+    const result = compareData(sqlConsts, sqlOperatorsJsEquivalent, equalOperator, data1, data2)
 
     //ASSERT
     expect(result).toBe(true)

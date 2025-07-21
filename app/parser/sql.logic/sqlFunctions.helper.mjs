@@ -38,20 +38,24 @@ const isPossibleColumnHeadWriting = (selectedColumnHead, header) => {
 }
 
 // ("columnHead", [...tables]) => colIndex
-export const getColumnHeadIndex = (selectedColumnHead, table) => {
+export const getColumnHeadIndex = (sqlConsts, selectedColumnHead, table) => {
+    const { sqlErrors } = sqlConsts;
+
     const result = [];
     for (const [colIndex, header] of table.table[0].entries()) {
         if (isPossibleColumnHeadWriting(selectedColumnHead, header)) result.push(colIndex);
     }
-    if (result.length > 1) throw new Error('Ambiguous column head : ' + `${selectedColumnHead}`);
-    if (result.length === 0) throw new Error('Couldnt find column head : ' + `${selectedColumnHead}`);
+    if (result.length > 1) throw sqlErrors.COLUMN_NAME_AMBIGUOUS(selectedColumnHead);
+    if (result.length === 0) throw sqlErrors.COLUMN_NOT_FOUND(selectedColumnHead);
     return result[0]; 
 }
 
 //#region Data comparison
 
 // TODO : refactor all -> rethink how you do types dummy
-export const compareData = (dataTypes, sqlOperatorsJsEquivalent, operator, data1, data2) => {
+export const compareData = (sqlConsts, sqlOperatorsJsEquivalent, operator, data1, data2) => {
+    const { dataTypes, sqlErrors } = sqlConsts;
+
     if (!data1 || !data2) return;
 
     const leftVal = {
@@ -77,9 +81,9 @@ export const compareData = (dataTypes, sqlOperatorsJsEquivalent, operator, data1
         return eval(`${leftVal.val}` + ` ${jsOperator} ` + `${rightVal.val}`);
     }
 
-    if (leftVal.type != rightVal.type) throw new Error('cant compare values of different types');
+    if (leftVal.type != rightVal.type) throw sqlErrors.DIFFERENT_VALUE_TYPES_COMPARISON(leftVal.type, rightVal.type);
 
-    if (!sqlOperatorsJsEquivalent[operator]) throw new Error('not a valid comparison operator');
+    if (!sqlOperatorsJsEquivalent[operator]) throw sqlErrors.INVALID_COMPARISON_OPERATOR(operator);
 
     switch(leftVal.type) {
         case dataTypes.NUMBER :
@@ -92,7 +96,7 @@ export const compareData = (dataTypes, sqlOperatorsJsEquivalent, operator, data1
 }
 
 export const inferDataType = (dataTypes, param) => {
-    if (param === 'null') {
+    if (param === dataTypes.NULL) {
         return dataTypes.NULL;
     } else if (!isNaN(param) && !['"','"'].includes(param[0]) && !['"','"'].includes(param[param.length - 1])) {
         return dataTypes.NUMBER;

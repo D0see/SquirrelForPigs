@@ -30,7 +30,7 @@ export const SqlParser = (input, tables) => {
     parseAllJoins(sqlConsts, queryBody, tables);
 
     //here query should look like => Select columnNames from finalTableName
-    let finalTable = findTableInTableArray(queryBody[queryBody.length - 1], tables);
+    let finalTable = findTableInTableArray(sqlConsts, queryBody[queryBody.length - 1], tables);
 
     whereClauses.forEach(whereClause => {
         finalTable = parseWhereClause(sqlConsts, whereClause, finalTable);
@@ -79,21 +79,21 @@ const parseAllJoins = (sqlConsts, words, tables) => {
 }
 
 const applySqlJoinQuery = (sqlConsts, dataTypes, sqlJoinMethodCallback, query, tables) => {
-    const table1 = findTableInTableArray(query[0], tables);
+    const table1 = findTableInTableArray(sqlConsts, query[0], tables);
     let tablesWithoutTable1 = tables;
     if (table1.alias) {
         tablesWithoutTable1 = tables.filter(table => table.alias != table1.alias);
     }
-    const table2 = findTableInTableArray(query[2], tablesWithoutTable1);
+    const table2 = findTableInTableArray(sqlConsts, query[2], tablesWithoutTable1);
     const resultTable = sqlJoinMethodCallback(sqlConsts, dataTypes, table1, table2, query[4], query[6], query[5]);
     return resultTable;
 }
 
 const parseSelect = (sqlConsts, words, tables) => {
-    const { sqlKeywords } = sqlConsts;
+    const { sqlKeywords, sqlErrors } = sqlConsts;
 
     const selectIndex = words.findIndex(word => word === sqlKeywords.SELECT);
-    if (selectIndex === -1) throw new Error(`missing ${sqlKeywords.SELECT} keyword"`);
+    if (selectIndex === -1) throw sqlErrors.MISSING_SELECT_KEYWORD();
 
     let lastElemIndex;
     for (const [index, word] of words.entries()) {
@@ -102,7 +102,7 @@ const parseSelect = (sqlConsts, words, tables) => {
         }
     }
     const selectedColumns = words.slice(selectIndex + 1, lastElemIndex);
-    const selectedFromTable = findTableInTableArray(words[lastElemIndex + 1], tables);
+    const selectedFromTable = findTableInTableArray(sqlConsts, words[lastElemIndex + 1], tables);
     return sqlSelect(sqlConsts, selectedColumns, selectedFromTable);
 }
 

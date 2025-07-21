@@ -106,19 +106,19 @@ export const findEndIndexOfKeywordQuery = (keywords, words, index) => {
 }
 
 export const tablesAliasesHandler = (sqlConsts, words, tables) => {
-    const { sqlKeywords, reservedKeyWords } = sqlConsts;
+    const { sqlKeywords, reservedKeyWords, sqlErrors } = sqlConsts;
     
     for (let i = 0; i < words.length; i++) {
         if (words[i] === sqlKeywords.ALIAS_ASSIGNEMENT) {
-            let table = findTableInTableArray(words[i - 1], tables);
+            let table = findTableInTableArray(sqlConsts, words[i - 1], tables);
             const alias = words[i + 1];
 
             //Error handling
-            if (!table) throw new Error(`No table with name : ${words[i - 1]}`);
-            if (!alias || reservedKeyWords[alias]) throw new Error(`Invalid or absent alias for table : ${table.tableName}`);
+            if (!table) throw sqlErrors.TABLE_NOT_FOUND(words[i + 1]);
+            else if (!alias || reservedKeyWords[alias]) throw sqlErrors.ALIAS_INVALID_OR_ABSENT(table.tableName);
             //Check for name conflict between specified alias and tables names and aliases
             const aliasOrNameCollidingTables = tables.filter(table => [table.tableName, table.alias].includes(alias));
-            if (aliasOrNameCollidingTables.length) throw new Error(`Name collision for alias : ${alias}`);
+            if (aliasOrNameCollidingTables.length) throw sqlErrors.ALIAS_NAME_COLLISION(alias);
 
             //Create new table if specified table already has an alias
             if (table.alias) {
@@ -152,10 +152,12 @@ export const findQueryEndSymbol = (sqlKeywords, openPar, input) => {
 //#endregion
 
 //#region RESULT TABLE FUNCS
-export const findTableInTableArray = (tableName, tableArr) => {
+export const findTableInTableArray = (sqlConsts, tableName, tableArr) => {
+    const { sqlErrors } = sqlConsts;
+
     const result = tableArr.filter(table => table.tableName === tableName || (table.alias ? table.alias === tableName : false));
-    if (result.length === 0) throw new Error(`no table with name : ${tableName}`);
-    if (result.length > 1) throw new Error(`ambiguous result for tableName : ${tableName}`);
+    if (result.length === 0) throw sqlErrors.TABLE_NOT_FOUND(tableName);
+    if (result.length > 1) throw sqlErrors.TABLE_NAME_AMBIGUOUS(tableName);
     return result[0];
 }
 

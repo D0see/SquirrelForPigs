@@ -58,6 +58,18 @@ export const sqlOperatorsJsEquivalent = {
     [sqlOperators.SUPERIOR_OR_EQUAL] : '>=',
 }
 
+export const sqlErrors = {
+    'TABLE_NOT_FOUND' : (tableName) => new Error(`No table with name : ${tableName}`),
+    'ALIAS_INVALID_OR_ABSENT' : (tableName) => new Error(`Invalid or absent alias for table with name : ${tableName}`),
+    'ALIAS_NAME_COLLISION' : (alias) => new Error(`Name collision for alias : ${alias}`),
+    'TABLE_NAME_AMBIGUOUS' : (tableName) => new Error(`ambiguous result for tableName : ${tableName}`),
+    'COLUMN_NAME_AMBIGUOUS' : (columnName) => new Error(`ambiguous result for columnName : ${columnName}`),
+    'COLUMN_NOT_FOUND' : (columnName) => new Error('Couldnt find column head : ' + `${columnName}`),
+    'MISSING_SELECT_KEYWORD' : () => new Error(`missing ${sqlKeywords.SELECT} keyword`),
+    'DIFFERENT_VALUE_TYPES_COMPARISON' : (type1, type2) => new Error(`cant compare values of different types ${type1}-${type2}`),
+    'INVALID_COMPARISON_OPERATOR' : (invalidOperator) => new Error(`${invalidOperator} is not a valid comparison operator`),
+}
+
 // AUTO GENERATED DO NOT TOUCH
 
 export const reservedKeyWords = Object.values(sqlKeywords).reduce((acc, val) => {
@@ -101,6 +113,7 @@ export const equivalentKeywords = {
 
 export const sqlConsts = {
     sqlKeywords,
+    sqlErrors,
     multipleConditionnalKeyword,
     dataTypes,
     sqlOperators,
