@@ -210,6 +210,30 @@ export const normalizeHeaders = (table) => {
 
 //#endregion
 
+//#region CLAUSES VALIDATION
+
+export const validateWhereClauses = (sqlConsts, whereClauses) => {
+    const { sqlKeywords, sqlOperatorsJsEquivalent, sqlErrors } = sqlConsts;
+    for (const clause of whereClauses) {
+        if (clause[0] !== sqlKeywords.WHERE) {
+            throw sqlErrors.MISSING_KEYWORD(clause[0]);
+        }
+        if (sqlKeywords[clause[1]]) {
+            throw sqlErrors.WRONGLY_PLACED_KEYWORD(clause[1])
+        }
+        if (!sqlOperatorsJsEquivalent[clause[2]]) {
+            throw sqlErrors.INVALID_COMPARISON_OPERATOR(clause[2]);
+        }
+        if (sqlKeywords[clause[3]]) {
+            throw sqlErrors.WRONGLY_PLACED_KEYWORD(clause[3])
+        }
+    }
+}
+
+
+
+//#endregion
+
 
 //#region UTILS
 
@@ -217,3 +241,4 @@ export const paramIsDirectValueRepresentation = (sqlConsts, param) => {
     const { dataTypes } = sqlConsts;
     return ((param.startsWith('"') && param.endsWith('"')) || (param.startsWith("'") && param.endsWith("'") || !isNaN(param) || param === dataTypes.NULL));
 }
+

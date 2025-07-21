@@ -65,9 +65,10 @@ export const sqlErrors = {
     'TABLE_NAME_AMBIGUOUS' : (tableName) => new Error(`ambiguous result for tableName : ${tableName}`),
     'COLUMN_NAME_AMBIGUOUS' : (columnName) => new Error(`ambiguous result for columnName : ${columnName}`),
     'COLUMN_NOT_FOUND' : (columnName) => new Error('Couldnt find column head : ' + `${columnName}`),
-    'MISSING_SELECT_KEYWORD' : () => new Error(`missing ${sqlKeywords.SELECT} keyword`),
+    'MISSING_KEYWORD' : (keyword) => new Error(`missing ${keyword} keyword`),
     'DIFFERENT_VALUE_TYPES_COMPARISON' : (type1, type2) => new Error(`cant compare values of different types ${type1}-${type2}`),
     'INVALID_COMPARISON_OPERATOR' : (invalidOperator) => new Error(`${invalidOperator} is not a valid comparison operator`),
+    'WRONGLY_PLACED_KEYWORD' : (keyword) => new Error(`${keyword} is placed at the wrong place`),
 }
 
 // AUTO GENERATED DO NOT TOUCH
@@ -121,5 +122,5 @@ export const sqlConsts = {
     reservedKeyWords,
     nextCompositeKeyWordsWord,
     joinKeywords,
-    equivalentKeywords
+    equivalentKeywords,
 }
