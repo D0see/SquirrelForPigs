@@ -59,6 +59,10 @@ export const sqlOperatorsJsEquivalent = {
 }
 
 export const sqlErrors = {
+    'MISSING_TABLE_NAME_AFTER' : (precedingKeyword) => new Error(`expected a table name after ${precedingKeyword}`),
+    'MISSING_VALUE_AFTER' : (precedingKeyword) => new Error(`expected a value after ${precedingKeyword}`),
+    'MISSING_OPERATOR_AFTER' : (precedingValue) => new Error(`expected an operator after ${precedingValue}`),
+    'MISSING_COLUMN_NAME_AFTER' : (precedingKeyword) => new Error(`expected a column name after ${precedingKeyword}`),
     'TABLE_NOT_FOUND' : (tableName) => new Error(`No table with name : ${tableName}`),
     'ALIAS_INVALID_OR_ABSENT' : (tableName) => new Error(`Invalid or absent alias for table with name : ${tableName}`),
     'ALIAS_NAME_COLLISION' : (alias) => new Error(`Name collision for alias : ${alias}`),
@@ -69,6 +73,8 @@ export const sqlErrors = {
     'DIFFERENT_VALUE_TYPES_COMPARISON' : (type1, type2) => new Error(`cant compare values of different types ${type1}-${type2}`),
     'INVALID_COMPARISON_OPERATOR' : (invalidOperator) => new Error(`${invalidOperator} is not a valid comparison operator`),
     'WRONGLY_PLACED_KEYWORD' : (keyword) => new Error(`${keyword} is placed at the wrong place`),
+    'EXPECTED' : (expected, received) => new Error(`expected ${expected} instead received ${received}`),
+    'WRONG_DATATYPE' : (expected, received) => new Error(`expected value of dataType ${expected} instead received value ${received}`),
 }
 
 // AUTO GENERATED DO NOT TOUCH
@@ -77,7 +83,7 @@ export const reservedKeyWords = Object.values(sqlKeywords).reduce((acc, val) => 
         acc[val] = true;
         return acc;
     }, {});
-reservedKeyWords[sqlKeywords.multipleConditionnalKeyword] = true;
+reservedKeyWords[multipleConditionnalKeyword] = true;
 
 export const nextCompositeKeyWordsWord = {
     [sqlKeywords.LEFT] : {

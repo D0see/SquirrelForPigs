@@ -1,5 +1,8 @@
 //#region INPUT HANDLING
 
+import { sqlConsts } from "../utils/sqlConsts.mjs";
+import { inferDataType } from "./sql.logic/sqlFunctions.helper.mjs";
+
 const buildCompositeKeywords = (nextCompositeKeyWordsWord, words) => {
     for (let i = 0; i < words.length; i++) {
         if (nextCompositeKeyWordsWord[words[i]] && nextCompositeKeyWordsWord[words[i]][words[i + 1]]) {
@@ -65,20 +68,21 @@ export const splitQuery = (sqlConsts, query) => {
     if (whereClause.length) whereClauses = buildMultipleWhereClauses(sqlKeywords, multipleConditionnalKeyword, whereClause);
     let orderByClause = query.slice(orderByIndex, limitIndex);
     let limitClause = query.slice(limitIndex);
-
     return [queryBody, whereClauses, orderByClause, limitClause];
 }
 
 const buildMultipleWhereClauses = (sqlKeywords, multipleConditionnalKeyword, inputArr) => {
     const result = [];
-    let start = 0;
-    for (let i = 1; i < inputArr.length; i++) {
-        if (multipleConditionnalKeyword === inputArr[i]) {
-            result.push([sqlKeywords.WHERE, ...inputArr.slice(start + 1, i)]);
-            start = i;
+    let temp = [];
+    for (let i = 0; i < inputArr.length; i++) {
+        if (inputArr[i] === multipleConditionnalKeyword) {
+            result.push(structuredClone(temp));
+            temp = [sqlKeywords.WHERE];
+            continue;
         }
-        if (i === inputArr.length - 1) result.push([sqlKeywords.WHERE, ...inputArr.slice(start + 1)]);
+        temp.push(inputArr[i]);
     }
+    if (temp.length) result.push(structuredClone(temp));
     return result;
 }
 
@@ -212,14 +216,42 @@ export const normalizeHeaders = (table) => {
 
 //#region CLAUSES VALIDATION
 
+export const validateQueryBody = (sqlConsts, query) => {
+    const { sqlKeywords, reservedKeyWords, sqlErrors } = sqlConsts;
+    if (query[0] !== sqlKeywords.SELECT) {
+        throw sqlErrors.MISSING_KEYWORD(sqlKeywords.SELECT);
+    }
+    let i = 1;
+    for (i; i < query.length; i++) {
+        if (query[i] === sqlKeywords.FROM) break;
+        if (i === query.length -1) {
+            sqlErrors.MISSING_KEYWORD(sqlKeywords.FROM);
+        }
+    }
+    if (!query[i + 1]) {
+        throw sqlErrors.MISSING_TABLE_NAME_AFTER(sqlKeywords.FROM);
+    }
+    if (reservedKeyWords[query[i + 1]]) {
+        throw sqlErrors.WRONGLY_PLACED_KEYWORD(query[i + 1]);
+    }
+
+
+}
+
 export const validateWhereClauses = (sqlConsts, whereClauses) => {
-    const { sqlKeywords, sqlOperatorsJsEquivalent, sqlErrors } = sqlConsts;
-    for (const clause of whereClauses) {
+    const { sqlKeywords, sqlOperatorsJsEquivalent, multipleConditionnalKeyword, sqlErrors } = sqlConsts;
+    for (const [index, clause] of whereClauses.entries()) {
         if (clause[0] !== sqlKeywords.WHERE) {
-            throw sqlErrors.MISSING_KEYWORD(clause[0]);
+            throw sqlErrors.MISSING_KEYWORD(sqlKeywords.WHERE);
+        }
+        if (!clause[1]) {
+            throw sqlErrors.MISSING_VALUE_AFTER(index ? multipleConditionnalKeyword : sqlKeywords.WHERE)
         }
         if (sqlKeywords[clause[1]]) {
             throw sqlErrors.WRONGLY_PLACED_KEYWORD(clause[1])
+        }
+        if (!clause[2]) {
+            throw sqlErrors.MISSING_OPERATOR_AFTER(`${clause[1]}`)
         }
         if (!sqlOperatorsJsEquivalent[clause[2]]) {
             throw sqlErrors.INVALID_COMPARISON_OPERATOR(clause[2]);
@@ -227,10 +259,45 @@ export const validateWhereClauses = (sqlConsts, whereClauses) => {
         if (sqlKeywords[clause[3]]) {
             throw sqlErrors.WRONGLY_PLACED_KEYWORD(clause[3])
         }
+        if (!clause[3]) {
+            throw sqlErrors.MISSING_VALUE_AFTER(`${clause[2]}`)
+        }
     }
 }
 
+export const validateOrderByClause = (sqlConsts, clause) => {
+    const { sqlKeywords, sqlErrors } = sqlConsts;
+    if (!clause.length) return
+    if (clause[0] !== sqlKeywords.ORDER_BY) {
+        throw sqlErrors.MISSING_KEYWORD(sqlKeywords.ORDER_BY);
+    }
+    if (!clause[1]) {
+        throw sqlErrors.MISSING_COLUMN_NAME_AFTER(sqlKeywords.ORDER_BY);
+    }
+    if (sqlKeywords[clause[1]]) {
+        throw sqlErrors.WRONGLY_PLACED_KEYWORD(clause[1])
+    }
+    if (sqlKeywords[clause[2]] && (clause[2] !== sqlKeywords.ASC && clause[2] !== sqlKeywords.DESC)) {
+        throw sqlErrors.EXPECTED(`${sqlKeywords.ASC}, ${sqlKeywords.DESC}`, clause[2]);
+    }
+}
 
+export const validateLimitClause = (sqlConsts, clause) => {
+    const { sqlKeywords, dataTypes, sqlErrors } = sqlConsts;
+    if (!clause.length) return
+    if (clause[0] !== sqlKeywords.LIMIT) {
+        throw sqlErrors.MISSING_KEYWORD(sqlKeywords.LIMIT);
+    }
+    if (!clause[1]) {
+        throw sqlErrors.MISSING_VALUE_AFTER(sqlKeywords.LIMIT);
+    }
+    if (sqlKeywords[clause[1]]) {
+        throw sqlErrors.WRONGLY_PLACED_KEYWORD(clause[1])
+    }
+    if (isNaN(clause[1]) || ['"','"'].includes(clause[1][0]) || ['"','"'].includes(clause[1][clause[1].length - 1])) {
+        throw sqlErrors.WRONG_DATATYPE(dataTypes.NUMBER, clause[1]);
+    }
+}
 
 //#endregion
 

@@ -1,6 +1,6 @@
 import { sqlLeftJoin, sqlInnerJoin, sqlFullJoin, sqlSelect, sqlWhereCompareColumnToColumn, sqlWhereCompareHeaderToString, sqlWhereCompareStringToString, sqlOrderBy } from "./sql.logic/sqlFunctions.mjs";
 import { sqlConsts } from "../utils/sqlConsts.mjs";
-import { cleanInput, splitQuery, tablesAliasesHandler, buildDescriptiveHeaders, turnRightJoinIntoLeftJoin, findEndIndexOfKeywordQuery, normalizeHeaders, findTableInTableArray, columnsHeadersAliasesHandler, applyHeadersAliases, paramIsDirectValueRepresentation, findQueryEndSymbol, validateWhereClauses } from "./sqlParser.helper.mjs";
+import { cleanInput, splitQuery, tablesAliasesHandler, buildDescriptiveHeaders, turnRightJoinIntoLeftJoin, findEndIndexOfKeywordQuery, normalizeHeaders, findTableInTableArray, columnsHeadersAliasesHandler, applyHeadersAliases, paramIsDirectValueRepresentation, findQueryEndSymbol, validateWhereClauses, validateOrderByClause, validateLimitClause, validateQueryBody } from "./sqlParser.helper.mjs";
 
 export const SqlParser = (input, tables) => {
     
@@ -13,7 +13,11 @@ export const SqlParser = (input, tables) => {
 
     //TODO :here i should validate the clauses
     console.log(queryBody, whereClauses, orderByClause, limitClause);
+    //throws error if invalid
+    validateQueryBody(sqlConsts, queryBody);
     validateWhereClauses(sqlConsts, whereClauses);
+    validateOrderByClause(sqlConsts, orderByClause);
+    validateLimitClause(sqlConsts, limitClause);
 
     //saves aliases for selected columns, remove them from the query
     const selectedColumnsHeaderAliases = columnsHeadersAliasesHandler(sqlConsts, queryBody);
