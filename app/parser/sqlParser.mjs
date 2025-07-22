@@ -1,6 +1,6 @@
 import { sqlLeftJoin, sqlInnerJoin, sqlFullJoin, sqlSelect, sqlWhereCompareColumnToColumn, sqlWhereCompareHeaderToString, sqlWhereCompareStringToString, sqlOrderBy } from "./sql.logic/sqlFunctions.mjs";
 import { sqlConsts } from "../utils/sqlConsts.mjs";
-import { cleanInput, splitQuery, tablesAliasesHandler, buildDescriptiveHeaders, turnRightJoinIntoLeftJoin, findEndIndexOfKeywordQuery, normalizeHeaders, findTableInTableArray, columnsHeadersAliasesHandler, applyHeadersAliases, paramIsDirectValueRepresentation, findQueryEndSymbol, validateWhereClauses, validateOrderByClause, validateLimitClause, validateQueryBody } from "./sqlParser.helper.mjs";
+import { cleanInput, splitQuery, tablesAliasesHandler, buildDescriptiveHeaders, turnRightJoinIntoLeftJoin, findEndIndexOfKeywordQuery, normalizeHeaders, findTableInTableArray, columnsHeadersAliasesHandler, applyHeadersAliases, paramIsDirectValueRepresentation, findQueryEndSymbol, validateQueries } from "./sqlParser.helper.mjs";
 
 export const SqlParser = (input, tables) => {
     
@@ -11,20 +11,15 @@ export const SqlParser = (input, tables) => {
 
     const [queryBody, whereClauses, orderByClause, limitClause] = splitQuery(sqlConsts, query);
 
-    //TODO :here i should validate the clauses
-    console.log(queryBody, whereClauses, orderByClause, limitClause);
-    //throws error if invalid
-    validateQueryBody(sqlConsts, queryBody);
-    validateWhereClauses(sqlConsts, whereClauses);
-    validateOrderByClause(sqlConsts, orderByClause);
-    validateLimitClause(sqlConsts, limitClause);
-
     //saves aliases for selected columns, remove them from the query
     const selectedColumnsHeaderAliases = columnsHeadersAliasesHandler(sqlConsts, queryBody);
 
     //updates tables aliases in place and remove them for the query  
     tablesAliasesHandler(sqlConsts, queryBody, tables);
 
+    //throws specific error if invalid
+    validateQueries(sqlConsts, queryBody, whereClauses, orderByClause, limitClause);
+    
     //updates tables headers in place based on their aliases and names (table.Name : a, table.alias : b => header.a.b)
     buildDescriptiveHeaders(tables);
 
