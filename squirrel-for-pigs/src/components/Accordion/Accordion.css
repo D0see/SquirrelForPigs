@@ -1,0 +1,12 @@
+.accordion {
+  border: solid var(--color-primary);
+  border-width: 2px 2px 0 2px;
+  border-radius: 0px;
+  overflow: hidden;
+  margin-bottom: 1em;
+  width: 100%;
+}
+
+.open-accordion {
+  border-width: 2px;
+}

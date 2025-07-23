@@ -17,7 +17,7 @@
 
 :root {
   --color-primary: #9BD0E1;
-  --color-dark: #0F0F21;
+  --color-dark: rgb(15, 15, 33);
 }
 
 body {

@@ -1,16 +1,21 @@
-.btn {
+.accordion-header {
   display: flex;
   padding: 8px;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   gap: 8px;
-  border: 2px solid var(--color-primary);
+  border-bottom: 2px solid var(--color-primary);
   color: var(--color-primary); 
   background-color: transparent;
   cursor: pointer;
+  font-size: 1.5em;
 }
 
-.btn:hover {
+.accordion-header:hover {
   background-color: var(--color-primary);
   color: var(--color-dark);
+}
+
+.icon {
+  fill: inherit !important;
 }

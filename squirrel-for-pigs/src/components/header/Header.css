@@ -11,7 +11,7 @@
   width: 24px;
   height: 24px;
   flex-shrink: 0; 
-  color: black;
+  color: var(--color-dark);
 }
 
 .sectionHeader .label  {
