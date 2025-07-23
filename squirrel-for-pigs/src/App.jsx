@@ -1,8 +1,7 @@
 import { useState } from 'react'
 import QueryEntry from './components/queryEntry/QueryEntry.jsx'
 import Button from './components/button/Button.jsx'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import Header from './components/header/header.jsx'
 import './App.css'
 
 function App() {
@@ -11,8 +10,9 @@ function App() {
   return (
     <>
       <QueryEntry/>
-      <Button name={'Submit'} hasIcon={true}/>
-      <Button name={'Submit'} hasIcon={false}/>
+      <Button text={'Submit'} hasIcon={true}/>
+      <Button text={'Submit'} hasIcon={false}/>
+      <Header label={'testlabel'} hasIcon={true}/>
     </>
   )
 }

@@ -1,7 +1,15 @@
 import React from 'react'
+import Logo from '../../assets/icons/book.svg?react'
 
-export default function header({text}) {
+import './Header.css'
+
+export default function Header({label, hasIcon}) {
   return (
-    <div>{text}</div>
+    <div className='sectionHeader'>
+        {hasIcon &&
+        <Logo className='icon'/>
+        }
+        <div className='text-header label'>{label}</div>
+    </div>
   )
 }
