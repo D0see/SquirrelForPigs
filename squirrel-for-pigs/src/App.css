@@ -1,0 +1,45 @@
+/* ═══════════════════════════
+   SETUP 
+   ═══════════════════════════ */
+
+/* ⎼⎼⎼ FONTS ⎼⎼⎼ */
+
+@import url('https://fonts.googleapis.com/css2?family=Jersey+10&display=swap');
+@font-face {
+  font-family: 'Minitel';
+  src: url('./assets/fonts/Minitel.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ⎼⎼⎼ COLORS ⎼⎼⎼ */
+
+:root {
+  --color-primary: #9BD0E1;
+  --color-dark: #0F0F21;
+}
+
+body {
+  background-color: var(--color-dark);
+}
+
+/* ⎼⎼⎼ TEXT STYLES ⎼⎼⎼ */
+
+.text-body {
+font-family: 'Minitel';
+font-size: 14px;
+font-style: normal;
+font-weight: normal;
+line-height: normal;
+color: var(--color-primary);
+}
+
+.text-header {
+font-family: 'jersey 10', sans-serif;
+font-style: normal;
+font-weight: normal;
+line-height: normal;
+color: var(--color-dark);
+margin: 0px;
+}

@@ -1,0 +1,123 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* ///////////////////////////
+   ///////////////////////////              INPUT AREA 
+   ///////////////////////////*/
+
+body {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border: 1px solid red;
+    width: 100%; 
+    height: 100%;
+    align-content: space-between;
+}
+
+#sqlQueryContainer {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    margin: 0 auto;
+    padding: 1%;
+    height: 50%;
+    width: 60%;
+    border: 1px solid orange;
+}
+
+#sqlQueryEntry {
+    position: relative;
+    margin: 12px auto;
+    border: 1px solid red;
+    width: 75%;
+}
+
+#errorMessage {
+    color: red;
+}
+
+#sqlQuerySubmitButton {
+    width:25%;
+    margin: 0 auto;
+}
+
+#queryResultVisualizer {
+    display: flex;
+    justify-content: center;
+    width: 60%;
+    margin: 0 auto;
+    border: 1px solid green;
+}
+
+/* ///////////////////////////
+   ///////////////////////////              TABLE STYLES 
+   ///////////////////////////*/
+
+/* queryResult */
+
+.queryResult table {
+    max-width: 75%;
+    min-width: 50%;
+}
+
+.queryResult caption {
+    padding: 5px;
+    text-transform: uppercase;
+}
+
+.queryResult thead {
+    background-color: darkgray;
+}
+
+.queryResult tbody {
+
+}
+
+.queryResult th {
+    padding: 10px;
+}
+
+.queryResult tr {
+    
+}
+
+.queryResult td {
+    background-color: lightgrey;
+    text-align: center;
+    padding: 5px;
+}
+
+/* tableDisplay */
+
+.tableDisplay-table {
+
+}
+
+.tableDisplay-caption {
+
+}
+
+.tableDisplay-thead {
+
+}
+
+.tableDisplay-tbody {
+
+}
+
+.tableDisplay-th {
+
+}
+
+.tableDisplay-tr {
+    
+}
+
+.tableDisplay-td {
+
+}
