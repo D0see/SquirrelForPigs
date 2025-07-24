@@ -9,7 +9,7 @@ export default function Header({label, hasIcon}) {
         {hasIcon &&
         <Logo className='icon'/>
         }
-        <div className='text-header label'>{label}</div>
+        <h2 className='text-header label'>{label}</h2>
     </div>
   )
 }

@@ -5,16 +5,20 @@ import DownArrow from '../../assets/icons/down-arrow.svg?react'
 import UpArrow from '../../assets/icons/up-arrow.svg?react'
 
 
-export default function AccordionHeader({text, isOpened, onClick, hugContent}) {
+export default function AccordionHeader({Icon, text, isOpened, onClick, hugContent}) {
   return (
-    <div className='accordion-header text-body' onClick={onClick}>
-        {text}
+    <div className='accordion-header text-header' onClick={onClick}>
+      <div className='left-content'>
+        {Icon ?
+        <Icon/> :''
+        }
+        <h2>{text}</h2>
+      </div>
         {
           isOpened ?
-          (<UpArrow className='icon'/>):
-          (<DownArrow className='icon'/>)
+          (<UpArrow className='arrow'/>):
+          (<DownArrow className='arrow'/>)
         }
-        
     </div>
   )
 }

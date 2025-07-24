@@ -32,14 +32,17 @@ font-size: 14px;
 font-style: normal;
 font-weight: normal;
 line-height: normal;
-color: var(--color-primary);
 }
 
 .text-header {
 font-family: 'jersey 10', sans-serif;
 font-style: normal;
 font-weight: normal;
-line-height: normal;
-color: var(--color-dark);
+line-height: 0;
 margin: 0px;
+}
+
+h2 {
+  font-size: 1.5em;
+  color: inherit;
 }

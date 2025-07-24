@@ -1,0 +1,53 @@
+/* --- RESULT TABLES --- */
+
+/* Pour le wrapper, au cas ou le tableau déborde */
+.table-wrapper {
+  overflow-x: auto;
+}
+
+/* Style du tableau */
+.componentTable {
+  width: 100%;
+  border-collapse: collapse;
+  border: 2px solid var(--color-primary);
+  overflow: hidden;
+}
+
+/* En-têtes */
+.componentTable thead th{
+  background-color: var(--color-primary);
+  color: var(--color-dark);
+  padding: 8px 8px;
+  text-align: left;
+  font-family: 'jersey 10', sans-serif;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: normal;
+  line-height: normal;
+  margin: 0px;
+}
+
+/* Cells */
+.componentTable td {
+  padding: 12px 8px;
+  font-family: 'Minitel';
+  font-size: 14px;
+  font-style: normal;
+  font-weight: normal;
+  line-height: normal;
+  color: var(--color-primary);
+  
+}
+
+/* pas de séparations horizontales */
+.componentTable tr {
+  border: none;
+}
+
+.componentTable thead .dataNumber {
+  text-align: end;
+}
+
+.dataNumber {
+  text-align: end;
+}
