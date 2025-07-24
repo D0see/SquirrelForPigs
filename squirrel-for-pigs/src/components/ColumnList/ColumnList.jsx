@@ -1,10 +1,12 @@
 import React from 'react'
 import TableColumn from '../TableColumn/TableColumn'
 
-export default function ColumnList({columns}) {
+import './ColumnList.css'
+
+export default function ColumnList({columns, columnDetails}) {
   return (
     <>
-    {columns.map((val, index) => <TableColumn key={index} name={val} />)} 
+    {columns.map((val, index) => <TableColumn detail={columnDetails[index]} key={index} name={val} />)} 
     </>
   )
 }

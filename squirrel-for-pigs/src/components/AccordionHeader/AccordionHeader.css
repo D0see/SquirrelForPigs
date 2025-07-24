@@ -5,6 +5,9 @@
   align-items: center;
   gap: 8px;
   border: 2px solid var(--color-primary);
+  border-top: 0px;
+  border-left: 0px;
+  border-right: 0px;
   color: var(--color-primary); 
   background-color: transparent;
   cursor: pointer;

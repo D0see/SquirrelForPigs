@@ -5,4 +5,5 @@
   align-items: center;
   padding: 8px;
   gap: 8px;
+  color: var(--color-primary)
 }

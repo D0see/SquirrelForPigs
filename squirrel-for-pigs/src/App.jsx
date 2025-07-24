@@ -24,9 +24,9 @@ function App() {
       <Header label={'header'} hasIcon={true} hasRightIcon={true}/>
       <br/>
 
-      {testingJson.tables.map(table => {
-        return <Accordion Icon={TableIcon} header={table.tableName}>
-        <ColumnList columns={table.table[0]}/>
+      {testingJson.tables.map((table, index) => {
+        return <Accordion key={'table ' + index} Icon={TableIcon} header={table.tableName}>
+        <ColumnList columnDetails={table.columnDetails} columns={table.table[0]}/>
       </Accordion>
       })}
       <ResultTable table={testingJson.expectedResult.table}/>
