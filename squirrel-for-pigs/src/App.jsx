@@ -8,6 +8,7 @@ import Accordion from './components/Accordion/Accordion.jsx'
 import ColumnList from './components/ColumnList/ColumnList.jsx'
 
 import TableIcon from './assets/icons/Table.svg?react' 
+import BookIcon from './assets/icons/book.svg?react'
 
 import testingJson from '../data/testingJson.json'
 import ResultTable from './components/ResultTable/ResultTable.jsx'
@@ -18,11 +19,14 @@ function App() {
   return (
     <>
       <QueryEntry/>
+      <br/>
       <Button text={'Submit'}/>
-      <AccordionHeader text={'People'} hasRightIcon={true} isOpened={false} hugContent={true}/>
-      <AccordionHeader text={'Job'} hasRightIcon={true} isOpened={true} hugContent={true}/>
+      <br/>
       <Header label={'header'} hasIcon={true} hasRightIcon={true}/>
       <br/>
+      <Accordion Icon={BookIcon} header={'Instructions'}>
+        <p className='text-body'>select all people from people</p>
+      </Accordion>
 
       {testingJson.tables.map((table, index) => {
         return <Accordion key={'table ' + index} Icon={TableIcon} header={table.tableName}>

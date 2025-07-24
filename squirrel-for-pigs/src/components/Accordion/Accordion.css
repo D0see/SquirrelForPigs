@@ -10,3 +10,8 @@
 .open-accordion {
   border-width: 2px;
 }
+
+.accordion p{
+  color : var(--color-primary);
+  margin : 8px
+}

@@ -5,6 +5,7 @@
   align-items: center;
   gap: 8px;
   background-color: var(--color-primary);
+  color: var(--color-dark);
 }
 
 .sectionHeader .icon {
