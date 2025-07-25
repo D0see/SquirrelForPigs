@@ -11,11 +11,13 @@ import TableIcon from './assets/icons/Table.svg?react'
 import BookIcon from './assets/icons/book.svg?react'
 
 import testingJson from '../data/testingJson.json'
+import level1 from '../data/level1.json'
 import ResultTable from './components/ResultTable/ResultTable.jsx'
 import AlertBar from './components/AlertBar/AlertBar.jsx'
 
 function App() {
   const [count, setCount] = useState(0);
+  console.log("hey", level1)
 
   return (
     <>
@@ -23,20 +25,26 @@ function App() {
       <br/>
       <AlertBar state={'success'} errorMessage={''}/>
       <br/>
+      <AlertBar state={'waiting'} errorMessage={''}/>
+      <br/>
+      <AlertBar state={'error'} errorMessage={''}/>
+      <br/>
+      <AlertBar state={'warning'} errorMessage={''}/>
+      <br/>
       <Button text={'Submit'}/>
       <br/>
       <Header label={'header'} hasIcon={true} hasRightIcon={true}/>
       <br/>
       <Accordion Icon={BookIcon} header={'Instructions'}>
-        <p className='text-body'>show all people firstName and last Name informations</p>
+        <p className='text-body'>{level1.instruction}</p>
       </Accordion>
 
-      {testingJson.tables.map((table, index) => {
+      {level1.tables.map((table, index) => {
         return <Accordion key={'table ' + index} Icon={TableIcon} header={table.tableName}>
         <ColumnList columnDetails={table.columnDetails} columns={table.table[0]}/>
       </Accordion>
       })}
-      <ResultTable table={testingJson.expectedResult.table}/>
+      <ResultTable table={level1.tables[0].table}/>
     </>
   )
 }
