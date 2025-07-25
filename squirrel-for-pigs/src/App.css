@@ -57,6 +57,9 @@ h2 {
 /* APP */
 
 .app-container {
+  margin-top: 5%;
+  min-height: 90vh;
+  height: 100%;
   display: flex;
   flex-direction: row;
   gap: 8px;
@@ -65,15 +68,20 @@ h2 {
 .database-container {
   display: flex;
   flex-direction: column;
+  width: 20vw;
   gap: 8px;
 }
 
 .query-container {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
 .main-container {
   display: flex;
   flex-direction: column;
+  width: 65vw;
   gap: 8px;
 }
 

@@ -25,7 +25,7 @@ function App() {
       <div className='app-container'>
         <div className='database-container'>
           <Header label={'Database'} Icon={Database}/>
-          {level1.tables.map((table, index) => {
+          {testingJson.tables.map((table, index) => {
             return <Accordion key={'table ' + index} Icon={TableIcon} header={table.tableName}>
             <ColumnList columnDetails={table.columnDetails} columns={table.table[0]}/>
           </Accordion>
@@ -33,7 +33,7 @@ function App() {
         </div>
         <div className='main-container'>
           <Accordion Icon={BookIcon} header={'Instructions'}>
-            <p className='text-body'>{level1.instruction}</p>
+            <p className='text-body'>{testingJson.instruction}</p>
           </Accordion>
           <Header label={'Query'} Icon={Notepad}/>
           <div className='query-container'>
@@ -44,7 +44,7 @@ function App() {
             </div>
           </div>
           <Header label={'Result'} Icon={Flag}/>
-          <ResultTable table={level1.tables[0].table}/>
+          <ResultTable table={testingJson.tables[0].table}/>
         </div>
       </div>
 
