@@ -1,0 +1,73 @@
+/* ⎼⎼⎼ Alert ⎼⎼⎼ */
+
+.alert {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border: 2px solid transparent;
+  flex: 1;
+}
+
+.alert .icon {
+  width: 24px;  
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.alert .label {
+  flex: 1 0 0;
+  display: block;
+  font-family: 'Minitel';
+  font-size: 14px;
+}
+
+/* Pour l'alert success qui doit contenir l'alert + un bouton */
+.alertwrapper {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  align-items: stretch; /* pour que le bouton prenne la même hauteur */
+  overflow: hidden;
+}
+
+/* Bouton next(affiché que pour "success") */
+.alert-btn {
+  background-color: var(--success);
+  border: 1px solid var(--success);
+  border-width: 1px 1px 1px 0px;
+  color: var(--color-dark);
+  font-size: 14px;
+  cursor: pointer;
+  padding: 4px 8px;
+  font-weight: 600;
+}
+
+.alert-btn:hover {
+  background-color: var(--success-dark);
+  border: 1px solid var(--success);
+  border-width: 1px 1px 1px 0px;
+  color: var(--color-dark);
+}
+
+/* Colorshemes des états */
+
+.alert[data-type="success"] {
+  border-color: var(--success);
+  color: var(--success);
+}
+
+.alert[data-type="error"] {
+  border-color: var(--error);
+  color: var(--error);
+}
+
+.alert[data-type="warning"] {
+  border-color: var(--warning);
+  color: var(--warning);
+}
+
+.alert[data-type="waiting"] {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}

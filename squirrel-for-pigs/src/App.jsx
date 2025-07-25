@@ -2,7 +2,7 @@ import { useState } from 'react'
 import QueryEntry from './components/QueryEntry/QueryEntry.jsx'
 import Button from './components/button/Button.jsx'
 import Header from './components/header/header.jsx'
-import AccordionHeader from './components/AccordionHeader/AccordionHeader.jsx'
+
 import './App.css'
 import Accordion from './components/Accordion/Accordion.jsx'
 import ColumnList from './components/ColumnList/ColumnList.jsx'
@@ -12,6 +12,7 @@ import BookIcon from './assets/icons/book.svg?react'
 
 import testingJson from '../data/testingJson.json'
 import ResultTable from './components/ResultTable/ResultTable.jsx'
+import AlertBar from './components/AlertBar/AlertBar.jsx'
 
 function App() {
   const [count, setCount] = useState(0);
@@ -20,12 +21,14 @@ function App() {
     <>
       <QueryEntry/>
       <br/>
+      <AlertBar state={'success'} errorMessage={''}/>
+      <br/>
       <Button text={'Submit'}/>
       <br/>
       <Header label={'header'} hasIcon={true} hasRightIcon={true}/>
       <br/>
       <Accordion Icon={BookIcon} header={'Instructions'}>
-        <p className='text-body'>select all people from people</p>
+        <p className='text-body'>show all people firstName and last Name informations</p>
       </Accordion>
 
       {testingJson.tables.map((table, index) => {

@@ -1,0 +1,15 @@
+.customTextarea {
+  min-height: 120px;
+  padding: 12px 16px;
+  border: 2px solid var(--color-primary);
+  background-color: black; 
+  resize: vertical; 
+  outline: none;
+  color: var(--color-primary);
+}
+
+.customTextarea::placeholder {
+  color: rgba(214, 241, 243, 0.5);
+  opacity: 0.7;
+  font-size: 14px;
+}
