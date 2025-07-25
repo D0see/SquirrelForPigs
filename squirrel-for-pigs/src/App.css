@@ -26,6 +26,8 @@
 }
 
 body {
+  display: flex;
+  justify-content: center;
   background-color: var(--color-dark);
 }
 
@@ -50,4 +52,32 @@ margin: 0px;
 h2 {
   font-size: 1.5em;
   color: inherit;
+}
+
+/* APP */
+
+.app-container {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+}
+
+.database-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.query-container {
+}
+
+.main-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.alert-wrapper {
+  display: flex;
+  gap: 8px;
 }

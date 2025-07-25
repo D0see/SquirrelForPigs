@@ -1,9 +1,11 @@
 .customTextarea {
   min-height: 120px;
   padding: 12px 16px;
+  font-size: larger;
+  width: 100%;
   border: 2px solid var(--color-primary);
   background-color: black; 
-  resize: vertical; 
+  resize: none; 
   outline: none;
   color: var(--color-primary);
 }
