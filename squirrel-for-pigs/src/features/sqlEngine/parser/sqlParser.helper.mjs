@@ -161,7 +161,6 @@ export const findTableInTableArray = (sqlConsts, tableName, tableArr) => {
 
     const result = tableArr.filter(table => table.tableName === tableName || (table.alias ? table.alias === tableName : false));
     if (result.length === 0) throw sqlErrors.TABLE_NOT_FOUND(tableName);
-    console.log(result);
     if (result.length > 1) throw sqlErrors.TABLE_NAME_AMBIGUOUS(tableName);
     return result[0];
 }
@@ -238,8 +237,6 @@ const validateQueryBody = (sqlConsts, query) => {
     }
     //joins
     for (i = i + 2; i < query.length; i+=6) {
-        console.log(query)
-        console.log(query[i])
         if (!joinKeywords[query[i]]) {
             sqlErrors.MISSING_JOIN_KEYWORD()
         }

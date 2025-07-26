@@ -8,12 +8,10 @@ export const SqlParser = (input, tables) => {
     
     // parse subQueries "(query)" push the result table into tables and updates the input with the result table name
     input = parseSubQueries(sqlConsts, input, tables);
-    console.log(input)
 
     const query = cleanInput(sqlConsts, input);
 
     const [queryBody, whereClauses, orderByClause, limitClause] = splitQuery(sqlConsts, query);
-    console.log(queryBody, whereClauses, orderByClause, limitClause)
 
     //saves aliases for selected columns, remove them from the query
     const selectedColumnsHeaderAliases = columnsHeadersAliasesHandler(sqlConsts, queryBody);
@@ -50,7 +48,6 @@ export const SqlParser = (input, tables) => {
     normalizeHeaders(finalTable);
 
     applyHeadersAliases(finalTable, selectedColumnsHeaderAliases)
-    console.log(finalTable);
     return finalTable;
 } 
 
