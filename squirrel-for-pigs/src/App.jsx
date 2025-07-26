@@ -15,22 +15,34 @@ import Database from './assets/icons/database.svg?react'
 import Flag from './assets/icons/flag.svg?react'
 import Notepad from './assets/icons/notepad-edit.svg?react'
 
-
 import testingJson from '../data/testingJson.json'
 import level1 from '../data/level1.json'
 
-import {SqlParser} from './features/sqlEngine/parser/sqlParser.mjs'
+import { queryStateMap } from './utils/appConsts.js'
+import { SqlParser } from './features/sqlEngine/parser/sqlParser.mjs'
 
 
 function App() {
   const [query, setQuery] = useState('');
   const [queryResult, setQueryResult] = useState([[]]);
+  const [queryState, setQueryState] =  useState(queryStateMap.waiting)
+  const [errorMessage, setErrorMessage] = useState('')
   // const [levelTables, setLevelTables] = useState(testingJson.tables);
 
   const handleSubmit = () => {
     const clonedTables = structuredClone(testingJson.tables);
     setQueryResult(_ => {
-      return SqlParser(query, clonedTables).table
+      let newTable;
+      try {
+            newTable = SqlParser(query, clonedTables).table;
+          } catch(e) {
+              setErrorMessage(e.message);
+              setQueryState(queryStateMap.error)
+              return [[]];
+          }
+          if (newTable) {
+              return newTable
+          };
     })
   }
 
@@ -55,7 +67,7 @@ function App() {
           <div className='query-container'>
             <QueryEntry setQuery={setQuery}/>
             <div className='alert-wrapper'>
-              <AlertBar state={'waiting'} errorMessage={''}/>
+              <AlertBar state={queryState} errorMessage={errorMessage}/>
               <Button text={'Submit'} onClickCallBack={handleSubmit}/>
             </div>
           </div>

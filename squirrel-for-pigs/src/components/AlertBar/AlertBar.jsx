@@ -13,7 +13,7 @@ const renderSwitchMessage = (state, errorMessage) => {
         case 'warning' :
             return <div className='label'>this is a warning</div>
         case 'error' :
-            return <div className='label'>this is a an error : {errorMessage}</div>
+            return <div className='label'>{errorMessage}</div>
         case 'waiting' :
             return <div className='label'>waiting for an input</div>
     }
