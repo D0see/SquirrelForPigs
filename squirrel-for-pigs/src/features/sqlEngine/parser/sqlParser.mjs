@@ -3,13 +3,17 @@ import { sqlConsts } from "../utils/sqlConsts.mjs";
 import { cleanInput, splitQuery, tablesAliasesHandler, buildDescriptiveHeaders, turnRightJoinIntoLeftJoin, findEndIndexOfKeywordQuery, normalizeHeaders, findTableInTableArray, columnsHeadersAliasesHandler, applyHeadersAliases, paramIsDirectValueRepresentation, findQueryEndSymbol, validateQueries } from "./sqlParser.helper.mjs";
 
 export const SqlParser = (input, tables) => {
+
+    tables = JSON.parse(JSON.stringify(tables));
     
     // parse subQueries "(query)" push the result table into tables and updates the input with the result table name
     input = parseSubQueries(sqlConsts, input, tables);
+    console.log(input)
 
     const query = cleanInput(sqlConsts, input);
 
     const [queryBody, whereClauses, orderByClause, limitClause] = splitQuery(sqlConsts, query);
+    console.log(queryBody, whereClauses, orderByClause, limitClause)
 
     //saves aliases for selected columns, remove them from the query
     const selectedColumnsHeaderAliases = columnsHeadersAliasesHandler(sqlConsts, queryBody);

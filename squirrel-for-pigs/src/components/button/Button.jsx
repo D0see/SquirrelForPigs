@@ -1,11 +1,12 @@
 import React from 'react'
 
 import './Button.css'
-import Logo from '../../assets/icons/book.svg?react'
 
-export default function Button({text, newClass}) {
+export default function Button({text, newClass, onClickCallBack}) {
   return (
-    <div className={newClass ? newClass :'btn text-body'}>
+    <div className={newClass ? newClass :'btn text-body'} onClick={() => {
+      onClickCallBack()
+      }}>
         {text}
     </div>
   )
