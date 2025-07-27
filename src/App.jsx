@@ -35,6 +35,7 @@ function App() {
   }
 
   const handleSubmit = () => {
+    console.log(query)
     let parsedUserQueryResult = [[]];
 
     //Parser error catching
