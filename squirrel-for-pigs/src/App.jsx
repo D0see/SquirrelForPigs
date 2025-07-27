@@ -32,27 +32,27 @@ function App() {
 
   const handleSubmit = () => {
     const clonedTables = structuredClone(level1.tables);
-    setQueryResult(_ => {
-      let newTable;
-      try {
-            newTable = SqlParser(query, clonedTables).table;
-          } catch(e) {
-              setErrorMessage(e.message);
-              setQueryState(queryStateMap.error)
-              return [[]];
-          }
-          if (newTable) {
-              try {
-                const isCorrectAnswer = validateResult(level1, newTable)
-                setQueryState(isCorrectAnswer ? queryStateMap.success : queryStateMap.warning);
-                setErrorMessage('wrong answer');
-              } catch(e) {
-                setQueryState(queryStateMap.warning);
-                setErrorMessage(e.message);
-              }
-              return newTable
-          };
-    })
+    let parsedUserQueryResult = [[]];
+
+    //Parser error catching
+    try {
+        parsedUserQueryResult = SqlParser(query, clonedTables).table;
+    } catch(e) {
+        setErrorMessage(e.message);
+        setQueryState(queryStateMap.error)
+        return;
+    }
+
+    //Wrong result error catching
+    try {
+      const isCorrectAnswer = validateResult(level1, parsedUserQueryResult);
+      setQueryState(isCorrectAnswer ? queryStateMap.success : queryStateMap.warning);
+      setErrorMessage('wrong answer');
+    } catch(e) {
+      setQueryState(queryStateMap.warning);
+      setErrorMessage(e.message);
+    }
+    setQueryResult(parsedUserQueryResult);
   }
 
   return (
