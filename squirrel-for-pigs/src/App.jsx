@@ -30,6 +30,10 @@ function App() {
   const [currLevelIndex, setCurrLevelIndex] = useState(0);
   const currLevel = levels[currLevelIndex];
 
+  const handleQueryChange = (e) => {
+    setQuery((_) =>  e.target.value)
+  }
+
   const handleSubmit = () => {
     let parsedUserQueryResult = [[]];
 
@@ -52,11 +56,17 @@ function App() {
       setQueryState(queryStateMap.warning);
       setErrorMessage(e.message);
     }
+
+    //console.log(JSON.stringify(parsedUserQueryResult));
     setQueryResult(parsedUserQueryResult);
   }
 
   const handleNext = () => {
     setCurrLevelIndex(prev => prev + 1);
+    setQuery('');
+    setQueryState(queryStateMap.waiting);
+    setErrorMessage('');
+    setQueryResult([[]]);
   }
 
   return (
@@ -80,7 +90,7 @@ function App() {
           <Header label={'Query'} Icon={Notepad}/>
 
           <div className='query-container'>
-            <QueryEntry setQuery={setQuery}/>
+            <QueryEntry val={query} handleQueryChange={handleQueryChange}/>
             <div className='alert-wrapper'>
               <AlertBar state={queryState} errorMessage={errorMessage} handleNext={handleNext}/>
               {queryState !== queryStateMap.success ? <Button text={'Submit'} onClickCallBack={handleSubmit}/> : ''}
