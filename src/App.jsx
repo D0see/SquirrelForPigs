@@ -1,25 +1,25 @@
 import { useState } from 'react'
 import './App.css'
 
-import QueryEntry from './components/QueryEntry/QueryEntry.jsx'
-import Button from './components/Button/Button.jsx'
-import Header from './components/Header/Header.jsx'
-import Accordion from './components/Accordion/Accordion.jsx'
-import ColumnList from './components/ColumnList/ColumnList.jsx'
-import ResultTable from './components/ResultTable/ResultTable.jsx'
-import AlertBar from './components/AlertBar/AlertBar.jsx'
+import QueryEntry from '@components/QueryEntry/QueryEntry.jsx'
+import Button from '@components/Button/Button.jsx'
+import Header from '@components/Header/Header.jsx'
+import Accordion from '@components/Accordion/Accordion.jsx'
+import ColumnList from '@components/ColumnList/ColumnList.jsx'
+import ResultTable from '@components/ResultTable/ResultTable.jsx'
+import AlertBar from '@components/AlertBar/AlertBar.jsx'
 
-import TableIcon from './assets/icons/Table.svg?react' 
-import BookIcon from './assets/icons/book.svg?react'
-import Database from './assets/icons/database.svg?react'
-import Flag from './assets/icons/flag.svg?react'
-import Notepad from './assets/icons/notepad-edit.svg?react'
+import TableIcon from '@assets/icons/Table.svg?react' 
+import BookIcon from '@assets/icons/book.svg?react'
+import Database from '@assets/icons/database.svg?react'
+import Flag from '@assets/icons/flag.svg?react'
+import Notepad from '@assets/icons/notepad-edit.svg?react'
 
-import { levels } from '../data/levels.json'
+import { levels } from '@data/levels.json'
 
-import { queryStateMap } from './utils/appConsts.js'
-import { SqlParser } from './features/sqlEngine/parser/sqlParser.mjs'
-import { validateResult } from './utils/gameLogic.js'
+import { queryStateMap } from '@utils/appConsts.js'
+import { SqlParser } from '@features/sqlEngine/parser/sqlParser.mjs'
+import { validateResult } from '@utils/gameLogic.js'
 
 
 function App() {
