@@ -342,7 +342,8 @@ export const validateQueries = (sqlConsts, queryBody, whereClauses, orderByClaus
 //#region UTILS
 
 export const paramIsDirectValueRepresentation = (sqlConsts, param) => {
+    console.log("param:", param, "isDirect:", paramIsDirectValueRepresentation(sqlConsts, param));
     const { dataTypes } = sqlConsts;
-    return ((param.startsWith('"') && param.endsWith('"')) || (param.startsWith("'") && param.endsWith("'") || !isNaN(param) || param === dataTypes.NULL));
+    return ((param.startsWith('"') && param.endsWith('"')) || (param.startsWith("'") && param.endsWith("'")) || !isNaN(param) || param === dataTypes.NULL);
 }
 
