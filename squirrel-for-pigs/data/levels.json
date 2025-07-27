@@ -1,0 +1,34 @@
+{
+    "levels" : [
+        {
+        "instruction" : "Since this is your first day on the job i'm giving you something simple to start with : \n Some drunkard from building-51 has been building up quite the tab at the stumbling poney, last week he fled the establishment as the owner was pressing him to pay. \n The only thing we know about him is his firstname 'John' and that he is between 175 and 185 centimeters tall (inclusive). \n Your job is to send the informations for the matching profiles so we can pay them a visit.",
+        "expectedResult" : [
+                ["social-security", "appartment-number", "firstName", "lastName", "age", "height", "gender"],
+                ["1234-5678-9023", "287", "John", "Doe", "35", "180", "M"]],
+        "tables" : [{
+            "columnDetails" : ["PK", "''", "''", "''", "''"],
+            "table": [
+                ["social-security", "appartment-number", "firstName", "lastName", "age", "height", "gender"],
+                ["1234-5678-9023", "287", "John", "Doe", "35", "180", "M"],
+                ["1234-5678-9023", "288", "Jane", "Doe", "35", "175", "F"]
+            ],
+            "tableName": "tower-51-occupants"
+            }]
+        },
+        {
+        "instruction" : "second mission",
+        "expectedResult" : [
+                ["social-security", "appartment-number", "firstName", "lastName", "age", "height", "gender"],
+                ["1234-5678-9023", "287", "John", "Doe", "35", "180", "M"]],
+        "tables" : [{
+            "columnDetails" : ["PK", "''", "''", "''", "''"],
+            "table": [
+                ["social-security", "appartment-number", "firstName", "lastName", "age", "height", "gender"],
+                ["1234-5678-9023", "287", "John", "Doe", "35", "180", "M"],
+                ["1234-5678-9023", "288", "Jane", "Doe", "35", "175", "F"]
+            ],
+            "tableName": "mega-building-51-occupants"
+            }]
+        }
+    ]
+}

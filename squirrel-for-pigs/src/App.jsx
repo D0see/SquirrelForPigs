@@ -15,8 +15,7 @@ import Database from './assets/icons/database.svg?react'
 import Flag from './assets/icons/flag.svg?react'
 import Notepad from './assets/icons/notepad-edit.svg?react'
 
-import testingJson from '../data/testingJson.json'
-import level1 from '../data/level1.json'
+import { levels } from '../data/levels.json'
 
 import { queryStateMap } from './utils/appConsts.js'
 import { SqlParser } from './features/sqlEngine/parser/sqlParser.mjs'
@@ -26,26 +25,27 @@ import { validateResult } from './utils/gameLogic.js'
 function App() {
   const [query, setQuery] = useState('');
   const [queryResult, setQueryResult] = useState([[]]);
-  const [queryState, setQueryState] =  useState(queryStateMap.waiting)
-  const [errorMessage, setErrorMessage] = useState('')
-  // const [levelTables, setLevelTables] = useState(testingJson.tables);
+  const [queryState, setQueryState] =  useState(queryStateMap.waiting);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [currLevelIndex, setCurrLevelIndex] = useState(0);
+  const currLevel = levels[currLevelIndex];
 
   const handleSubmit = () => {
-    const clonedTables = structuredClone(level1.tables);
     let parsedUserQueryResult = [[]];
 
     //Parser error catching
     try {
-        parsedUserQueryResult = SqlParser(query, clonedTables).table;
+      const clonedTables = structuredClone(currLevel.tables);
+      parsedUserQueryResult = SqlParser(query, clonedTables).table;
     } catch(e) {
-        setErrorMessage(e.message);
-        setQueryState(queryStateMap.error)
-        return;
+      setErrorMessage(e.message); 
+      setQueryState(queryStateMap.error)
+      return;
     }
 
     //Wrong result error catching
     try {
-      const isCorrectAnswer = validateResult(level1, parsedUserQueryResult);
+      const isCorrectAnswer = validateResult(currLevel, parsedUserQueryResult);
       setQueryState(isCorrectAnswer ? queryStateMap.success : queryStateMap.warning);
       setErrorMessage('wrong answer');
     } catch(e) {
@@ -55,12 +55,16 @@ function App() {
     setQueryResult(parsedUserQueryResult);
   }
 
+  const handleNext = () => {
+    setCurrLevelIndex(prev => prev + 1);
+  }
+
   return (
       <div className='app-container'>
 
         <div className='database-container'>
           <Header label={'Database'} Icon={Database}/>
-          {level1.tables.map((table, index) => {
+          {currLevel.tables.map((table, index) => {
             return <Accordion key={'table ' + index} Icon={TableIcon} header={table.tableName}>
             <ColumnList columnDetails={table.columnDetails} columns={table.table[0]}/>
           </Accordion>
@@ -69,15 +73,17 @@ function App() {
 
         <div className='main-container'>
           <Accordion Icon={BookIcon} header={'Instructions'}>
-            <p className='text-body'>{level1.instruction}</p>
+            {currLevel.instruction.split('\n').map((line, index) => 
+              <p className='text-body' key={index}>{line}</p>
+            )}
           </Accordion>
           <Header label={'Query'} Icon={Notepad}/>
 
           <div className='query-container'>
             <QueryEntry setQuery={setQuery}/>
             <div className='alert-wrapper'>
-              <AlertBar state={queryState} errorMessage={errorMessage}/>
-              <Button text={'Submit'} onClickCallBack={handleSubmit}/>
+              <AlertBar state={queryState} errorMessage={errorMessage} handleNext={handleNext}/>
+              {queryState !== queryStateMap.success ? <Button text={'Submit'} onClickCallBack={handleSubmit}/> : ''}
             </div>
           </div>
 

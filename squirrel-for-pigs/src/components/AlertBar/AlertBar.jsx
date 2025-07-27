@@ -9,7 +9,7 @@ import './AlertBar.css'
 const renderSwitchMessage = (state, errorMessage) => {
     switch(state) {
         case 'success' :
-            return <div className='label'>this is a success</div>
+            return <div className='label'>assignement completed</div>
         case 'warning' :
             return <div className='label'>{errorMessage}</div>
         case 'error' :
@@ -33,7 +33,7 @@ const renderSwitchIcon = (state) => {
     return <SadFace className='icon'/>
 }
 
-export default function AlertBar({state, errorMessage}) {
+export default function AlertBar({state, errorMessage, handleNext}) {
   return (
   <div className='alertwrapper'>
     <div className='alert' data-type={state}>
@@ -41,7 +41,7 @@ export default function AlertBar({state, errorMessage}) {
         {renderSwitchMessage(state, errorMessage)}
     </div>
     {state === 'success' ? 
-    <Button newClass={'alert-btn btn text-body'} text={'next'}/> : ''
+    <Button newClass={'alert-btn btn text-body'} text={'next'} onClickCallBack={handleNext}/> : ''
     }
   </div>
   )
