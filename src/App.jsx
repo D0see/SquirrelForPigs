@@ -35,15 +35,12 @@ function App() {
   }
 
   const handleSubmit = () => {
-    console.log(query)
     let parsedUserQueryResult = [[]];
 
     //Parser error catching
     try {
       const clonedTables = structuredClone(currLevel.tables);
-      console.log('clonedTables ', clonedTables)
       parsedUserQueryResult = SqlParser(query, clonedTables).table;
-      console.log('parsedUserQueryResult ', parsedUserQueryResult  )
     } catch(e) {
       setErrorMessage(e.message); 
       setQueryState(queryStateMap.error)

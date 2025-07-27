@@ -12,43 +12,31 @@ export const SqlParser = (input, tables) => {
     const query = cleanInput(sqlConsts, input);
 
     const [queryBody, whereClauses, orderByClause, limitClause] = splitQuery(sqlConsts, query);
-    console.log([queryBody, whereClauses, orderByClause, limitClause])
     //saves aliases for selected columns, remove them from the query
     const selectedColumnsHeaderAliases = columnsHeadersAliasesHandler(sqlConsts, queryBody);
 
     //updates tables aliases in place and remove them for the query  
     tablesAliasesHandler(sqlConsts, queryBody, tables);
-    console.log(1)
     //throws specific error if invalid
     validateQueries(sqlConsts, queryBody, whereClauses, orderByClause, limitClause);
-    console.log(2)
 
     //updates tables headers in place based on their aliases and names (table.Name : a, table.alias : b => header.a.b)
     buildDescriptiveHeaders(tables);
-    console.log(3)
 
     //updates the query in place "table1 RIGHTJOIN table2 on table1.header = table2.header" => "table2 LEFTJOIN table1 on table2.header = table1.header"
     turnRightJoinIntoLeftJoin(sqlConsts, queryBody);
-    console.log(4)
 
     //executes all joins in the query, updates the query with the new joined tables names and push them into tables
     parseAllJoins(sqlConsts, queryBody, tables);
-    console.log(5)
 
     //here query should look like => Select columnNames from finalTableName
     let finalTable = findTableInTableArray(sqlConsts, queryBody[queryBody.length - 1], tables);
-
-    console.log(6)
 
     whereClauses.forEach(whereClause => {
         finalTable = parseWhereClause(sqlConsts, whereClause, finalTable);
     })
 
-    console.log(7)
-
     finalTable = parseOrderByClause(sqlConsts, orderByClause, finalTable);
-
-    console.log(8)
 
     finalTable = parseLimitClause(limitClause, finalTable);
     
