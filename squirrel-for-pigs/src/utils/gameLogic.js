@@ -16,14 +16,29 @@ export const validateResult = (currLevelData, resultTable) => {
         }
         hashMaps.push(currMap);
     }
+        
+    for (let x = 0; x < resultTable[0].length; x++) {
+        mapLoop : for (const hashMap of hashMaps) {
+            if (hashMap.cleared) continue
+            const tempMap = structuredClone(hashMap);
+            for (let y = 1; y < resultTable.length; y++) {
+                if (!tempMap[resultTable[y][x]]) continue mapLoop;
+                tempMap[resultTable[y][x]]--;
+            }
 
-    console.log(hashMaps);
+            const allValuesPresent = Object.values(tempMap).reduce((acc, val) => {
+                return acc + val
+            }, 0) === 0;
 
-    for (const hashMap of hashMaps) {
-        for (let x = 0; x < resultTable[0].length; x++) {
-            for (let y = 0; y < resultTable.length; y++) {
-            
+            if (allValuesPresent) {
+                hashMap.cleared = true;
             }
         }
     }
+
+    for (const hashMap of hashMaps) {
+        if (!hashMap.cleared) return false;
+    }
+
+    return true;
 }

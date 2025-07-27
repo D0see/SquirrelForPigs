@@ -20,6 +20,7 @@ import level1 from '../data/level1.json'
 
 import { queryStateMap } from './utils/appConsts.js'
 import { SqlParser } from './features/sqlEngine/parser/sqlParser.mjs'
+import { validateResult } from './utils/gameLogic.js'
 
 
 function App() {
@@ -30,7 +31,7 @@ function App() {
   // const [levelTables, setLevelTables] = useState(testingJson.tables);
 
   const handleSubmit = () => {
-    const clonedTables = structuredClone(testingJson.tables);
+    const clonedTables = structuredClone(level1.tables);
     setQueryResult(_ => {
       let newTable;
       try {
@@ -41,6 +42,14 @@ function App() {
               return [[]];
           }
           if (newTable) {
+              try {
+                const isCorrectAnswer = validateResult(level1, newTable)
+                setQueryState(isCorrectAnswer ? queryStateMap.success : queryStateMap.warning);
+                setErrorMessage('wrong answer');
+              } catch(e) {
+                setQueryState(queryStateMap.warning);
+                setErrorMessage(e.message);
+              }
               return newTable
           };
     })
@@ -51,7 +60,7 @@ function App() {
 
         <div className='database-container'>
           <Header label={'Database'} Icon={Database}/>
-          {testingJson.tables.map((table, index) => {
+          {level1.tables.map((table, index) => {
             return <Accordion key={'table ' + index} Icon={TableIcon} header={table.tableName}>
             <ColumnList columnDetails={table.columnDetails} columns={table.table[0]}/>
           </Accordion>
@@ -60,7 +69,7 @@ function App() {
 
         <div className='main-container'>
           <Accordion Icon={BookIcon} header={'Instructions'}>
-            <p className='text-body'>{testingJson.instruction}</p>
+            <p className='text-body'>{level1.instruction}</p>
           </Accordion>
           <Header label={'Query'} Icon={Notepad}/>
 
