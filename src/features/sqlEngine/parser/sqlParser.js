@@ -38,11 +38,17 @@ export const SqlParser = (input, tables) => {
     //here query should look like => Select columnNames from finalTableName
     let finalTable = findTableInTableArray(sqlConsts, queryBody[queryBody.length - 1], tables);
 
+    console.log(6)
+
     whereClauses.forEach(whereClause => {
         finalTable = parseWhereClause(sqlConsts, whereClause, finalTable);
     })
 
+    console.log(7)
+
     finalTable = parseOrderByClause(sqlConsts, orderByClause, finalTable);
+
+    console.log(8)
 
     finalTable = parseLimitClause(limitClause, finalTable);
     
