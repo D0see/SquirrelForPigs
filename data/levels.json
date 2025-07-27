@@ -1,7 +1,7 @@
 {
     "levels" : [
         {
-        "instruction" : "Since this is your first day on the job i'm giving you something simple to start with : \n Some drunkard from building-51 has been building up quite the tab at the stumbling poney, last week he fled the establishment as the owner was pressing him to pay. \n The only thing we know about him is his firstname 'John' and that he is between 175 and 185 centimeters tall (inclusive). \n Your job is to send the informations for the matching profiles so we can pay them a visit.",
+        "instruction" : "Since this is your first day on the job i'm giving you something simple to start with : \n Some drunkard from building-51 has been building up quite the tab at the stumbling poney, last week he fled the establishment as the owner was pressing him to pay. \n The only thing we know about him is his firstname 'John' and that he is between 175 and 185 centimeters tall (inclusive). \n Your job is to send us all the informations for the matching profiles so we can pay them a visit.",
         "expectedResult" : [["social-security","apartment-number","firstName","lastName","age","height","gender"],["8901-2345-6790",147,"John","Wilson",27,185,"M"],["0011-2233-4455",201,"John","Clark",42,175,"M"],["4455-6677-8917",715,"John","Stevens",53,176,"M"]],
         "tables" : [{
             "columnDetails" : ["PK", "''", "''", "''", "''"],

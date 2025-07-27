@@ -1,5 +1,5 @@
 import React from 'react'
-import Button from '../button/Button.jsx';
+import Button from '../Button/Button.jsx';
 import SmileFace from '../../assets/icons/smile-face.svg?react'
 import SadFace from '../../assets/icons/sad-face.svg?react'
 import SkepticFace from '../../assets/icons/skeptic-face.svg?react'
