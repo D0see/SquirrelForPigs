@@ -162,7 +162,13 @@ const parseWhereClause = (sqlConsts, whereClauseWords, finalTable) => {
         }
     });
 
-    console.log(parameters);
+    console.log(JSON.stringify(parameters));
+
+    console.log('LEFT TYPE:', JSON.stringify(parameters.left.type));
+    console.log('RIGHT TYPE:', JSON.stringify(parameters.right.type));
+
+    console.log(parameters.left.type === 'header' && parameters.right.type === 'header')
+    console.log(parameters.left.type === 'string' && parameters.right.type === 'string')
     
     if (parameters.left.type === 'header' && parameters.right.type === 'header') {
         return sqlWhereCompareColumnToColumn(sqlConsts, parameters.left.val, parameters.right.val, finalTable, operator, dataTypes);
