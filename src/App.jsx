@@ -18,7 +18,7 @@ import Notepad from '@assets/icons/notepad-edit.svg?react'
 import { levels } from '@data/levels.json'
 
 import { queryStateMap } from '@utils/appConsts.js'
-import { SqlParser } from '@features/sqlEngine/parser/sqlParser.mjs'
+import { SqlParser } from '@features/sqlEngine/parser/sqlParser.js'
 import { validateResult } from '@utils/gameLogic.js'
 
 
@@ -41,7 +41,9 @@ function App() {
     //Parser error catching
     try {
       const clonedTables = structuredClone(currLevel.tables);
+      console.log('clonedTables ', clonedTables)
       parsedUserQueryResult = SqlParser(query, clonedTables).table;
+      console.log('parsedUserQueryResult ', parsedUserQueryResult  )
     } catch(e) {
       setErrorMessage(e.message); 
       setQueryState(queryStateMap.error)

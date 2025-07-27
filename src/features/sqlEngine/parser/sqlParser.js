@@ -12,7 +12,7 @@ export const SqlParser = (input, tables) => {
     const query = cleanInput(sqlConsts, input);
 
     const [queryBody, whereClauses, orderByClause, limitClause] = splitQuery(sqlConsts, query);
-
+    console.log([queryBody, whereClauses, orderByClause, limitClause])
     //saves aliases for selected columns, remove them from the query
     const selectedColumnsHeaderAliases = columnsHeadersAliasesHandler(sqlConsts, queryBody);
 
