@@ -19,5 +19,8 @@ export default defineConfig({
       '@utils': path.resolve(__dirname, './src/utils'),
       '@features': path.resolve(__dirname, './src/features')
     }
+  },
+  build: {
+    minify: false
   }
 })
