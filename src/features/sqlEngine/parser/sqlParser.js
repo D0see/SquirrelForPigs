@@ -136,6 +136,7 @@ const parseSubQueries = (sqlConsts, input, tables) => {
 }
 
 const parseWhereClause = (sqlConsts, whereClauseWords, finalTable) => {
+    console.log('whereClauseWords ', JSON.stringify(whereClauseWords))
     const { sqlKeywords, sqlOperatorsJsEquivalent, dataTypes } = sqlConsts;
 
     if (!whereClauseWords.length) return finalTable;
@@ -160,6 +161,8 @@ const parseWhereClause = (sqlConsts, whereClauseWords, finalTable) => {
             parameter.type = 'string';
         }
     });
+
+    console.log(parameters);
     
     if (parameters.left.type === 'header' && parameters.right.type === 'header') {
         return sqlWhereCompareColumnToColumn(sqlConsts, parameters.left.val, parameters.right.val, finalTable, operator, dataTypes);
@@ -168,6 +171,7 @@ const parseWhereClause = (sqlConsts, whereClauseWords, finalTable) => {
         return sqlWhereCompareStringToString(sqlConsts, parameters.left.val, parameters.right.val, finalTable, operator, dataTypes);
 
     } else {
+        console.log('good')
         return sqlWhereCompareHeaderToString(
             sqlConsts,
             (parameters.left.type === 'header' ? parameters.left.val : parameters.right.val), 
