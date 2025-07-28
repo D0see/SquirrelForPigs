@@ -56,8 +56,7 @@ function App() {
       setQueryState(queryStateMap.warning);
       setErrorMessage(e.message);
     }
-
-    //console.log(JSON.stringify(parsedUserQueryResult));
+    console.log(JSON.stringify(parsedUserQueryResult))
     setQueryResult(parsedUserQueryResult);
   }
 

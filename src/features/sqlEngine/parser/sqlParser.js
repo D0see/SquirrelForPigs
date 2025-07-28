@@ -17,6 +17,7 @@ export const SqlParser = (input, tables) => {
 
     //updates tables aliases in place and remove them for the query  
     tablesAliasesHandler(sqlConsts, queryBody, tables);
+    
     //throws specific error if invalid
     validateQueries(sqlConsts, queryBody, whereClauses, orderByClause, limitClause);
 
