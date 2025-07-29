@@ -5,8 +5,8 @@ import { useState } from 'react'
 
 import './Accordion.css'
 
-export default function Accordion({header, Icon, children}) {
-  const [clicked, setClicked] = useState(false);
+export default function Accordion({header, Icon, children, startsOpened}) {
+  const [clicked, setClicked] = useState(startsOpened);
 
   return (
     <div className={`accordion ${clicked ? 'open-accordion' : ''}`}>

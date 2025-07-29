@@ -51,7 +51,7 @@ function App() {
     try {
       const isCorrectAnswer = validateResult(currLevel, parsedUserQueryResult);
       setQueryState(isCorrectAnswer ? queryStateMap.success : queryStateMap.warning);
-      setErrorMessage('wrong answer');
+      setErrorMessage('invalid result');
     } catch(e) {
       setQueryState(queryStateMap.warning);
       setErrorMessage(e.message);
@@ -74,14 +74,14 @@ function App() {
         <div className='database-container'>
           <Header label={'Database'} Icon={Database}/>
           {currLevel.tables.map((table, index) => {
-            return <Accordion key={'table ' + index} Icon={TableIcon} header={table.tableName}>
+            return <Accordion key={'table ' + index} Icon={TableIcon} header={table.tableName} startsOpened={false}>
             <ColumnList columnDetails={table.columnDetails} columns={table.table[0]}/>
           </Accordion>
           })}
         </div>
 
         <div className='main-container'>
-          <Accordion Icon={BookIcon} header={'Instructions'}>
+          <Accordion Icon={BookIcon} header={'Instructions'} startsOpened={true}>
             {currLevel.instruction.split('\n').map((line, index) => 
               <p className='text-body' key={index}>{line}</p>
             )}
