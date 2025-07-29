@@ -465,12 +465,12 @@
             }]
         },
         {
-        "instruction" : "Our person of interest was last seen by our cameras a couple of days ago near the Chrome Crocodiles compound, they are a massive gang known for suspected of live implant harvesting operations. \n While our current case lacks the strength to justify a full-scale assault on their complex, there may be another way to get the answers we need. \n Several of their members are currently serving time in the city prison. \n We may be able to offer a deal to a low-gravity felony offender in exchange for exploitable informations about John Stevens. Your new assignment is to identify all Chrome Crocodiles convicted of a low-gravity felonies and send us their prisonner-id, firstName, lastName and crime. \n You have been given access to the prison database.",
+        "instruction" : "Our person of interest was last seen by our cameras a couple of days ago near the Chrome Crocodiles compound, they are a massive gang we suspect of orchestrating implant harvesting operations. \n While our current case lacks the strength to justify a full-scale assault on their complex, there may be another way to get the answers we need. \n Several of their members are currently serving time in the city prison. \n We may be able to offer a deal to a low-gravity felony offender in exchange for exploitable informations about John Stevens. Your new assignment is to identify all Chrome Crocodiles convicted of a low-gravity felonies and send us their prisonner-id, firstName, lastName and crime. \n You have been given access to the prison database.",
         "expectedResult" : [["id","firstName","lastName","crime"],[2,"Emma","Johnson","Forgery"],[14,"Charlotte","Wilson","Illegal Activation Of A Self-Defense Implant"],[17,"Alexander","Taylor","Vandalism"],[23,"Matthew","Thompson","Petty Theft"],[41,"Wyatt","Green","Petty Theft"],[50,"Aria","Roberts","Trespassing"],[65,"Joshua","Cook","Illegal Activation Of A Self-Defense Implant"],[89,"Ezekiel","Ruiz","Petty Theft"],[98,"Ellie","Ross","Trespassing"]],
         "tables" : [{
             "columnDetails" : ["PK", "''", "''"],
             "table": [
-                ["id", "crime", "gravity"],
+                ["id", "title", "gravity"],
                 [1, "Trespassing", "Low"],
                 [2, "Vandalism", "Low"],
                 [3, "Petty Theft", "Low"],
@@ -492,7 +492,7 @@
                 [19, "Child Hacking", "Extreme"],
                 [20, "Terrorism", "Extreme"]
             ],
-            "tableName": "felony"
+            "tableName": "crime"
             },
             {
             "columnDetails" : ["PK", "''"],

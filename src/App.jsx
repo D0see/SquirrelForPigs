@@ -70,12 +70,12 @@ function App() {
   }
 
   return (
-      <div className='app-container'>
-
+    <div className='app-container'>
+      <div className='interface-container'>
         <div className='database-container'>
           <Header label={'Database'} Icon={Database}/>
           {currLevel.tables.map((table, index) => {
-            return <Accordion key={'table ' + index} Icon={TableIcon} header={table.tableName} startsOpened={false}>
+            return <Accordion key={table.tableName + index} Icon={TableIcon} header={table.tableName} startsOpened={false}>
             <ColumnList columnDetails={table.columnDetails} columns={table.table[0]}/>
           </Accordion>
           })}
@@ -104,7 +104,7 @@ function App() {
         </div>
 
       </div>
-
+    </div>
   )
 }
 
