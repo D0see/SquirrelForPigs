@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import Editor, { useMonaco } from '@monaco-editor/react';
 import './App.css'
 
 import QueryEntry from '@components/QueryEntry/QueryEntry.jsx'
@@ -29,9 +30,9 @@ function App() {
   const [errorMessage, setErrorMessage] = useState('');
   const [currLevelIndex, setCurrLevelIndex] = useState(0);
   const currLevel = levels[currLevelIndex];
-
-  const handleQueryChange = (e) => {
-    setQuery((_) =>  e.target.value)
+  
+  const handleQueryChange = (value, e) => {
+    setQuery((_) =>  value)
   }
 
   const handleSubmit = () => {
@@ -81,23 +82,25 @@ function App() {
         </div>
 
         <div className='main-container'>
-          <Accordion Icon={BookIcon} header={'Instructions'} startsOpened={true}>
-            {currLevel.instruction.split('\n').map((line, index) => 
-              <p className='text-body' key={index}>{line}</p>
-            )}
-          </Accordion>
-          <Header label={'Query'} Icon={Notepad}/>
-
-          <div className='query-container'>
-            <QueryEntry val={query} handleQueryChange={handleQueryChange}/>
+          <div className='sub-container'>
+            <Accordion Icon={BookIcon} header={'Instructions'} startsOpened={true}>
+              {currLevel.instruction.split('\n').map((line, index) => 
+                <p className='text-body' key={index}>{line}</p>
+              )}
+            </Accordion>
+          </div>
+          <div className='sub-container'>
+            <Header label={'Query'} Icon={Notepad}/>
+            <QueryEntry query={query} handleQueryChange={handleQueryChange}/>
             <div className='alert-wrapper'>
               <AlertBar state={queryState} errorMessage={errorMessage} handleNext={handleNext}/>
               {queryState !== queryStateMap.success ? <Button text={'Submit'} onClickCallBack={handleSubmit}/> : ''}
             </div>
           </div>
-
-          <Header label={'Result'} Icon={Flag}/>
-          <ResultTable table={queryResult}/>
+          <div className='sub-container'>
+            <Header label={'Result'} Icon={Flag}/>
+            <ResultTable table={queryResult}/>
+          </div>
         </div>
 
       </div>

@@ -62,7 +62,7 @@ h2 {
   height: 100%;
   display: flex;
   flex-direction: row;
-  gap: 8px;
+  gap: 24px;
 }
 
 .database-container {
@@ -82,6 +82,12 @@ h2 {
   display: flex;
   flex-direction: column;
   width: 65vw;
+  gap: 24px;
+}
+
+.sub-container {
+  display: flex;
+  flex-direction: column;
   gap: 8px;
 }
 
