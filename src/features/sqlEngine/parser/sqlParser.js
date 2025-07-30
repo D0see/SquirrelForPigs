@@ -2,7 +2,7 @@ import { sqlLeftJoin, sqlInnerJoin, sqlFullJoin, sqlSelect, sqlWhereCompareColum
 import { sqlConsts } from "../utils/sqlConsts.mjs";
 import { cleanInput, splitQuery, tablesAliasesHandler, buildDescriptiveHeaders, turnRightJoinIntoLeftJoin, findEndIndexOfKeywordQuery, normalizeHeaders, findTableInTableArray, columnsHeadersAliasesHandler, applyHeadersAliases, paramIsDirectValueRepresentation, findQueryEndSymbol, validateQueries } from "./sqlParser.helper.mjs";
 
-export const SqlParser = (input, tables) => {
+export const sqlParser = (input, tables) => {
 
     tables = JSON.parse(JSON.stringify(tables));
     
@@ -116,7 +116,7 @@ const parseSubQueries = (sqlConsts, input, tables) => {
     if (openPar === -1 || closedPar === -1) return input;
 
     const subQuery = input.slice(openPar + 1, closedPar);
-    const subQueryResult = SqlParser(subQuery, tables);
+    const subQueryResult = sqlParser(subQuery, tables);
     tables.push(subQueryResult);
 
     input = input.slice(0, openPar).concat(subQueryResult.tableName).concat(input.slice(closedPar + 1));
