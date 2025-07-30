@@ -26,6 +26,12 @@ export const cleanInput = (sqlConsts, input) => {
     //removes empty spaces
     let query = input.split(' ').map(word => word.trim()).filter(word => word);
 
+    const queryArr = [];
+    let currWord = '';
+    let currQuoteType = '';
+    for (let i = 0; i < query.length; i++) {
+        
+    }
     //make sure keyword are uppercase
     query = query.map(word => 
         reservedKeyWords[word.toUpperCase()] || 

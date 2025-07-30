@@ -312,7 +312,7 @@ describe(tablesAliasesHandler.name, () => {
 })
 
 describe(tablesAliasesHandler.name, () => {
-  it("should removes the alias affectation from the query", () => {
+  it("should removes the alias affectation from the query -- 41", () => {
     //ARRANGE
     const words = ['select', '*', 'from', 'people', 'AS', 'p', 'left join', 'people', 'AS', 'p2', 'ON', 'p.idManager', '=', 'p2.id'];
     const tables = structuredClone(testingData);

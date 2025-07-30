@@ -655,4 +655,18 @@ describe(sqlParser.name, () => {
   }) 
 })
 
+//  describe(sqlParser.name, () => {
+//   it("quotes at the beginning and end of column name -- 41", () => {
+//     //ARRANGE
+//     const query = 'select "firstName" lastName from people';
+//     const tablesObj = structuredClone(testingData);
+
+//     //ACT
+//     const result = JSON.stringify(sqlParser(query, tablesObj));
+
+//     //ASSERT
+//     expect(result).toBe('')
+//   }) 
+// })
+
 

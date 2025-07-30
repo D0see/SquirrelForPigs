@@ -64,6 +64,7 @@ export const sqlErrors = {
     'MISSING_OPERATOR_AFTER' : (precedingValue) => new Error(`expected an operator after ${precedingValue}`),
     'MISSING_COLUMN_NAME_AFTER' : (precedingKeyword) => new Error(`expected a column name after ${precedingKeyword}`),
     'MISSING_JOIN_KEYWORD' : () => new Error(`expected a join Keyword`),
+    'MISSING_DELIMITER' : (delimiter) => new Error(`missing or extra ${delimiter}`),
     'TABLE_NOT_FOUND' : (tableName) => new Error(`No table with name : ${tableName}`),
     'ALIAS_INVALID_OR_ABSENT' : (tableName) => new Error(`Invalid or absent alias for table with name : ${tableName}`),
     'ALIAS_NAME_COLLISION' : (alias) => new Error(`Name collision for alias : ${alias}`),
