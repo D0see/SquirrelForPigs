@@ -93,6 +93,10 @@ export const compareData = (sqlConsts, sqlOperatorsJsEquivalent, operator, data1
         case dataTypes.VARCHAR :
             return eval(`"${leftVal.val}"` + ` ${jsOperator} ` + `"${rightVal.val}"`)
     }
+
+    if (leftVal.type === dataTypes.NULL || rightVal.type === dataTypes.NULL) {
+        return eval(`${leftVal.val}` + ` ${jsOperator} ` + `${rightVal.val}`);
+    }
 }
 
 export const inferDataType = (dataTypes, param) => {
