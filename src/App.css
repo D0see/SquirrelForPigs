@@ -106,3 +106,82 @@ h2 {
   display: flex;
   gap: 8px;
 }
+
+/* APP */
+
+body {
+  position: relative;
+  overflow: hidden;
+  box-shadow: inset 0 0 80px rgba(0,0,0,0.6);
+  display: flex;
+  flex-direction: row;
+  justify-items: start;
+  align-items: start;
+  justify-content: center;
+  overflow: hidden;
+}
+
+body::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9998; 
+  pointer-events: none;
+
+ background: repeating-linear-gradient(
+  to top,
+  rgba(5, 85, 82, 0.7) 0px,
+  rgba(5, 85, 82, 0.7) 2px,
+  transparent 2px,
+  transparent 4px
+  );
+
+  opacity: 0.5;
+  animation:
+  flicker 6.5s infinite cubic-bezier(.4,0,.6,1);
+  animation-delay: -0.3s;
+
+  transform: scale(1.01) perspective(800px) translateZ(0) 
+             translateY(-1px) 
+             scaleX(1.005) scaleY(1.01);
+  transform-origin: center;
+
+  filter: contrast(1.2) brightness(1.1) saturate(1.2);
+  
+  box-shadow: inset 0 0 100px rgba(0, 0, 0, 1);
+}
+
+@keyframes flicker {
+  0%   { opacity: 0.45; }
+  5%   { opacity: 0.4; }
+  10%  { opacity: 0.5; }
+  15%  { opacity: 0.35; }
+  20%  { opacity: 0.55; }
+  25%  { opacity: 0.3; }
+  30%  { opacity: 0.5; }
+  35%  { opacity: 0.45; }
+  100% { opacity: 0.4; }
+}
+
+.scanLine {
+  position: absolute;
+  top: -2px;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: rgb(0, 229, 255);
+  pointer-events: none;
+  z-index: 99999;
+  animation: scanLine 10s linear infinite;
+  opacity: 0;
+  mix-blend-mode: screen;
+}
+
+@keyframes scanLine {
+  0% {transform: translateY(-10px); opacity: 0;}
+  1% {opacity: 0.5;}
+  40% {transform: translateY(100vh); opacity: 0.5;}
+  41% {opacity: 0;}
+}

@@ -28,7 +28,7 @@ function App() {
   const [queryResult, setQueryResult] = useState([[]]);
   const [queryState, setQueryState] =  useState(queryStateMap.waiting);
   const [errorMessage, setErrorMessage] = useState('');
-  const [currLevelIndex, setCurrLevelIndex] = useState(3);
+  const [currLevelIndex, setCurrLevelIndex] = useState(0);
   const currLevel = levels[currLevelIndex];
   
   const handleQueryChange = (value, e) => {
@@ -43,7 +43,7 @@ function App() {
       const clonedTables = structuredClone(currLevel.tables);
       parsedUserQueryResult = sqlParser(query, clonedTables).table;
     } catch(e) {
-      setErrorMessage(e.message + '\n' + e.stack); 
+      setErrorMessage(e.message); 
       setQueryState(queryStateMap.error)
       return;
     }
@@ -55,7 +55,7 @@ function App() {
       setErrorMessage('invalid result');
     } catch(e) {
       setQueryState(queryStateMap.warning);
-      setErrorMessage(e.message + '\n' + e.stack);
+      setErrorMessage(e.message);
     }
     console.log(JSON.stringify(parsedUserQueryResult))
     setQueryResult(parsedUserQueryResult);
@@ -70,6 +70,7 @@ function App() {
   }
 
   return (
+    <div className='crt'>
     <div className='app-container'>
       <div className='interface-container'>
         <div className='database-container'>
@@ -104,6 +105,8 @@ function App() {
         </div>
 
       </div>
+    </div>
+    <div className='scanLine'></div>
     </div>
   )
 }
