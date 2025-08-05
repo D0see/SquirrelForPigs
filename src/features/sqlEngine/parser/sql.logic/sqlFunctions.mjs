@@ -146,7 +146,7 @@ export const sqlFullJoin = (sqlConsts, dataTypes, table1, table2, table1JoiningH
 
 export const sqlWhereCompareColumnToColumn = (sqlConsts, leftVal, rightVal, finalTable, operator, dataTypes) => {
     const { sqlOperatorsJsEquivalent } = sqlConsts;
-
+    console.log(leftVal, rightVal)
     const wheredtwoDArr = [structuredClone(finalTable.table[0])];
     const headerColIndex1 = getColumnHeadIndex(sqlConsts, leftVal, finalTable);
     const headerColIndex2 = getColumnHeadIndex(sqlConsts, rightVal, finalTable);

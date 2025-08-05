@@ -119,10 +119,11 @@ export const tablesAliasesHandler = (sqlConsts, words, tables) => {
     const { sqlKeywords, reservedKeyWords, sqlErrors } = sqlConsts;
     
     for (let i = 0; i < words.length; i++) {
+        console.log(words[i])
         if (words[i] === sqlKeywords.ALIAS_ASSIGNEMENT) {
+            console.log(words[i], words[i + 1])
             let table = findTableInTableArray(sqlConsts, words[i - 1], tables);
             const alias = words[i + 1];
-
             //Error handling
             if (!table) throw sqlErrors.TABLE_NOT_FOUND(words[i + 1]);
             else if (!alias || reservedKeyWords[alias]) throw sqlErrors.ALIAS_INVALID_OR_ABSENT(table.tableName);
@@ -143,6 +144,7 @@ export const tablesAliasesHandler = (sqlConsts, words, tables) => {
             i -= 2;
         }
     }
+    console.log(tables);
 }
 
 export const findQueryEndSymbol = (sqlKeywords, openPar, input) => {
@@ -164,7 +166,7 @@ export const findQueryEndSymbol = (sqlKeywords, openPar, input) => {
 //#region RESULT TABLE FUNCS
 export const findTableInTableArray = (sqlConsts, tableName, tableArr) => {
     const { sqlErrors } = sqlConsts;
-
+    console.log(tableName, tableArr)
     const result = tableArr.filter(table => table.tableName === tableName || (table.alias ? table.alias === tableName : false));
     if (result.length === 0) throw sqlErrors.TABLE_NOT_FOUND(tableName);
     if (result.length > 1) throw sqlErrors.TABLE_NAME_AMBIGUOUS(tableName);

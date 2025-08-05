@@ -79,7 +79,7 @@ h2 {
 .database-container {
   display: flex;
   flex-direction: column;
-  width: 20vw;
+  width: 25vw;
   gap: 8px;
 }
 

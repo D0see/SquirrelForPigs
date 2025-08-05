@@ -28,7 +28,7 @@ function App() {
   const [queryResult, setQueryResult] = useState([[]]);
   const [queryState, setQueryState] =  useState(queryStateMap.waiting);
   const [errorMessage, setErrorMessage] = useState('');
-  const [currLevelIndex, setCurrLevelIndex] = useState(0);
+  const [currLevelIndex, setCurrLevelIndex] = useState(3);
   const currLevel = levels[currLevelIndex];
   
   const handleQueryChange = (value, e) => {
@@ -43,7 +43,7 @@ function App() {
       const clonedTables = structuredClone(currLevel.tables);
       parsedUserQueryResult = sqlParser(query, clonedTables).table;
     } catch(e) {
-      setErrorMessage(e.message); 
+      setErrorMessage(e.message + '\n' + e.stack); 
       setQueryState(queryStateMap.error)
       return;
     }
@@ -55,7 +55,7 @@ function App() {
       setErrorMessage('invalid result');
     } catch(e) {
       setQueryState(queryStateMap.warning);
-      setErrorMessage(e.message);
+      setErrorMessage(e.message + '\n' + e.stack);
     }
     console.log(JSON.stringify(parsedUserQueryResult))
     setQueryResult(parsedUserQueryResult);

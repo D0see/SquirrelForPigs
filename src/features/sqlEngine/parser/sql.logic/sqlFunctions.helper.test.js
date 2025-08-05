@@ -15,7 +15,7 @@ import { sqlOperators, sqlOperatorsJsEquivalent, dataTypes, sqlConsts } from '..
   }) 
   it("should return dataTypes.DATETIME when the param string is formatted as such 'yyyy-mm-dd'", () => {
     //ARRANGE
-    const param = "2024-12-12";
+    const param = "12-12-2024";
 
     //ACT
     const result = inferDataType(dataTypes, param);

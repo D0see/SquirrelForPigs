@@ -615,9 +615,55 @@
             }]
         },
         {
-        "instruction" : "It's amazing what a few combat stimulants can get you in a prison overrun by warring gang factions. Our informant has confirmed that Mr. Stevens is operating as an implant removal specialist for the Chrome Crocodiles. She also reported that he was present with her during her arrest for trespassing in a military morgue. \n This may be the source of the implants we recovered from his residence. If we can verify their origin, we may have sufficient grounds to convince our superiors to authorize an invasion of the gang’s compound. \n Your task is to cross-reference each implant’s serial number with the medical records to identify the corresponding deceased military operative. We will need the implant ID, type and the operative’s name. \n Your database has been updated with a list of the implants recovered from Stevens’ location, as well as the medical records of the deceased operatives found at the morgue at the time.",
-        "expectedResult" : [],
-        "tables" : []
+        "instruction" : "It's amazing what a few combat stimulants can get you in a prison overrun by warring gang factions. Our informant has confirmed that Mr. Stevens is operating as an implant removal specialist for the Chrome Crocodiles. \n Your new task is to gather evidence to support her claim. We have compiled a list of individuals who went missing around Tower 51 recently along with a list of their implants.\n You need to find the provenance for each implant found at Tower 51.\n For each implant, we require the implant model and the victim’s first and last name.",
+        "expectedResult" : [["TI.implant-model","MP.firstName","MP.lastName"],["T51-ZX","Lana","Smith"],["T51-K7","Nico","Reyes"],["T51-Q1","Eva","Cho"],["T51-XX","Mathilda","Smith"],["T51-ZZ","Marie","Tison"],["T51-A9","Marie","Tison"]],
+        "tables" : [
+            {
+            "columnDetails" : ["PK", "''", "''"],
+            "table": 
+                [
+                    ["id", "firstName", "lastName"],
+                    [1, "Liam", "Smith"],
+                    [2, "Lana", "Smith"],
+                    [3, "Mathilda", "Smith"],
+                    [4, "Nico", "Reyes"],
+                    [5, "Eva", "Cho"],
+                    [6, "Marie", "Tison"],
+                    [7, "Rina", "Okafor"]
+                ],
+            "tableName" : "missing-person"
+            },
+            {
+            "columnDetails" : ["PK", "FK", "", ""],
+            "table": 
+                [
+                    ["id", "missing-person-id", "implant-model", "activation-date"],
+                    [9002, 1, "T51-B3", "06-12-2068"],
+                    [9003, 2, "T51-ZX", "09-09-2068"],
+                    [9004, 3, "T51-XX", "12-13-2068"],
+                    [9005, 4, "T51-K7", "01-24-2068"],
+                    [9007, 5, "T51-Q1", "05-15-2068"],
+                    [9008, 6, "T51-B3", "01-24-2068"],
+                    [9009, 6, "T51-ZZ", "01-24-2068"],
+                    [9010, 6, "T51-A9", "01-25-2068"]
+                ],
+            "tableName" : "missing-person-implant"
+            },
+            {
+            "columnDetails" : ["PK", "''", "''"],
+            "table": 
+                [
+                    ["id", "implant-model", "activation-date"],
+                    [9003, "T51-ZX", "09-09-2068"],
+                    [9004, "T51-K7", "01-24-2068"],
+                    [9005, "T51-Q1", "05-15-2068"],
+                    [9006, "T51-XX", "12-13-2068"],
+                    [9008, "T51-ZZ", "01-24-2068"],
+                    [9010, "T51-A9", "01-25-2068"]
+                ],
+            "tableName" : "tower-51-implant"
+            }
+        ]
         }
     ]
 }
