@@ -1,0 +1,22 @@
+.animationContainer {
+    border: 2px solid var(--color-primary);
+    width: 50%;
+    height: 5%;
+}
+
+.loadingBar {
+    width: 0%;
+    height: 60%;
+    background-color: var(--color-primary);
+    padding: 2px;
+    animation: load 0.7s forwards;
+}
+
+@keyframes load {
+    0% {
+        width: 0%;
+    }
+    100% {
+        width: 100%
+    }
+}

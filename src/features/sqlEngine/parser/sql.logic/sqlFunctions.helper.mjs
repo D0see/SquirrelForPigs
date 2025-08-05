@@ -66,7 +66,6 @@ export const compareData = (sqlConsts, sqlOperatorsJsEquivalent, operator, data1
         val : data2,
         type : inferDataType(dataTypes, data2),
     }
-    console.log(leftVal.val, leftVal.type, rightVal.val, rightVal.type)
     //handles strings TODO : ITS AWFUL FIXFIXFIXFIX
     for (const data of [leftVal, rightVal]) {
         if (data.type === 'VARCHAR' && ["'",'"'].includes(data.val[0]) && ["'",'"'].includes(data.val[data.val.length - 1])) {

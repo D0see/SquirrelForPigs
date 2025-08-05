@@ -2,6 +2,7 @@ import React from 'react'
 import { useState, useEffect } from 'react'
 import Editor, { useMonaco } from '@monaco-editor/react';
 import { customMonacoEditorOptions } from './monacoEditorParameters.js';
+import EditorLoader from '../EditorLoader/EditorLoader.jsx';
 import './QueryEntry.css'
 
 export default function QueryEntry({handleQueryChange, query}) {
@@ -36,13 +37,16 @@ export default function QueryEntry({handleQueryChange, query}) {
   }
 
   return (
-    <Editor
-              className= 'query-editor'
-              height="30vh"
-              defaultLanguage="sql"
-              value={query}
-              onChange={handleQueryChange}
-              onMount={handleEditorDidMount}
-      />
+    <>
+      <Editor
+                className= 'query-editor'
+                height="30vh"
+                defaultLanguage="sql"
+                value={query}
+                onChange={handleQueryChange}
+                onMount={handleEditorDidMount}
+                loading={<EditorLoader/>}
+        />
+    </>
   )
 }

@@ -1,5 +1,4 @@
-import { useState, useEffect } from 'react'
-import Editor, { useMonaco } from '@monaco-editor/react';
+import { useState } from 'react'
 import './App.css'
 
 import QueryEntry from '@components/QueryEntry/QueryEntry.jsx'
@@ -57,7 +56,6 @@ function App() {
       setQueryState(queryStateMap.warning);
       setErrorMessage(e.message);
     }
-    console.log(JSON.stringify(parsedUserQueryResult))
     setQueryResult(parsedUserQueryResult);
   }
 
