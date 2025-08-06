@@ -2,11 +2,11 @@
     "levels" : [
         {
         "instruction" : "Since this is your first day on the job i'm giving you something simple to start with : \n Some drunkard from tower-51 has been building up quite the tab at the stumbling poney, last week he fled the establishment as the owner was pressing him to pay. \n The only thing we know about him is his firstname 'John' and that he is between 175 and 185 centimeters tall (inclusive). \n Your task is to send us all the informations for the matching profiles so we can pay them a visit.",
-        "expectedResult" : [["social-security","apartment-number","firstName","lastName","age","height","gender"],["8901-2345-6790",147,"John","Wilson",27,185,"M"],["0011-2233-4455",201,"John","Clark",42,175,"M"],["4455-6677-8917",715,"John","Stevens",53,176,"M"]],
+        "expectedResult" : [["social_security","apartment_number","firstName","lastName","age","height","gender"],["8901-2345-6790",147,"John","Wilson",27,185,"M"],["0011-2233-4455",201,"John","Clark",42,175,"M"],["4455-6677-8917",715,"John","Stevens",53,176,"M"]],
         "tables" : [{
             "columnDetails" : ["PK", "''", "''", "''", "''"],
             "table": [
-                        ["social-security", "apartment-number", "firstName", "lastName", "age", "height", "gender"],
+                        ["social_security", "apartment_number", "firstName", "lastName", "age", "height", "gender"],
                         ["1234-5678-9023", 102, "Brice", "Dujardin", 35, 180, "M"],
                         ["1234-5678-9024", 102, "Jane", "Doe", 33, 175, "F"],
                         ["2345-6789-0134", 115, "Michael", "Smith", 28, 172, "M"],
@@ -205,7 +205,7 @@
                         ["6677-8899-0039", 715, "Maxwell", "Stevens", 23, 172, "M"],
                         ["7788-9900-1150", 715, "Sadie", "Stevens", 21, 163, "F"]
                     ],
-            "tableName": "tower-51-occupants"
+            "tableName": "tower_51_occupant"
             }]
         },
         {
@@ -213,7 +213,7 @@
         "expectedResult" : [["log-id","camera-number","log-date","social-security"],["r3hi-jl7m",68,"12-30-2068","4455-6677-8917"],["l3hi-jl8m",68,"12-30-2068","4455-6677-8917"],["x3hi-jl7m",68,"12-29-2068","4455-6677-8917"],["d3hi-jl6m",58,"12-28-2068","4455-6677-8917"],["j3hi-jl0m",89,"12-27-2068","4455-6677-8917"],["p3hi-jl5m",89,"12-26-2068","4455-6677-8917"],["v3hi-jl9m",89,"12-25-2068","4455-6677-8917"],["b3hi-jl4m",59,"12-24-2068","4455-6677-8917"],["x6vb-pcv8",57,"12-23-2068","4455-6677-8917"],["t3cd-ef5g",81,"12-23-2068","4455-6677-8917"]],
         "tables" : [{
             "columnDetails" : ["PK", "''", "''", "''"],
-            "table": [["log-id", "camera-number", "log-date", "social-security"],
+            "table": [["id", "camera_number", "log_date", "social_security"],
             ["x6vb-pcv8", 57, "12-23-2068", "4455-6677-8917"],
             ["k8mn-qr3t", 73, "12-15-2068", "1122-3344-5566"],
             ["p9xy-zw4u", 89, "12-07-2068", "7788-9900-1234"],
@@ -461,7 +461,7 @@
             ["d5xy-za0b", 84, "12-04-2068", "3344-5566-7788"],
             ["e9cd-ef4g", 71, "12-18-2068", "8899-0011-2345"],
             ["f3hi-jl8m", 88, "12-01-2068", "4455-6677-8917"]],
-            "tableName": "tower-51-cameras"
+            "tableName": "tower_51_cameras_log"
             }]
         },
         {
@@ -509,7 +509,7 @@
             "columnDetails" : ["PK", "''", "''", "FK", "FK"],
             "table": 
                 [
-                    ["id", "firstName", "lastName", "id-crime", "id-gang"],
+                    ["id", "firstName", "lastName", "id_crime", "id_gang"],
                     [1, "Liam", "Smith", 3, 1],
                     [2, "Emma", "Johnson", 5, 2],
                     [3, "Noah", "Williams", 8, 3],
@@ -637,7 +637,7 @@
             "columnDetails" : ["PK", "FK", "", ""],
             "table": 
                 [
-                    ["id", "missing-operative-id", "implant-model", "activation-date"],
+                    ["id", "missing_operative_id", "implant_model", "activation_date"],
                     [9002, 1, "T51-B3", "06-12-2068"],
                     [9003, 2, "T51-ZX", "09-09-2068"],
                     [9004, 3, "T51-XX", "12-13-2068"],
@@ -647,13 +647,13 @@
                     [9009, 6, "T51-ZZ", "01-24-2068"],
                     [9010, 6, "T51-A9", "01-25-2068"]
                 ],
-            "tableName" : "missing-operative-implant"
+            "tableName" : "missing_operative_implant"
             },
             {
             "columnDetails" : ["PK", "''", "''"],
             "table": 
                 [
-                    ["id", "implant-model", "activation-date"],
+                    ["id", "implant_model", "activation_date"],
                     [9003, "T51-ZX", "09-09-2068"],
                     [9004, "T51-K7", "01-24-2068"],
                     [9005, "T51-Q1", "05-15-2068"],
@@ -661,7 +661,7 @@
                     [9008, "T51-ZZ", "01-24-2068"],
                     [9010, "T51-A9", "01-25-2068"]
                 ],
-            "tableName" : "tower-51-implant"
+            "tableName" : "tower_51_implant"
             }
         ]
         }
