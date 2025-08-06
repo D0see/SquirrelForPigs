@@ -143,13 +143,14 @@ const parseWhereClause = (sqlConsts, whereClauseWords, finalTable) => {
 
     const operator = whereClauseWords[2];
     if (!sqlOperatorsJsEquivalent[operator]) throw new Error(`no operator found in ${sqlKeywords.WHERE} clause`);
-
+    console.log(1, parameters.left.type, parameters.right.type)
     Object.values(parameters).forEach((parameter) => {
         if (paramIsDirectValueRepresentation(sqlConsts, parameter.val)) {
             parameter.type = 'string';
         }
     });
-    
+    console.log(2, parameters.left.type, parameters.right.type)
+
     if (parameters.left.type === 'header' && parameters.right.type === 'header') {
         return sqlWhereCompareColumnToColumn(sqlConsts, parameters.left.val, parameters.right.val, finalTable, operator, dataTypes);
 
