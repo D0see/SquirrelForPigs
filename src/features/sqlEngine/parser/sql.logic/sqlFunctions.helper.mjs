@@ -72,7 +72,6 @@ export const compareData = (sqlConsts, sqlOperatorsJsEquivalent, operator, data1
             data.val = data.val.slice(1, data.val.length - 1)
         }
     }
-
     const jsOperator = sqlOperatorsJsEquivalent[operator];
 
     // //handles null

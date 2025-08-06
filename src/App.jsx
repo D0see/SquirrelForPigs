@@ -43,7 +43,7 @@ function App() {
       const clonedTables = structuredClone(currLevel.tables);
       parsedUserQueryResult = sqlParser(query, clonedTables).table;
     } catch(e) {
-      setErrorMessage(e.message); 
+      setErrorMessage(e.message + e.stack); 
       setQueryState(queryStateMap.error)
       return;
     }
@@ -55,7 +55,7 @@ function App() {
       setErrorMessage('invalid result');
     } catch(e) {
       setQueryState(queryStateMap.warning);
-      setErrorMessage(e.message);
+      setErrorMessage(e.message + e.stack);
     }
     setQueryResult(parsedUserQueryResult);
   }
