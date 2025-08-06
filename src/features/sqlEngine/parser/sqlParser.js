@@ -125,40 +125,25 @@ const parseSubQueries = (sqlConsts, input, tables) => {
 }
 
 const parseWhereClause = (sqlConsts, whereClauseWords, finalTable) => {
-    const { sqlKeywords, sqlOperatorsJsEquivalent, dataTypes } = sqlConsts;
+    const { dataTypes } = sqlConsts;
 
     if (!whereClauseWords.length) return finalTable;
 
-    // Create a proper array and map instead of modifying in place
     const parameterValues = [
-        { val: whereClauseWords[1], type: 'header', key: 'left' },
-        { val: whereClauseWords[3], type: 'header', key: 'right' }
+        { val: whereClauseWords[1], type: 'header'},
+        { val: whereClauseWords[3], type: 'header'}
     ];
 
-    // Fix the typo here
-    if (sqlKeywords[parameterValues[0].val] || sqlKeywords[parameterValues[1].val]) {
-        throw new Error(`invalid names for values in ${sqlKeywords.WHERE} clause`);
-    }
-
     const operator = whereClauseWords[2];
-    if (!sqlOperatorsJsEquivalent[operator]) {
-        throw new Error(`no operator found in ${sqlKeywords.WHERE} clause`);
-    }
 
-    console.log(1, parameterValues[0].type, parameterValues[1].type)
-
-    // Use map instead of forEach with mutation
     const processedParams = parameterValues.map(param => ({
         ...param,
         type: paramIsDirectValueRepresentation(sqlConsts, param.val) ? 'string' : param.type
     }));
 
-    console.log(2, processedParams[0].type, processedParams[0].val, processedParams[1].type, processedParams[1].val)
-
     const [left, right] = processedParams;
 
     if (left.type === 'header' && right.type === 'header') {
-        console.log('compare header to header')
         return sqlWhereCompareColumnToColumn(sqlConsts, left.val, right.val, finalTable, operator, dataTypes);
     } else if (left.type === 'string' && right.type === 'string') {
         return sqlWhereCompareStringToString(sqlConsts, left.val, right.val, finalTable, operator, dataTypes);

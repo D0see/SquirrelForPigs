@@ -77,6 +77,7 @@ export const sqlErrors = {
     'WRONGLY_PLACED_KEYWORD' : (keyword) => new Error(`${keyword} is placed at the wrong place`),
     'EXPECTED' : (expected, received) => new Error(`expected ${expected} instead received ${received}`),
     'WRONG_DATATYPE' : (expected, received) => new Error(`expected value of dataType ${expected} instead received value ${received}`),
+    'INVALID_VALUE_NAME' : (clauseKeyword) => `invalid value in ${clauseKeyword} clause`
 }
 
 // AUTO GENERATED DO NOT TOUCH
