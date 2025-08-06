@@ -28,7 +28,7 @@ function App() {
   const [queryResult, setQueryResult] = useState([[]]);
   const [queryState, setQueryState] =  useState(queryStateMap.waiting);
   const [errorMessage, setErrorMessage] = useState('');
-  const [currLevelIndex, setCurrLevelIndex] = useState(0);
+  const [currLevelIndex, setCurrLevelIndex] = useState(3);
   const currLevel = levels[currLevelIndex];
   
   const handleQueryChange = (value, e) => {

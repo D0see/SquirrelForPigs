@@ -21,7 +21,7 @@ export const cleanInput = (sqlConsts, input) => {
 
     //removes commas
     const commaRegex = new RegExp(sqlKeywords.COMMA, 'g');
-    input = input.replace(commaRegex, '') 
+    input = input.replace(commaRegex, ' ') 
 
     //removes empty spaces
     let query = input.split(/(\\r\\n|\s)/).map(word => word.trim()).filter(word => word);

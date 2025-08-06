@@ -631,7 +631,7 @@
                     [6, "Marie", "Tison"],
                     [7, "Rina", "Okafor"]
                 ],
-            "tableName" : "missing-operative"
+            "tableName" : "missing_operative"
             },
             {
             "columnDetails" : ["PK", "FK", "", ""],
