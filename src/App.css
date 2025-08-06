@@ -69,7 +69,7 @@ h2 {
 }
 
 .interface-container {
-  margin-top: 5%;
+  margin-top: 24px;
   min-height: 100%;
   display: flex;
   flex-direction: row;
@@ -107,7 +107,7 @@ h2 {
   gap: 8px;
 }
 
-/* APP */
+/* BACKGROUND AND CURSOR */
 
 body {
   position: relative;
@@ -119,6 +119,12 @@ body {
   align-items: start;
   justify-content: center;
   overflow: hidden;
+    /* cursor:
+    url("cursor_1.png") 4 12,
+    auto;
+  cursor:
+    url("cursor_2.png") 2 2,
+    pointer; */
 }
 
 body::before {
@@ -184,4 +190,10 @@ body::before {
   1% {opacity: 0.5;}
   39% {opacity: 0.5;}
   40% {transform: translateY(100vh); opacity: 0;}
+}
+
+/* Utils */
+
+.no-select {
+  user-select: none;
 }

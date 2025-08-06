@@ -1,0 +1,32 @@
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px;
+  border-bottom: 2px solid var(--color-primary);
+  color: var(--color-primary);
+}
+
+.logo {
+  font-size: 18px;
+  font-family: 'Minitel';
+}
+
+.game-info-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.medal-icon {
+  width: 45px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stage-number {
+color: var(--color-primary); 
+font-size: 2em;
+}

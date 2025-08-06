@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import './App.css'
 
+import PageHeader from './components/PageHeader/PageHeader'
 import QueryEntry from '@components/QueryEntry/QueryEntry.jsx'
 import Button from '@components/button/Button.jsx'
 import Header from '@components/header/Header.jsx'
@@ -27,7 +28,7 @@ function App() {
   const [queryResult, setQueryResult] = useState([[]]);
   const [queryState, setQueryState] =  useState(queryStateMap.waiting);
   const [errorMessage, setErrorMessage] = useState('');
-  const [currLevelIndex, setCurrLevelIndex] = useState(3);
+  const [currLevelIndex, setCurrLevelIndex] = useState(0);
   const currLevel = levels[currLevelIndex];
   
   const handleQueryChange = (value, e) => {
@@ -69,6 +70,7 @@ function App() {
 
   return (
     <div className='crt'>
+    <PageHeader numberOfStages={levels.length} currStageNumber={currLevelIndex + 1}/>
     <div className='app-container'>
       <div className='interface-container'>
         <div className='database-container'>

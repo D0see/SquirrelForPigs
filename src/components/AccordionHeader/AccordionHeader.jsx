@@ -12,7 +12,7 @@ export default function AccordionHeader({Icon, text, isOpened, onClick, hugConte
         {Icon ?
         <Icon/> :''
         }
-        <h2>{text}</h2>
+        <h2 className='no-select'>{text}</h2>
       </div>
         {
           isOpened ?
