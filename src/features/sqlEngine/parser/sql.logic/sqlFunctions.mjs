@@ -173,7 +173,6 @@ export const sqlWhereCompareStringToString = (sqlConsts, leftVal, rightVal, fina
 
 export const sqlWhereCompareHeaderToString = (sqlConsts, headerVal, stringVal, finalTable, operator, dataTypes) => {
     const { sqlOperatorsJsEquivalent } = sqlConsts;
-    console.log(headerVal, stringVal)
 
     const wheredtwoDArr = [structuredClone(finalTable.table[0])];
     const headerColIndex = getColumnHeadIndex(sqlConsts, headerVal, finalTable);

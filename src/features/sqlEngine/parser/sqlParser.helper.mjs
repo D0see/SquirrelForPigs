@@ -24,14 +24,9 @@ export const cleanInput = (sqlConsts, input) => {
     input = input.replace(commaRegex, '') 
 
     //removes empty spaces
-    let query = input.split(' ').map(word => word.trim()).filter(word => word);
+    let query = input.split(/(\\r\\n|\s)/).map(word => word.trim()).filter(word => word);
+    console.log(query)
 
-    const queryArr = [];
-    let currWord = '';
-    let currQuoteType = '';
-    for (let i = 0; i < query.length; i++) {
-        
-    }
     //make sure keyword are uppercase
     query = query.map(word => 
         reservedKeyWords[word.toUpperCase()] || 
@@ -48,16 +43,6 @@ export const cleanInput = (sqlConsts, input) => {
 
 export const splitQuery = (sqlConsts, query) => {
     const {sqlKeywords, multipleConditionnalKeyword} = sqlConsts;
-
-    /*SPLITTING QUERIES
-        SELECT 
-        FROM 
-        JOIN 
-        WHERE 
-        GROUP BY 
-        HAVING 
-        ORDER BY 
-        LIMIT */
 
     let whereIndex = query.findIndex(word => word === sqlKeywords.WHERE);
     whereIndex = whereIndex === -1 ? Infinity : whereIndex;

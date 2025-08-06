@@ -6,7 +6,7 @@
         "tables" : [{
             "columnDetails" : ["PK", "''", "''", "''", "''"],
             "table": [
-                        ["social_security", "apartment_number", "firstName", "lastName", "age", "height", "gender"],
+                        ["social_security", "apartment_number", "firstname", "lastname", "age", "height", "gender"],
                         ["1234-5678-9023", 102, "Brice", "Dujardin", 35, 180, "M"],
                         ["1234-5678-9024", 102, "Jane", "Doe", 33, 175, "F"],
                         ["2345-6789-0134", 115, "Michael", "Smith", 28, 172, "M"],
@@ -465,8 +465,8 @@
             }]
         },
         {
-        "instruction" : "Our person of interest was last seen by our cameras a couple of days ago near the Chrome Crocodiles compound, they are a massive gang we suspect of orchestrating implant harvesting operations. \n While our current case lacks the strength to justify a full-scale assault on their complex, there may be another way to get the answers we need. \n Several of their members are currently serving time in the city prison. \n We may be able to offer a deal to a low-gravity felony offender in exchange for exploitable informations about John Stevens. Your new assignment is to identify all Chrome Crocodiles convicted of a low-gravity felonies and send us their prisonner-id, firstName, lastName and crime. \n You have been given access to the prison database.",
-        "expectedResult" : [["id","firstName","lastName","crime"],[2,"Emma","Johnson","Forgery"],[14,"Charlotte","Wilson","Illegal Activation Of A Self-Defense Implant"],[17,"Alexander","Taylor","Vandalism"],[23,"Matthew","Thompson","Petty Theft"],[41,"Wyatt","Green","Petty Theft"],[50,"Aria","Roberts","Trespassing"],[65,"Joshua","Cook","Illegal Activation Of A Self-Defense Implant"],[89,"Ezekiel","Ruiz","Petty Theft"],[98,"Ellie","Ross","Trespassing"]],
+        "instruction" : "Our person of interest was last seen by our cameras a couple of days ago near the Chrome Crocodiles compound, they are a massive gang we suspect of orchestrating implant harvesting operations. \n While our current case lacks the strength to justify a full-scale assault on their complex, there may be another way to get the answers we need. \n Several of their members are currently serving time in the city prison. \n We may be able to offer a deal to a low-gravity felony offender in exchange for exploitable informations about John Stevens. Your new assignment is to identify all Chrome Crocodiles convicted of a low-gravity felonies and send us their prisoner id, firstName, lastName and crime title. \n You have been given access to the prison database.",
+        "expectedResult" : [["id","firstname","lastname","crime"],[2,"Emma","Johnson","Forgery"],[14,"Charlotte","Wilson","Illegal Activation Of A Self-Defense Implant"],[17,"Alexander","Taylor","Vandalism"],[23,"Matthew","Thompson","Petty Theft"],[41,"Wyatt","Green","Petty Theft"],[50,"Aria","Roberts","Trespassing"],[65,"Joshua","Cook","Illegal Activation Of A Self-Defense Implant"],[89,"Ezekiel","Ruiz","Petty Theft"],[98,"Ellie","Ross","Trespassing"]],
         "tables" : [{
             "columnDetails" : ["PK", "''", "''"],
             "table": [
@@ -509,7 +509,7 @@
             "columnDetails" : ["PK", "''", "''", "FK", "FK"],
             "table": 
                 [
-                    ["id", "firstName", "lastName", "id_crime", "id_gang"],
+                    ["id", "firstname", "lastname", "id_crime", "id_gang"],
                     [1, "Liam", "Smith", 3, 1],
                     [2, "Emma", "Johnson", 5, 2],
                     [3, "Noah", "Williams", 8, 3],
@@ -622,7 +622,7 @@
             "columnDetails" : ["PK", "''", "''"],
             "table": 
                 [
-                    ["id", "firstName", "lastName"],
+                    ["id", "firstname", "lastname"],
                     [1, "Liam", "Smith"],
                     [2, "Lana", "Smith"],
                     [3, "Mathilda", "Smith"],
