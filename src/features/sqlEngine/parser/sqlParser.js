@@ -152,6 +152,7 @@ const parseWhereClause = (sqlConsts, whereClauseWords, finalTable) => {
     console.log(2, parameters.left.type, parameters.right.type)
 
     if (parameters.left.type === 'header' && parameters.right.type === 'header') {
+        console.log('compare header to header')
         return sqlWhereCompareColumnToColumn(sqlConsts, parameters.left.val, parameters.right.val, finalTable, operator, dataTypes);
 
     } else if (parameters.left.type === 'string' && parameters.right.type === 'string') {
