@@ -615,7 +615,7 @@
             }]
         },
         {
-        "instruction" : "It's amazing what a few combat stimulants can get you in a prison overrun by warring gang factions. Our informant has confirmed that Mr. Stevens is operating as an implant removal specialist for the Chrome Crocodiles. \n Your new task is to gather evidence to support her claim. We have compiled a list of individuals who went missing around Tower 51 recently along with a list of their implants.\n You need to find the provenance for each implant found at Tower 51.\n For each implant, we require the implant model and the victim’s first and last name.",
+        "instruction" : "It's amazing what a few combat stimulants can get you in a prison overrun by warring gang factions. Our informant has confirmed that Mr. Stevens is operating as an implant removal specialist for the Chrome Crocodiles. \n According to her, Stevens was typically called in when the target had high-value implants... Around here, those are mainly found on peace-enforcers. \n Your new task is to gather evidence to support her claim. We have compiled a list of operatives who went missing not far from Tower-51, along with a list of the implants they were fitted with at the time of their disappearance. \n You need to find the provenance for each implant recovered at Tower-51. \n For each implant, we require the implant model and the missing operative’s first and last name.",
         "expectedResult" : [["TI.implant-model","MP.firstName","MP.lastName"],["T51-ZX","Lana","Smith"],["T51-K7","Nico","Reyes"],["T51-Q1","Eva","Cho"],["T51-XX","Mathilda","Smith"],["T51-ZZ","Marie","Tison"],["T51-A9","Marie","Tison"]],
         "tables" : [
             {
@@ -631,13 +631,13 @@
                     [6, "Marie", "Tison"],
                     [7, "Rina", "Okafor"]
                 ],
-            "tableName" : "missing-person"
+            "tableName" : "missing-operatives"
             },
             {
             "columnDetails" : ["PK", "FK", "", ""],
             "table": 
                 [
-                    ["id", "missing-person-id", "implant-model", "activation-date"],
+                    ["id", "missing-operative-id", "implant-model", "activation-date"],
                     [9002, 1, "T51-B3", "06-12-2068"],
                     [9003, 2, "T51-ZX", "09-09-2068"],
                     [9004, 3, "T51-XX", "12-13-2068"],
@@ -647,7 +647,7 @@
                     [9009, 6, "T51-ZZ", "01-24-2068"],
                     [9010, 6, "T51-A9", "01-25-2068"]
                 ],
-            "tableName" : "missing-person-implant"
+            "tableName" : "missing-operative-implant"
             },
             {
             "columnDetails" : ["PK", "''", "''"],
