@@ -47,6 +47,7 @@ export const sqlParser = (input, tables) => {
     normalizeHeaders(finalTable);
 
     applyHeadersAliases(finalTable, selectedColumnsHeaderAliases)
+    console.log(JSON.stringify(finalTable.table));
     return finalTable;
 } 
 

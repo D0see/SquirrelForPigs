@@ -615,7 +615,7 @@
             }]
         },
         {
-        "instruction" : "It's amazing what a few combat stimulants can get you in a prison overrun by warring gang factions. Our informant has confirmed that Mr. Stevens is operating as an implant removal specialist for the Chrome Crocodiles. \n According to her, Stevens was typically called in when the target had high-value implants... Around here, those are mainly found on peace-enforcers. \n Your new task is to gather evidence to support her claim. We have compiled a list of operatives who went missing not far from Tower-51, along with a list of the implants they were fitted with at the time of their disappearance. \n You need to find the provenance for each implant recovered at Tower-51. \n For each implant, we require the implant model and the missing operative’s first and last name.",
+        "instruction" : "It's amazing what a few combat stimulants can get you in a prison overrun by warring gang factions. Our informant has confirmed that Mr. Stevens is operating as an implant removal specialist for the Chrome Crocodiles. \n According to her, Stevens was typically called in when the target had high-value implants... Around here, those are mainly found on peace-enforcers. \n Your new task is to gather evidence to support her claim. We have compiled a list of operatives who went missing not far from Tower-51, along with a list of the implants they were fitted with at the time of their disappearance. \n You need to find the provenance for each implant recovered at Tower-51. This is surely the kind of evidence top-brass is waiting for to authorize a raid on the compound. \n For each implant, we require the implant model and the missing operative’s first and last name.",
         "expectedResult" : [["TI.implant-model","MP.firstName","MP.lastName"],["T51-ZX","Lana","Smith"],["T51-K7","Nico","Reyes"],["T51-Q1","Eva","Cho"],["T51-XX","Mathilda","Smith"],["T51-ZZ","Marie","Tison"],["T51-A9","Marie","Tison"]],
         "tables" : [
             {
@@ -664,6 +664,106 @@
             "tableName" : "tower_51_implant"
             }
         ]
+        },
+        {
+        "instruction" : "The raid is live. \n Forward recon already jacked the compound relay, but the Crocodiles weren’t napping : motion-activated explosives placed in decoy-rooms just unalived half the recon crew, and the assault teams have gone static. \n Your task it to query the seized data and send back the exact coordinates of every decoy rooms. \n For each, give the story's number, its description and the door number.",
+        "expectedResult" : [["R.door_number","S.number","S.description"],["B-03",-1,"surgery"],["L-02",0,"lobby"],["1-02",1,"labs"],["2-02",2,"storage"],["3-04",3,"dorms"],["4-03",4,"offices"],["5-03",5,"penthouse"]],
+        "tables" : [{
+            "columnDetails" : ["PK", "''", "''"],
+            "table": [
+                ["id", "number", "description"],
+                [1, -1, "surgery"],
+                [2, 0, "lobby"],
+                [3, 1, "labs"],
+                [4, 2, "storage"],
+                [5, 3, "dorms"],
+                [6, 4, "offices"],
+                [7, 5, "penthouse"]
+            ],
+            "tableName": "story"
+            },
+            {
+            "columnDetails" : ["PK", "''"],
+            "table": [
+                ["id", "description"],
+                [1, "surgery"],
+                [2, "black-bag intake"],
+                [3, "cyber-morgue"],
+                [4, "organ-fridge"],
+                [5, "weapons-depot"],
+                [6, "lobby"],
+                [7, "front-desk-security"],
+                [8, "accounting"],
+                [9, "vending-nook"],
+                [10, "labs"],
+                [11, "prototype-bench"],
+                [12, "server-closet"],
+                [13, "toxin-storage"],
+                [14, "bulk-storage"],
+                [15, "crate-maze"],
+                [16, "chiller"],
+                [17, "dorms"],
+                [18, "common-room"],
+                [19, "recycler"],
+                [20, "stash-cubby"],
+                [21, "executive-office"],
+                [22, "boardroom"],
+                [23, "vault-anteroom"],
+                [24, "penthouse"],
+                [25, "panic-lounge"],
+                [26, "sky-bar"],
+                [27, "private-office"],
+                [28, "rooftop-cache"],
+                [99, "decoy-room"]
+            ],
+            "tableName": "activity"
+            },
+        {
+            "columnDetails" : ["PK", "''", "FK", "FK"],
+            "table": [
+                ["id", "door_number", "story_id", "activity_id"],
+                [101, "B-01", 1, 1],
+                [102, "B-02", 1, 2],
+                [103, "B-03", 1, 99],
+                [104, "B-04", 1, 3],
+                [105, "B-05", 1, 4],
+                [106, "B-06", 1, 5],
+                [201, "L-01", 2, 6],
+                [202, "L-02", 2, 99],
+                [203, "L-03", 2, 7],
+                [204, "L-04", 2, 8],
+                [205, "L-05", 2, 9],
+                [301, "1-01", 3, 10],
+                [302, "1-02", 3, 99],
+                [303, "1-03", 3, 11],
+                [304, "1-04", 3, 12],
+                [305, "1-05", 3, 13],
+                [306, "1-06", 3, 21],
+                [401, "2-01", 4, 14],
+                [402, "2-02", 4, 99],
+                [403, "2-03", 4, 15],
+                [404, "2-04", 4, 5],
+                [405, "2-05", 4, 16],
+                [501, "3-01", 5, 17],
+                [502, "3-02", 5, 18],
+                [503, "3-03", 5, 21],
+                [504, "3-04", 5, 99],
+                [505, "3-05", 5, 19],
+                [506, "3-06", 5, 20],
+                [601, "4-01", 6, 21],
+                [602, "4-02", 6, 8],
+                [603, "4-03", 6, 99],
+                [604, "4-04", 6, 22],
+                [605, "4-05", 6, 23],
+                [701, "5-01", 7, 24],
+                [702, "5-02", 7, 25],
+                [703, "5-03", 7, 99],
+                [704, "5-04", 7, 26],
+                [705, "5-05", 7, 27],
+                [706, "5-06", 7, 28]
+                ],
+            "tableName": "room"
+            }]
         }
     ]
 }
