@@ -9,6 +9,7 @@ import Accordion from '@components/Accordion/Accordion.jsx'
 import ColumnList from '@components/ColumnList/ColumnList.jsx'
 import ResultTable from '@components/ResultTable/ResultTable.jsx'
 import AlertBar from '@components/AlertBar/AlertBar.jsx'
+import ToBeContinued from './components/ToBeContinued/ToBeContinued'
 
 import TableIcon from '@assets/icons/Table.svg?react' 
 import BookIcon from '@assets/icons/book.svg?react'
@@ -28,7 +29,7 @@ function App() {
   const [queryResult, setQueryResult] = useState([[]]);
   const [queryState, setQueryState] =  useState(queryStateMap.waiting);
   const [errorMessage, setErrorMessage] = useState('');
-  const [currLevelIndex, setCurrLevelIndex] = useState(0);
+  const [currLevelIndex, setCurrLevelIndex] = useState(5);
   const currLevel = levels[currLevelIndex];
   
   const handleQueryChange = (value, e) => {
@@ -70,43 +71,44 @@ function App() {
 
   return (
     <div className='crt'>
-    <PageHeader numberOfStages={levels.length} currStageNumber={currLevelIndex + 1}/>
-    <div className='app-container'>
-      <div className='interface-container'>
-        <div className='database-container'>
-          <Header label={'Database'} Icon={Database}/>
-          {currLevel.tables.map((table, index) => {
-            return <Accordion key={table.tableName + index} Icon={TableIcon} header={table.tableName} startsOpened={false}>
-            <ColumnList columnDetails={table.columnDetails} columns={table.table[0]}/>
-          </Accordion>
-          })}
-        </div>
-
-        <div className='main-container'>
-          <div className='sub-container'>
-            <Accordion Icon={BookIcon} header={'Instructions'} startsOpened={true}>
-              {currLevel.instruction.split('\n').map((line, index) => 
-                <p className='text-body' key={index}>{line}</p>
-              )}
-            </Accordion>
-          </div>
-          <div className='sub-container'>
-            <Header label={'Query'} Icon={Notepad}/>
-            <QueryEntry query={query} handleQueryChange={handleQueryChange}/>
-            <div className='alert-wrapper'>
-              <AlertBar state={queryState} errorMessage={errorMessage} handleNext={handleNext}/>
-              {queryState !== queryStateMap.success ? <Button text={'Submit'} onClickCallBack={handleSubmit}/> : ''}
+      {currLevelIndex < levels.length ? 
+      <><PageHeader numberOfStages={levels.length} currStageNumber={currLevelIndex + 1} /><div className='app-container'>
+          <div className='interface-container'>
+            <div className='database-container'>
+              <Header label={'Database'} Icon={Database} />
+              {currLevel.tables.map((table, index) => {
+                return <Accordion key={table.tableName + index} Icon={TableIcon} header={table.tableName} startsOpened={false}>
+                  <ColumnList columnDetails={table.columnDetails} columns={table.table[0]} />
+                </Accordion>
+              })}
             </div>
-          </div>
-          <div className='sub-container'>
-            <Header label={'Result'} Icon={Flag}/>
-            <ResultTable table={queryResult}/>
-          </div>
-        </div>
 
-      </div>
-    </div>
-    <div className='scanLine'></div>
+            <div className='main-container'>
+              <div className='sub-container'>
+                <Accordion Icon={BookIcon} header={'Instructions'} startsOpened={true}>
+                  {currLevel.instruction.split('\n').map((line, index) => <p className='text-body' key={index}>{line}</p>
+                  )}
+                </Accordion>
+              </div>
+              <div className='sub-container'>
+                <Header label={'Query'} Icon={Notepad} />
+                <QueryEntry query={query} handleQueryChange={handleQueryChange} />
+                <div className='alert-wrapper'>
+                  <AlertBar state={queryState} errorMessage={errorMessage} handleNext={handleNext} />
+                  {queryState !== queryStateMap.success ? <Button text={'Submit'} onClickCallBack={handleSubmit} /> : ''}
+                </div>
+              </div>
+              <div className='sub-container'>
+                <Header label={'Result'} Icon={Flag} />
+                <ResultTable table={queryResult} />
+              </div>
+            </div>
+
+          </div>
+        </div><div className='scanLine'></div></> 
+        : <ToBeContinued/> 
+    }
+    
     </div>
   )
 }

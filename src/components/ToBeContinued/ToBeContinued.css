@@ -1,0 +1,30 @@
+.tbc-container {
+  display: flex;
+  margin: 0 auto;
+  margin-top: 40%;
+  color: var(--color-primary);
+  fill: var(--color-primary);
+}
+
+.tbc-text {
+  font-size: xx-large;
+  margin-bottom: 5%;
+  align-self: center;
+}
+
+.tbc-flexbox {
+  display: flex;
+  flex-direction: row;
+}
+
+.socials {
+  display: flex;
+  flex-flow: row;
+  justify-content: center;
+  gap: 10%;
+}
+
+.social-container {
+  display: flex;
+  flex-flow: row;
+}
