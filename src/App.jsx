@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import './App.css'
+import { Analytics } from '@vercel/analytics/next'
 
 import PageHeader from './components/PageHeader/PageHeader'
 import QueryEntry from '@components/QueryEntry/QueryEntry.jsx'
@@ -108,7 +109,7 @@ function App() {
         </div><div className='scanLine'></div></> 
         : <ToBeContinued/> 
     }
-    
+    <Analytics/>
     </div>
   )
 }
