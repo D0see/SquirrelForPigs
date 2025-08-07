@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import './App.css'
-import { Analytics } from '@vercel/analytics/next'
+import { Analytics } from '@vercel/analytics/react'
 
 import PageHeader from './components/PageHeader/PageHeader'
 import QueryEntry from '@components/QueryEntry/QueryEntry.jsx'
